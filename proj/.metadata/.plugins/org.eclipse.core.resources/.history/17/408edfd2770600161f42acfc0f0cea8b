@@ -1,0 +1,27 @@
+package blackjackG21;
+
+public class Shoe {
+	Deck[] decks;
+	
+	public Shoe(Deck deck1,Deck deck2,Deck deck3,Deck deck4){
+		
+	}
+
+	public Shoe(Deck deck1,Deck deck2,Deck deck3,Deck deck4, Deck deck5){
+			
+		}
+	public Shoe(Deck deck1,Deck deck2,Deck deck3,Deck deck4, Deck deck5, Deck deck6){
+		
+	}
+	public Shoe(Deck deck1,Deck deck2,Deck deck3,Deck deck4, Deck deck5, Deck deck6, Deck deck7){
+		
+	}
+	public Shoe(Deck deck1,Deck deck2,Deck deck3,Deck deck4, Deck deck5, Deck deck6, Deck deck7, Deck deck8){
+		
+	}
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

@@ -27,7 +27,7 @@ public class Deck {
 				name="10";
 				suit=card.charAt(2);
 			}
-	   	    list[positionToAdd++]=new Card(name, suit, this);
+	   	    list[positionToAdd++]=new Card(name, suit);
 	   	 }
 		
 	}	

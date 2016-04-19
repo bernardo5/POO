@@ -27,7 +27,7 @@ public class Deck {
 				name="10";
 				suit=card.charAt(2);
 			}
-	   	    list[positionToAdd++]=new Card(name, suit, this);
+	   	    list[positionToAdd++]=new Card(name, suit);
 	   	 }
 		
 	}	
@@ -39,7 +39,7 @@ public class Deck {
 		
 	}
 
-	/*public static void main(String[] args) {
+	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 			Deck deck=new Deck();
 			String line;
@@ -59,6 +59,6 @@ public class Deck {
 		            e.printStackTrace();
 		     } 
 			System.out.println(deck.toString());
-	}*/
+	}
 
 }
