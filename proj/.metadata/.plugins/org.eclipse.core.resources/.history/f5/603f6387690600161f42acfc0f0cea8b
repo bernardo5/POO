@@ -1,0 +1,11 @@
+package blackjackG21;
+
+public class Card {
+	private String name;	
+	private Suit suit;
+	
+	Card(String name, Suit suit){
+		this.name=name;
+		this.suit=suit;
+	}
+}

@@ -1,0 +1,45 @@
+package blackjackG21;
+
+import java.io.*;
+import java.util.*;
+
+
+
+public class Deck {
+	LinkedList<Card> list;
+	
+	Deck(){
+		list=new LinkedList<Card>();
+	}
+	
+	public void populateDeck(String Filename){
+		String message;
+		try
+	     {
+			 FileInputStream fileInputStream = new FileInputStream(Filename);
+		     InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+		     
+		     BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+		     StringBuffer stringBuffer = new StringBuffer();
+		     while ((message = bufferedReader.readLine()) != null) {
+		        System.out.println(message);
+		     }
+	     }catch(FileNotFoundException e){
+	            e.printStackTrace();
+	        }catch(IOException e){
+	            e.printStackTrace();
+	        } 
+	}
+	
+	public void addCard(String name, Suit suit){		
+		list.addFirst(new Card(name, suit));
+	}
+	
+	
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

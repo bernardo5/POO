@@ -1,0 +1,27 @@
+package blackjackG21;
+
+public class Card {
+	private String name;	
+	private Suit suit;
+	
+	Card(String fromFile){
+		if(fromFile.length()==2){/*all except 10's*/
+			this.name=String.valueOf(fromFile.charAt(0));
+			switch(fromFile.charAt(1)){
+				case 'C': 
+					this.suit= "Clubs";
+					break;
+				case 'D': 
+					this.suit= "Diamonds";
+					break;
+				case 'S': 
+					this.suit= "Spades";
+					break;
+				case 'H': 
+					this.suit= "Hearts";
+					break;
+				
+			}
+		}
+	}
+}
