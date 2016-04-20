@@ -1,0 +1,32 @@
+package blackjackG21;
+
+public class RegularPlayer extends Player{
+
+	public RegularPlayer(Card card1, Card card2) {
+		super(card1, card2);
+	}
+	
+	/*********************************************************
+	 * Implement side rules
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * *********************************************************/
+	
+	public void showHands(){
+		/*player may have more than one hand and shows all cards*/
+		String game=new String();
+		int i=1;
+		for(Hand aux:hand){
+			game+="Hand "+i+": "+aux.toString()+"\n";
+		}
+	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}
