@@ -12,8 +12,9 @@ public class Shoe {
 		nbNextCard=0;
 	}
 	
-	public void addCard(int position, Card c){
-		sequence[position]=c;
+	public Card takeCard(){
+		if(nbNextCard<52)return sequence[nbNextCard++];
+		return null;
 	}
 	
 	

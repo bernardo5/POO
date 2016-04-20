@@ -4,9 +4,13 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 public class Hand {
-	LinkedList<Card> hand;
-	HashMap<String, Integer> points;
+	private LinkedList<Card> hand;
+	private HashMap<String, Integer> points;
 	private int bust;
+	
+	public LinkedList<Card> getHand(){
+		return hand;
+	}
 	
 	public Hand(){
 		hand= new LinkedList<Card>();

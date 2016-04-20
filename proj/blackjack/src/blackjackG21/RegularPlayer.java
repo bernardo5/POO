@@ -2,8 +2,8 @@ package blackjackG21;
 
 public class RegularPlayer extends Player{
 	private int balance;
-	public RegularPlayer(Card card1, Card card2, int balance) {
-		super(card1, card2);
+	public RegularPlayer(/*Card card1, Card card2,*/ int balance) {
+		super(/*card1, card2*/);
 		this.setBalance(balance);
 	}
 	
@@ -45,10 +45,10 @@ public class RegularPlayer extends Player{
 		this.balance+=returnBalance;
 	}
 
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		RegularPlayer player=new RegularPlayer(new Card("Q",'S'), new Card("A",'S'), 15);
 		player.hit(new Card("A",'S'), 0);
 		System.out.println(player.showHands());
-	}
+	}*/
 
 }
