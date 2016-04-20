@@ -26,7 +26,7 @@ public class Shoe {
 		return message;
 	}
 
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		int shoe=4;
 		Shoe shoeGame=new Shoe(shoe);
@@ -57,6 +57,6 @@ public class Shoe {
 		
 		
 		
-	}
+	}*/
 
 }
