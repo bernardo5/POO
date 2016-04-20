@@ -6,10 +6,12 @@ import java.util.LinkedList;
 public class Hand {
 	LinkedList<Card> hand;
 	HashMap<String, Integer> points;
+	private int bust;
 	
 	public Hand(){
 		hand= new LinkedList<Card>();
 		points = new HashMap<String, Integer>();
+		this.bust=0;
 	}
 	
 	public Hand(Card card1, Card card2){
@@ -53,25 +55,35 @@ public class Hand {
 		return total;
 	}
 	
-	
-
 	@Override
 	public String toString() {
 		
-		return "Hand [" + hand + "], points=" + this.getTotal() + "\n";
+		return "Hand [" + hand + "] with " + this.getTotal()+" points";
 	}
 
-	public static void main(String[] args) {
+	public int getBust() {
+		return bust;
+	}
+	
+	public void bust(){
+		if(this.getTotal()>21){
+			this.bust=1;
+			System.out.println("Hand"+this.toString()+", busted");
+		}
+	}
+	
+
+	/*public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		Hand hand=new Hand(new Card("Q",'S', null), new Card("A",'S', null));
 		
 		System.out.println(hand.toString());
 		
-		//hand.addCard(new Card("A", 'H', null));
-		hand.addCard(new Card("K", 'H', null));
+		hand.addCard(new Card("A", 'H', null));
+		//hand.addCard(new Card("K", 'H', null));
 		
 		System.out.println(hand.toString());
-
-	}
+		hand.bust();
+	}*/
 
 }
