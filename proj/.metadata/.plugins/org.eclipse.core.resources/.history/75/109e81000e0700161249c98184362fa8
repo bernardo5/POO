@@ -3,7 +3,7 @@ package blackjackG21;
 import java.util.LinkedList;
 
 public abstract class Player {
-	protected LinkedList<Hand> hands;
+	private LinkedList<Hand> hands;
 	
 	public Player(Card card1, Card card2){
 		hands= new LinkedList<Hand>();
