@@ -62,10 +62,6 @@ public class Shoe {
 	     } 
 		System.out.println(this.toString());
 	}
-	
-	public void shuffle(){
-		Collections.shuffle(Arrays.asList(sequence));
-	}
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -73,9 +69,8 @@ public class Shoe {
 		Shoe shoeGame=new Shoe(shoe);
 		shoeGame.populateShoeFromFile("src/shoe-file.txt", shoe);
 		System.out.println(shoeGame.toString());
-		shoeGame.shuffle();
 		
-		System.out.println(shoeGame.toString());
+
 
 		
 		

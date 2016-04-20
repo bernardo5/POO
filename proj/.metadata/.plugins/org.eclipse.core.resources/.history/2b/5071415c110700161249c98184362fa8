@@ -73,9 +73,8 @@ public class Shoe {
 		Shoe shoeGame=new Shoe(shoe);
 		shoeGame.populateShoeFromFile("src/shoe-file.txt", shoe);
 		System.out.println(shoeGame.toString());
-		shoeGame.shuffle();
 		
-		System.out.println(shoeGame.toString());
+
 
 		
 		
