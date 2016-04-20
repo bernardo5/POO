@@ -38,7 +38,6 @@ public class Game {
 		while(player.getBalance()>=minBet){
 			//give player and dealer the hand
 			this.distributeHands();
-			this.showCards();
 			break;
 		}
 	}
@@ -46,7 +45,8 @@ public class Game {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		Game game= new Game(1,	1000, 50,	4,	58, "src/shoe-file.txt");
-		game.interactiveMode();
+		game.distributeHands();
+		game.showCards();
 	}
 
 }
