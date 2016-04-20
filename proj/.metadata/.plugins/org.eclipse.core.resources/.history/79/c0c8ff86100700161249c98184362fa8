@@ -8,7 +8,7 @@ public class Shoe {
 	private int nbNextCard;
 	
 	public Shoe(int numberDecks){
-		sequence=new Card[numberDecks*52];
+		sequence=new Card[numberDecks];
 		nbNextCard=0;
 	}
 	
@@ -23,7 +23,7 @@ public class Shoe {
 	public String toString() {
 		String message= "Shoe: \n";
 		for(Card c:sequence){
-			message+=c.toString()+"\n";
+			message+="Shoe: "+c.toString()+"\n";
 		}
 		return message;
 	}

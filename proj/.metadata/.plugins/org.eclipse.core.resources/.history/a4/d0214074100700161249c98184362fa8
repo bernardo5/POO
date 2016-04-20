@@ -8,7 +8,7 @@ public class Shoe {
 	private int nbNextCard;
 	
 	public Shoe(int numberDecks){
-		sequence=new Card[numberDecks*52];
+		sequence=new Card[numberDecks];
 		nbNextCard=0;
 	}
 	
@@ -23,7 +23,7 @@ public class Shoe {
 	public String toString() {
 		String message= "Shoe: \n";
 		for(Card c:sequence){
-			message+=c.toString()+"\n";
+			message+="Shoe: "+c.toString()+"\n";
 		}
 		return message;
 	}
@@ -63,18 +63,37 @@ public class Shoe {
 		System.out.println(this.toString());
 	}
 
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		int shoe=4;
 		Shoe shoeGame=new Shoe(shoe);
-		shoeGame.populateShoeFromFile("src/shoe-file.txt", shoe);
+		//System.out.println(shoeGame.toString());
+		
+
+		String line;
+		try{
+			int i=0;
+			 FileInputStream fileInputStream = new FileInputStream("src/shoe-file.txt");
+		     InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+		     
+		     BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+		     StringBuffer stringBuffer = new StringBuffer();
+		     while (((line = bufferedReader.readLine()) != null)&&(i<shoe)) {
+		    	Deck aux=new Deck();
+		    	aux.populateDeck(line);
+		    	 shoeGame.addDeck(i, aux);
+		    	 i++;
+		     }
+	     }catch(FileNotFoundException e){
+	            e.printStackTrace();
+	     }catch(IOException e){
+	            e.printStackTrace();
+	     } 
 		System.out.println(shoeGame.toString());
 		
-
-
 		
 		
 		
-	}
+	}*/
 
 }

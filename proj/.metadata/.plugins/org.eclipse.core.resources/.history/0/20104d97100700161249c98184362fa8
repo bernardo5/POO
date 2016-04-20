@@ -23,7 +23,7 @@ public class Shoe {
 	public String toString() {
 		String message= "Shoe: \n";
 		for(Card c:sequence){
-			message+=c.toString()+"\n";
+			message+="Shoe: "+c.toString()+"\n";
 		}
 		return message;
 	}
