@@ -22,31 +22,22 @@ public class Game {
 	}
 	
 	public void distributeHands(){
-		Hand p=new Hand(shoe.takeCard(), shoe.takeCard());
-		Hand d=new Hand(shoe.takeCard(), shoe.takeCard());
+		
+		Hand p=new Hand();
+		Hand d=new Hand();
 		player.getHand(p);
 		dealer.getHand(d);
 	}
 	
-	public void showCards(){
-		System.out.println("Player hand: "+ player.showHands());
-		System.out.println("Dealer's hand: "+ dealer.showHands());
-		
-	}
-	
 	public void interactiveMode(){
 		while(player.getBalance()>=minBet){
-			//give player and dealer the hand
-			this.distributeHands();
-			break;
+			
 		}
 	}
 
-	public static void main(String[] args) {
+/*	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		Game game= new Game(1,	1000, 50,	4,	58, "src/shoe-file.txt");
-		game.distributeHands();
-		game.showCards();
-	}
+
+	}*/
 
 }
