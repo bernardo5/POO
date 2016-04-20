@@ -80,7 +80,7 @@ public class Hand {
 		System.out.println(hand.toString());
 		
 		hand.addCard(new Card("A", 'H', null));
-		hand.addCard(new Card("K", 'H', null));
+		//hand.addCard(new Card("K", 'H', null));
 		
 		System.out.println(hand.toString());
 		hand.bust();

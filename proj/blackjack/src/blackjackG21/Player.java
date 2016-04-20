@@ -12,7 +12,7 @@ public abstract class Player {
 	
 	public abstract String showHands();
 	
-	public abstract void stand(Hand h);
+	//public abstract void stand(Hand h);
 	
 	public void hit(Card card, int index){
 		Hand handAux=hands.get(index);//so it wont be necessary to search twice for element
