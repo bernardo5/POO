@@ -1,0 +1,21 @@
+package blackjackG21;
+
+public class Dealer extends Player{
+
+	public Dealer(Card card1, Card card2) {
+		super(card1, card2);
+	}
+
+	public void stand(Hand h){
+		if((h.getTotal())>=17){
+			//do something
+			System.out.println("You will now stand");
+		}
+	}
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

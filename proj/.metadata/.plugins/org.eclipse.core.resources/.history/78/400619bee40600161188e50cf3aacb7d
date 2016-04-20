@@ -19,7 +19,7 @@ public class RegularPlayer extends Player{
 		/*player may have more than one hand and shows all cards*/
 		String game=new String();
 		int i=1;
-		for(Hand aux:hands){
+		for(Hand aux:hand){
 			game+="Hand "+i+": "+aux.toString()+"\n";
 		}
 		return game;
