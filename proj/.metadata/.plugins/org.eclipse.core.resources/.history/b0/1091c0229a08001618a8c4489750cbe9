@@ -52,15 +52,13 @@ public class Game {
 		}
 	}
 	
-	public boolean placeBet(int bet){//the player has to do at least a bet
+	public void placeBet(int bet){//the player has to do at least a bet
 		System.out.println("bet command");
 		if(bet>player.getBalance()){
 			System.out.println("You cannot afford this bet. Your balance is:"+player.getBalance());
-			return false;
 		}else{
 			player.setBalance(player.getBalance()-bet);
 			player.setCurrentBet(bet);
-			return true;
 		}
 	}
 	
@@ -86,19 +84,13 @@ public class Game {
 	public void interactiveMode(){
 		String[] command;
 		boolean prevBetFlag=false;
-		int prevBet = 0;
+		int prevBet;
 		while(player.getBalance()>=minBet){
 			command=this.getCommand();
 			switch(command[0]){
 				case "b": 
 					if(prevBetFlag){
-						if(Integer.parseInt(command[1])==-1){
-							this.placeBet(prevBet);
-						}else{
-							if(this.placeBet(Integer.parseInt(command[1]))) 
-								prevBet=Integer.parseInt(command[1]);
-							
-						} 
+						
 					}else{
 						prevBet=this.placeFirstBet(Integer.parseInt(command[1]));
 						prevBetFlag=true;
