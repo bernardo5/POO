@@ -2,12 +2,9 @@ package blackjackG21;
 
 public class RegularPlayer extends Player{
 	private int balance;
-	private int currentBet;
-	
 	public RegularPlayer(/*Card card1, Card card2,*/ int balance) {
 		super(/*card1, card2*/);
 		this.setBalance(balance);
-		this.setCurrentBet(0);
 	}
 	
 	/*********************************************************
@@ -46,14 +43,6 @@ public class RegularPlayer extends Player{
 
 	public void addBalance(int returnBalance){
 		this.balance+=returnBalance;
-	}
-
-	public int getCurrentBet() {
-		return currentBet;
-	}
-
-	public void setCurrentBet(int currentBet) {
-		this.currentBet = currentBet;
 	}
 
 	/*public static void main(String[] args) {

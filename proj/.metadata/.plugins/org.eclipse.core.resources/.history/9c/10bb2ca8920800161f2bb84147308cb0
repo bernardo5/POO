@@ -85,7 +85,9 @@ public class Game {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		Game game= new Game(1,	1000, 50,	4,	58, "src/shoe-file.txt");
+		System.out.println(game.player.getBalance());
 		game.interactiveMode();
+		System.out.println(game.player.getBalance());
 	}
 
 }
