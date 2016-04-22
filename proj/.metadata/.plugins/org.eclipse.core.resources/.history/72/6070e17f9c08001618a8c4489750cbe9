@@ -112,10 +112,10 @@ public class Game {
 					break;
 				case "d":
 					if(prevBetFlag){
-						dealFlag=true;
 						this.distributeHands();
 						this.showCards();
 					}else System.out.println("You havent placed your bet yet");
+					dealFlag=true;
 					break;
 				case "h":
 					if(prevBetFlag){

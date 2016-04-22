@@ -59,7 +59,7 @@ public class Game {
 			return false;
 		}else{
 			player.setBalance(player.getBalance()-bet);
-			player.setCurrentBet(player.getCurrentBet()+bet);
+			player.setCurrentBet(bet);
 			return true;
 		}
 	}
@@ -87,32 +87,28 @@ public class Game {
 		String[] command;
 		boolean prevBetFlag=false;
 		int prevBet = 0;
-		boolean dealFlag=false;
 		while(player.getBalance()>=minBet){
 			command=this.getCommand();
 			switch(command[0]){
 				case "b": 
-					if(!dealFlag){
-						if(prevBetFlag){
-							if(Integer.parseInt(command[1])==-1){
-								this.placeBet(prevBet);
-							}else{
-								if(this.placeBet(Integer.parseInt(command[1]))) 
-									prevBet=Integer.parseInt(command[1]);
-								
-							} 
+					if(prevBetFlag){
+						if(Integer.parseInt(command[1])==-1){
+							this.placeBet(prevBet);
 						}else{
-							prevBet=this.placeFirstBet(Integer.parseInt(command[1]));
-							prevBetFlag=true;
-						}
-					}else System.out.println("b: Illegal command");
+							if(this.placeBet(Integer.parseInt(command[1]))) 
+								prevBet=Integer.parseInt(command[1]);
+							
+						} 
+					}else{
+						prevBet=this.placeFirstBet(Integer.parseInt(command[1]));
+						prevBetFlag=true;
+					}
 					break;
 				case "$":
 					System.out.println("Your current balance is: "+player.getBalance());
 					break;
 				case "d":
 					if(prevBetFlag){
-						dealFlag=true;
 						this.distributeHands();
 						this.showCards();
 					}else System.out.println("You havent placed your bet yet");
@@ -125,13 +121,6 @@ public class Game {
 				case "s":
 					if(prevBetFlag){
 						System.out.println("stand option");
-						//fazer a parte do dealer
-						
-						/////////////////////////////////
-						//player.setBalance(balance);
-						player.setCurrentBet(0);
-						dealFlag=false;
-						prevBetFlag=false;
 					}else System.out.println("You havent placed your bet yet");
 					break;
 				case "i":

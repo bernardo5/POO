@@ -59,7 +59,7 @@ public class Game {
 			return false;
 		}else{
 			player.setBalance(player.getBalance()-bet);
-			player.setCurrentBet(player.getCurrentBet()+bet);
+			player.setCurrentBet(bet);
 			return true;
 		}
 	}
@@ -112,10 +112,10 @@ public class Game {
 					break;
 				case "d":
 					if(prevBetFlag){
-						dealFlag=true;
 						this.distributeHands();
 						this.showCards();
 					}else System.out.println("You havent placed your bet yet");
+					dealFlag=true;
 					break;
 				case "h":
 					if(prevBetFlag){
@@ -125,13 +125,6 @@ public class Game {
 				case "s":
 					if(prevBetFlag){
 						System.out.println("stand option");
-						//fazer a parte do dealer
-						
-						/////////////////////////////////
-						//player.setBalance(balance);
-						player.setCurrentBet(0);
-						dealFlag=false;
-						prevBetFlag=false;
 					}else System.out.println("You havent placed your bet yet");
 					break;
 				case "i":
