@@ -41,13 +41,14 @@ public class Game {
 	
 	public void placeBet(int bet){//the player has to do at least a bet
 		System.out.println("bet command");
-		if((bet==-1)||(bet<minBet)){
+		
+		/*if((bet==-1)||(bet<minBet)){
 			player.setBalance(player.getBalance()-minBet);
 			player.setCurrentBet(minBet);
 		}else{
 			player.setBalance(player.getBalance()-bet);
 			player.setCurrentBet(bet);
-		}
+		}*/
 	}
 	
 	public String[] getCommand(){
@@ -70,45 +71,12 @@ public class Game {
 	}
 	
 	public void interactiveMode(){
-		String[] command;
+		String command=new String();
 		while(player.getBalance()>=minBet){
-			command=this.getCommand();
-			switch(command[0]){
-				case "b": 
-					this.placeBet(Integer.parseInt(command[1]));
-					break;
-				case "$":
-					System.out.println("Your current balance is: "+player.getBalance());
-					break;
-				case "d":
-					this.distributeHands();
-					this.showCards();
-					break;
-				case "h":
-					System.out.println("hit option");
-					break;
-				case "s":
-					System.out.println("stand option");
-					break;
-				case "i":
-					System.out.println("insurance option");
-					break;
-				case "u":
-					System.out.println("surrender option");
-					break;
-				case "p":
-					System.out.println("splitting option");
-					break;
-				case "2":
-					System.out.println("double option");
-					break;
-				case "ad":
-					System.out.println("advice option");
-					break;
-				case "st":
-					System.out.println("statistics option");
-					break;
-			}
+			command
+			this.distributeHands();
+			this.showCards();
+			break;
 		}
 	}
 

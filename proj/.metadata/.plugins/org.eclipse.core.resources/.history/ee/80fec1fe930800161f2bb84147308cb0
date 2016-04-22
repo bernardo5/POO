@@ -41,6 +41,7 @@ public class Game {
 	
 	public void placeBet(int bet){//the player has to do at least a bet
 		System.out.println("bet command");
+		
 		if((bet==-1)||(bet<minBet)){
 			player.setBalance(player.getBalance()-minBet);
 			player.setCurrentBet(minBet);
@@ -50,11 +51,10 @@ public class Game {
 		}
 	}
 	
-	public String[] getCommand(){
+	public String getCommand(){
 		String s=new String();
 		String command=new String();
 		Scanner scanner;
-		int bet=-1;
 		BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
         try {
 			s = bufferRead.readLine();
@@ -64,51 +64,17 @@ public class Game {
 		}
         scanner = new Scanner (s);
         command =	scanner.next ();
-        if(scanner.hasNextInt())bet=scanner.nextInt();
 		scanner.close();
-		return new String[]{command, Integer.toString(bet)};
+		return command;
 	}
 	
 	public void interactiveMode(){
-		String[] command;
 		while(player.getBalance()>=minBet){
-			command=this.getCommand();
-			switch(command[0]){
-				case "b": 
-					this.placeBet(Integer.parseInt(command[1]));
-					break;
-				case "$":
-					System.out.println("Your current balance is: "+player.getBalance());
-					break;
-				case "d":
-					this.distributeHands();
-					this.showCards();
-					break;
-				case "h":
-					System.out.println("hit option");
-					break;
-				case "s":
-					System.out.println("stand option");
-					break;
-				case "i":
-					System.out.println("insurance option");
-					break;
-				case "u":
-					System.out.println("surrender option");
-					break;
-				case "p":
-					System.out.println("splitting option");
-					break;
-				case "2":
-					System.out.println("double option");
-					break;
-				case "ad":
-					System.out.println("advice option");
-					break;
-				case "st":
-					System.out.println("statistics option");
-					break;
-			}
+			//give player and dealer the hand
+			//this.waitBet();
+			this.distributeHands();
+			this.showCards();
+			break;
 		}
 	}
 
