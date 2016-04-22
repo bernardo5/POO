@@ -25,9 +25,6 @@ public class Dealer extends Player{
 			if(i!=0)game+=c.toString();
 			i++;
 		}
-		
-		game+=" with "+hands.getFirst().getTotal()+" points";
-		
 		return game;
 	}
 	

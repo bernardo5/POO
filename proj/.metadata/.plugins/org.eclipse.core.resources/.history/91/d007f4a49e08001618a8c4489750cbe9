@@ -121,19 +121,15 @@ public class Game {
 					if(prevBetFlag){
 						System.out.println("hit option");
 						//get a new card to the hand
-						player.hit(shoe.takeCard(), 0);
-						this.showCards();
+						
+						//verify if it is a bust
 					}else System.out.println("You havent placed your bet yet");
 						break;
 				case "s":
 					if(prevBetFlag){
 						System.out.println("stand option");
 						//fazer a parte do dealer
-						while(dealer.hands.getFirst().getTotal()<=17){
-							dealer.hit(shoe.takeCard(), 0);
-						}
-						this.showCards();
-						System.out.println("end of turn");
+						
 						/////////////////////////////////
 						//player.setBalance(balance);
 						player.setCurrentBet(0);
