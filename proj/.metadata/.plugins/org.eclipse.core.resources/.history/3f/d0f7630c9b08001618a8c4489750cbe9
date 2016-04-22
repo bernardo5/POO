@@ -108,50 +108,32 @@ public class Game {
 					System.out.println("Your current balance is: "+player.getBalance());
 					break;
 				case "d":
-					if(prevBetFlag){
-						this.distributeHands();
-						this.showCards();
-					}else System.out.println("You havent placed your bet yet");
+					this.distributeHands();
+					this.showCards();
 					break;
 				case "h":
-					if(prevBetFlag){
-						System.out.println("hit option");
-					}else System.out.println("You havent placed your bet yet");
-						break;
+					System.out.println("hit option");
+					break;
 				case "s":
-					if(prevBetFlag){
-						System.out.println("stand option");
-					}else System.out.println("You havent placed your bet yet");
+					System.out.println("stand option");
 					break;
 				case "i":
-					if(prevBetFlag){
-						System.out.println("insurance option");
-					}else System.out.println("You havent placed your bet yet");
+					System.out.println("insurance option");
 					break;
 				case "u":
-					if(prevBetFlag){
-						System.out.println("surrender option");
-					}else System.out.println("You havent placed your bet yet");
+					System.out.println("surrender option");
 					break;
 				case "p":
-					if(prevBetFlag){
-						System.out.println("splitting option");
-					}else System.out.println("You havent placed your bet yet");
+					System.out.println("splitting option");
 					break;
 				case "2":
-					if(prevBetFlag){
-						System.out.println("double option");
-					}else System.out.println("You havent placed your bet yet");
+					System.out.println("double option");
 					break;
 				case "ad":
-					if(prevBetFlag){
-						System.out.println("advice option");
-					}else System.out.println("You havent placed your bet yet");
+					System.out.println("advice option");
 					break;
 				case "st":
-					if(prevBetFlag){
-						System.out.println("statistics option");
-					}else System.out.println("You havent placed your bet yet");
+					System.out.println("statistics option");
 					break;
 			}
 		}
