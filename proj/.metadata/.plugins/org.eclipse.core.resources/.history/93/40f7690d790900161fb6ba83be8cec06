@@ -22,14 +22,14 @@ public class Card {
 	        DEUCE(2), THREE(3), FOUR(4), FIVE(5), SIX(6), SEVEN(7), EIGHT(8), NINE(
 	                9), TEN(10), JACK(10), QUEEN(10), KING(10), ACE(11);
 
-	        private int RankPoints;
+	        private int Rankpoints;
 
 	        Rank(int points) {
-	            this.RankPoints = points;
+	            this.Rankpoints = points;
 	        }
 
-	        public int getRankPoints() {
-	            return this.RankPoints;
+	        public int getRankpoints() {
+	            return this.Rankpoints;
 	        }
 
 	    }
@@ -60,12 +60,12 @@ public class Card {
 	        return rank + " of " + suit;
 	    }
 	    
-	  /*  public static void main(String[] args) {
+	    public static void main(String[] args) {
 			// TODO Auto-generated method stub
-			Card AceOfSpades=new Card(Rank.ACE, Suit.SPADES);
-			System.out.println(AceOfSpades.toString()+" with value "+AceOfSpades.rank.getRankPoints());
+			Card AceOfSpades=new Card(/*new Rank(11)*/Rank.ACE, Suit.SPADES);
+			System.out.println(AceOfSpades.toString());
 			
-		}*/
+		}
 
 	
 	

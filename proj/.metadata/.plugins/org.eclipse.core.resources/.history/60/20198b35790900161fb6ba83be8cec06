@@ -60,12 +60,12 @@ public class Card {
 	        return rank + " of " + suit;
 	    }
 	    
-	  /*  public static void main(String[] args) {
+	    public static void main(String[] args) {
 			// TODO Auto-generated method stub
-			Card AceOfSpades=new Card(Rank.ACE, Suit.SPADES);
+			Card AceOfSpades=new Card(/*new Rank(11)*/Rank.ACE, Suit.SPADES);
 			System.out.println(AceOfSpades.toString()+" with value "+AceOfSpades.rank.getRankPoints());
 			
-		}*/
+		}
 
 	
 	
