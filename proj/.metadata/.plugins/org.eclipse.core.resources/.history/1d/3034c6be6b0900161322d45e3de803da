@@ -85,18 +85,16 @@ public class Game {
 	
 	public void interactiveMode(){
 		boolean tight=false;
-		boolean playing=false;
 		int bust=0;
 		String[] command;
 		boolean prevBetFlag=false;
 		int prevBet = 0;
 		boolean dealFlag=false;
-		while((player.getBalance()>=minBet)||(playing)){
+		while(player.getBalance()>=minBet){
 			command=this.getCommand();
 			switch(command[0]){
 				case "b": 
 					if(!dealFlag){
-						playing=true;
 						if(prevBetFlag){
 							if(Integer.parseInt(command[1])==-1){
 								this.placeBet(prevBet);
@@ -137,7 +135,6 @@ public class Game {
 					}else System.out.println("You havent placed your bet yet");
 						break;
 				case "s":
-					playing=false;
 					if(prevBetFlag){
 						System.out.println("stand option");
 						//fazer a parte do dealer
