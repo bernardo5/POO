@@ -22,7 +22,10 @@ public class Dealer extends Player{
 		LinkedList<Card> cardsss=h.getHand();
 		int i=0;
 		for(Card c:cardsss){
-			if(i!=0)game+=c.toString();
+			if(i!=0){
+				if(i!=1)game+=", ";
+				game+=c.toString();
+				}
 			i++;
 		}
 		

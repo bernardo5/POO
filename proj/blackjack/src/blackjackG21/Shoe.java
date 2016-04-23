@@ -3,6 +3,9 @@ package blackjackG21;
 import java.io.*;
 import java.util.*;
 
+import blackjackG21.Card.Rank;
+import blackjackG21.Card.Suit;
+
 public class Shoe {
 	private Card[] sequence;
 	private int nbNextCard;
@@ -32,6 +35,8 @@ public class Shoe {
 	public void populateShoeFromFile(String file, int shoe){
 		String line, name;
 		char suit;
+		Rank rank=null;
+		Suit suits=null;
 		int positionToAdd=0;
 		int i=0;
 		try{
@@ -52,7 +57,67 @@ public class Shoe {
 						name="10";
 						suit=card.charAt(2);
 					}
-			   	    sequence[positionToAdd++]=new Card(name, suit);
+			   	    ///////////////////////////////////////////////////////////
+			   	    switch(name){
+			   	    	case "2":
+			   	    		rank = Rank.DEUCE;
+			   	    		break;
+			   	    	case "3":
+			   	    		rank = Rank.THREE;
+			   	    		break;
+			   	    	case "4":
+			   	    		rank = Rank.FOUR;
+			   	    		break;
+			   	    	case "5":
+			   	    		rank = Rank.FIVE;
+			   	    		break;
+			   	    	case "6":
+			   	    		rank = Rank.SIX;
+			   	    		break;
+			   	    	case "7":
+			   	    		rank = Rank.SEVEN;
+			   	    		break;
+			   	    	case "8":
+			   	    		rank = Rank.EIGHT;
+			   	    		break;
+			   	    	case "9":
+			   	    		rank = Rank.NINE;
+			   	    		break;
+			   	    	case "10":
+			   	    		rank = Rank.TEN;
+			   	    		break;
+			   	    	case "J":
+			   	    		rank = Rank.JACK;
+			   	    		break;
+			   	    	case "Q":
+			   	    		rank = Rank.QUEEN;
+			   	    		break;
+			   	    	case "K":
+			   	    		rank = Rank.KING;
+			   	    		break;
+			   	    	case "A":
+			   	    		rank = Rank.ACE;
+			   	    		break;
+			   	    }
+			   	    
+			   	    switch(suit){
+			   	    	case 'H':
+			   	    		suits=Suit.HEARTS;
+			   	    		break;
+			   	    	case 'S':
+			   	    		suits=Suit.SPADES;
+			   	    		break;
+						case 'D':
+							suits=Suit.DIAMONDS;	
+							break;
+						case 'C':
+							suits=Suit.CLUBS;	
+							break;
+			
+			   	    }
+			   	    
+			   	    //////////////////////////////////////////////////////////////
+			   	 sequence[positionToAdd++]=new Card(rank, suits);
 			   	 }
 		    	 i++;
 		     }
