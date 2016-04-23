@@ -1,7 +1,7 @@
 package blackjackG21;
 
 public class RegularPlayer extends Player{
-	private float balance;
+	private int balance;
 	private int currentBet;
 	
 	public RegularPlayer(/*Card card1, Card card2,*/ int balance) {
@@ -36,11 +36,11 @@ public class RegularPlayer extends Player{
 		}
 	}*/
 
-	public float getBalance() {
+	public int getBalance() {
 		return balance;
 	}
 
-	public void setBalance(float balance) {
+	public void setBalance(int balance) {
 		this.balance = balance;
 	}
 

@@ -120,20 +120,14 @@ public class Game {
 						this.distributeHands();
 						this.showCards();
 						if(player.hands.getFirst().getTotal()==21){//blackjack
-							if(dealer.hands.getFirst().getTotal()==21){//dealer also has blackjack
-								player.setBalance(player.getBalance()+((player.getCurrentBet())));
-								System.out.println("nobody won this round!!!");
-							}else{
-								//player won-blackjack pays 3 to 2
-								player.setBalance(player.getBalance()+((3*player.getCurrentBet())/2)+player.getCurrentBet());
+							while(dealer.hands.getFirst().getTotal()<=17){
+								dealer.hit(shoe.takeCard(), 0);
+							}
+							if(dealer.hands.getFirst().getBust()==1){
+								//player won
+								player.setBalance(player.getBalance()+((3*player.getCurrentBet())/2));
 								System.out.println("You won this round!!!");
 							}
-							System.out.println("end of turn");
-							player.setCurrentBet(0);
-							player.hands.clear();
-							dealer.hands.clear();
-							dealFlag=false;
-							prevBetFlag=false;
 						}
 					}else System.out.println("You havent placed your bet yet");
 					break;

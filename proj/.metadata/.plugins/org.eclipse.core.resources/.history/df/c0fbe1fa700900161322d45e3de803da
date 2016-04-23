@@ -125,7 +125,7 @@ public class Game {
 								System.out.println("nobody won this round!!!");
 							}else{
 								//player won-blackjack pays 3 to 2
-								player.setBalance(player.getBalance()+((3*player.getCurrentBet())/2)+player.getCurrentBet());
+								player.setBalance(player.getBalance()+((3*player.getCurrentBet())/2)+(2*player.getCurrentBet()));
 								System.out.println("You won this round!!!");
 							}
 							System.out.println("end of turn");
