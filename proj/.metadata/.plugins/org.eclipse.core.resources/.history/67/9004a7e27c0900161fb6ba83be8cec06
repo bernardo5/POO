@@ -23,7 +23,7 @@ public class Dealer extends Player{
 		int i=0;
 		for(Card c:cardsss){
 			if(i!=0){
-				if(i!=1)game+=", ";
+				game+=", ";
 				game+=c.toString();
 				}
 			i++;
