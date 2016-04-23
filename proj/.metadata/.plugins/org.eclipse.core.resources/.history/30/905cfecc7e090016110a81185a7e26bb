@@ -32,17 +32,6 @@ public class Shoe {
 		return message;
 	}
 	
-	public void populateShoe(int nbDecks){
-		int positionToAdd=0;
-		for(int i=0; i<nbDecks; i++){
-			for(Rank c:Rank.values()){
-				for(Suit s:Suit.values()){
-					sequence[positionToAdd++]=new Card(c, s);
-				}
-			}
-		}
-	}
-	
 	public void populateShoeFromFile(String file, int shoe){
 		String line, name;
 		char suit;
