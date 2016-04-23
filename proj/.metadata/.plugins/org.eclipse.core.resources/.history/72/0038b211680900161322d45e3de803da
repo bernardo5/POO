@@ -84,8 +84,6 @@ public class Game {
 	}
 	
 	public void interactiveMode(){
-		boolean tight=false;
-		int bust=0;
 		String[] command;
 		boolean prevBetFlag=false;
 		int prevBet = 0;
@@ -123,15 +121,8 @@ public class Game {
 					if(prevBetFlag){
 						System.out.println("hit option");
 						//get a new card to the hand
-						bust=player.hit(shoe.takeCard(), 0);
+						player.hit(shoe.takeCard(), 0);
 						this.showCards();
-						if(bust==1){
-							//dealer won
-							player.setCurrentBet(0);
-							dealFlag=false;
-							prevBetFlag=false;
-							bust=0;
-						}
 					}else System.out.println("You havent placed your bet yet");
 						break;
 				case "s":
@@ -143,35 +134,6 @@ public class Game {
 							dealer.hit(shoe.takeCard(), 0);
 						}
 						this.showCards();
-						
-						for(Hand h:player.hands){//check if a players hand beats the dealer's hand
-							if(h.getTotal()>=dealer.hands.getFirst().getTotal()){
-								if(h.getTotal()==dealer.hands.getFirst().getTotal()){
-									//check who has less cards
-									if(h.getHand().size()<dealer.hands.getFirst().getHand().size()){
-										//player has less cards
-										player.setBalance(player.getBalance()+(2*player.getCurrentBet()));
-										System.out.println("You won this round!!!");
-									}else if(h.getHand().size()==dealer.hands.getFirst().getHand().size()){
-										//same card number
-										tight=true;
-									}
-								}else{
-									//player won
-									player.setBalance(player.getBalance()+(2*player.getCurrentBet()));
-									System.out.println("You won this round!!!");
-								}
-								
-								break;
-							}
-						}
-						
-						if(tight){
-							player.setBalance(player.getBalance()+player.getCurrentBet());
-							System.out.println("Nobody won this round!!!");
-							tight=false;
-						}
-						
 						System.out.println("end of turn");
 						/////////////////////////////////
 						//player.setBalance(balance);

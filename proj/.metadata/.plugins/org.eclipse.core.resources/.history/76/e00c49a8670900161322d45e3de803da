@@ -69,12 +69,11 @@ public class Hand {
 		return bust;
 	}
 	
-	public int bust(){
+	public void bust(){
 		if(this.getTotal()>21){
 			this.bust=1;
 			System.out.println("Hand"+this.toString()+", busted");
 		}
-		return this.bust;
 	}
 	
 

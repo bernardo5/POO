@@ -84,7 +84,6 @@ public class Game {
 	}
 	
 	public void interactiveMode(){
-		boolean tight=false;
 		int bust=0;
 		String[] command;
 		boolean prevBetFlag=false;
@@ -148,28 +147,14 @@ public class Game {
 							if(h.getTotal()>=dealer.hands.getFirst().getTotal()){
 								if(h.getTotal()==dealer.hands.getFirst().getTotal()){
 									//check who has less cards
-									if(h.getHand().size()<dealer.hands.getFirst().getHand().size()){
-										//player has less cards
-										player.setBalance(player.getBalance()+(2*player.getCurrentBet()));
-										System.out.println("You won this round!!!");
-									}else if(h.getHand().size()==dealer.hands.getFirst().getHand().size()){
-										//same card number
-										tight=true;
-									}
+									if()
 								}else{
 									//player won
 									player.setBalance(player.getBalance()+(2*player.getCurrentBet()));
 									System.out.println("You won this round!!!");
 								}
-								
 								break;
 							}
-						}
-						
-						if(tight){
-							player.setBalance(player.getBalance()+player.getCurrentBet());
-							System.out.println("Nobody won this round!!!");
-							tight=false;
 						}
 						
 						System.out.println("end of turn");
