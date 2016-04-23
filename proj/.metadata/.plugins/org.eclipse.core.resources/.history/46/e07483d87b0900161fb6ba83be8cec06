@@ -38,8 +38,8 @@ public class Card {
 	        CLUBS, DIAMONDS, HEARTS, SPADES;
 	    }
 
-	    final Rank rank;
-	    final Suit suit;
+	    private final Rank rank;
+	    private final Suit suit;
 
 	    public Card(Rank rank, Suit suit) {
 	        this.rank = rank;

@@ -1,5 +1,6 @@
 package blackjackG21;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 
 public class Hand {
@@ -33,8 +34,8 @@ public class Hand {
 		int total=0;
 		int Aces=0;
 		for(Card c:hand){
-			total+=c.rank.getRankPoints();
-			if(c.rank.getRankPoints()==11)Aces++;
+			total+=points.get(c.getName());
+			if((c.getName()).equals("A"))Aces++;
 		}
 		while((total>21)&&(Aces>0)){
 			total-=10;
