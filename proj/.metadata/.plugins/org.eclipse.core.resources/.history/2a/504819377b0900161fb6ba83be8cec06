@@ -100,22 +100,6 @@ public class Shoe {
 			   	    		break;
 			   	    }
 			   	    
-			   	    switch(suit){
-			   	    	case 'H':
-			   	    		suits=Suit.HEARTS;
-			   	    		break;
-			   	    	case 'S':
-			   	    		suits=Suit.SPADES;
-			   	    		break;
-						case 'D':
-							suits=Suit.DIAMONDS;	
-							break;
-						case 'C':
-							suits=Suit.CLUBS;	
-							break;
-			
-			   	    }
-			   	    
 			   	    //////////////////////////////////////////////////////////////
 			   	 sequence[positionToAdd++]=new Card(rank, suits);
 			   	 }

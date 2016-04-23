@@ -101,16 +101,16 @@ public class Shoe {
 			   	    }
 			   	    
 			   	    switch(suit){
-			   	    	case 'H':
+			   	    	case 'h':
 			   	    		suits=Suit.HEARTS;
 			   	    		break;
-			   	    	case 'S':
+			   	    	case 's':
 			   	    		suits=Suit.SPADES;
 			   	    		break;
-						case 'D':
+						case 'd':
 							suits=Suit.DIAMONDS;	
 							break;
-						case 'C':
+						case 'c':
 							suits=Suit.CLUBS;	
 							break;
 			

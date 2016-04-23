@@ -101,16 +101,16 @@ public class Shoe {
 			   	    }
 			   	    
 			   	    switch(suit){
-			   	    	case 'H':
+			   	    	case 'h':
 			   	    		suits=Suit.HEARTS;
 			   	    		break;
-			   	    	case 'S':
+			   	    	case 's':
 			   	    		suits=Suit.SPADES;
 			   	    		break;
-						case 'D':
+						case 'd':
 							suits=Suit.DIAMONDS;	
 							break;
-						case 'C':
+						case 'c':
 							suits=Suit.CLUBS;	
 							break;
 			
@@ -133,7 +133,7 @@ public class Shoe {
 		Collections.shuffle(Arrays.asList(sequence));
 	}
 
-	/*public static void main(String[] args) {
+	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		int shoe=4;
 		Shoe shoeGame=new Shoe(shoe);
@@ -146,6 +146,6 @@ public class Shoe {
 		
 		
 		
-	}*/
+	}
 
 }
