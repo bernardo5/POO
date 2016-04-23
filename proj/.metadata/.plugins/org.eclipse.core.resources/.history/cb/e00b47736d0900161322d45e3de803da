@@ -133,7 +133,6 @@ public class Game {
 							dealFlag=false;
 							prevBetFlag=false;
 							bust=0;
-							playing=false;
 						}
 					}else System.out.println("You havent placed your bet yet");
 						break;
