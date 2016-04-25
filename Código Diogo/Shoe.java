@@ -63,12 +63,10 @@ public class Shoe {
 		Suit cardsuit = null;
 		
 		try{
-			FileInputStream fileInputStream = new FileInputStream(file);
-		    InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
-		    BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+			BufferedReader br = new BufferedReader(new FileReader(file));
 		    
 		    int i=0;
-		    while (((line = bufferedReader.readLine()) != null)&&(i<nDecks)) {
+		    while (((line = br.readLine()) != null)&&(i<nDecks)) {
 		    	String[] arr = line.split(" ");
 		    	for ( String card : arr) {
 		    		System.out.println(card);
@@ -104,7 +102,7 @@ public class Shoe {
 			   	 }
 		    	 i++;
 		    }
-		    bufferedReader.close();
+		    br.close();
 		    
 	     }catch(FileNotFoundException e){
 	    	 e.printStackTrace();
