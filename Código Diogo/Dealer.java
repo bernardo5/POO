@@ -28,10 +28,16 @@ public class Dealer extends Person{
 	}
 	
 	/*public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		Dealer player=new Dealer(new Card("Q",'S'), new Card("A",'S'));
-		player.hit(new Card("10",'S'), 0);
-		System.out.println(player.showHands());
+		Card card1 = new Card(Rank.valueOf("ACE"), Suit.valueOf("S"));
+		Card card2 = new Card(Rank.valueOf("QUEEN"), Suit.valueOf("C"));
+		Card card3 = new Card(Rank.valueOf("TEN"), Suit.valueOf("C"));
+		Dealer dealer = new Dealer();
+		
+		Hand hand1 = new Hand(card1, card2);
+		
+		dealer.addHand(hand1);
+
+		System.out.println(dealer.showHands());
 	}*/
 
 }

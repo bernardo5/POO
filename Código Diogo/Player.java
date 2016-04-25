@@ -83,10 +83,18 @@ public class Player extends Person{
 	}
 	
 
-	/*public static void main(String[] args) {
-		RegularPlayer player=new RegularPlayer(new Card("Q",'S'), new Card("A",'S'), 15);
-		player.hit(new Card("A",'S'), 0);
-		System.out.println(player.showHands());
-	}*/
+	public static void main(String[] args) {
+		Card card1 = new Card(Rank.valueOf("ACE"), Suit.valueOf("SPADES"));
+		Card card2 = new Card(Rank.valueOf("QUEEN"), Suit.valueOf("HEARTS"));
+		Card card3 = new Card(Rank.valueOf("TEN"), Suit.valueOf("DIAMONDS"));
+		Player player1 = new Player(100);
+		
+		Hand hand1 = new Hand(card1, card2);
+		
+		player1.addHand(hand1);
+		player1.hands.getFirst().addCard(card3);
+
+		System.out.println(player1.showHands());
+	}
 
 }
