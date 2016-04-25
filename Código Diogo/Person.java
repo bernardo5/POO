@@ -14,14 +14,4 @@ public class Person {
 		hands.add(hand);
 	}
 	
-	
-	//public abstract void stand(Hand h);
-	/*
-	public void hit(Card card, int index){
-		Hand handAux=hands.get(index);//so it wont be necessary to search twice for element
-		handAux.addCard(card);
-		handAux.bust();
-	}
-	*/
-	
 }

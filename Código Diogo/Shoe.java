@@ -1,6 +1,7 @@
 package blackjackG21;
 
-//import java.io.*;
+
+import java.io.*;
 import java.util.*;
 
 public class Shoe {
@@ -33,6 +34,7 @@ public class Shoe {
 	
 	public void shuffleShoe(){
 		Collections.shuffle(sequence);
+		System.out.println("shuffling the shoe...");
 	}
 	
 	public void populateShoe(int nbDecks){
@@ -54,21 +56,22 @@ public class Shoe {
 		}
 		return message;
 	}
-	/*
+	
 	public void populateShoeFromFile(String file){
 		String line, rank,suit;
-		int i=0, rank2;
+		Rank cardrank = null;
+		Suit cardsuit = null;
 		
 		try{
 			FileInputStream fileInputStream = new FileInputStream(file);
 		    InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
 		    BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 		    
+		    int i=0;
 		    while (((line = bufferedReader.readLine()) != null)&&(i<nDecks)) {
 		    	String[] arr = line.split(" ");
 		    	for ( String card : arr) {
 		    		System.out.println(card);
-			   	    rank2 = Integer.(card);
 			   	    
 		    		if(card.length()==2){//all except 10's
 						rank=String.valueOf(card.charAt(0));
@@ -77,7 +80,27 @@ public class Shoe {
 						rank="10";
 						suit=String.valueOf(card.charAt(2));
 					}
-			   	    sequence.add(new Card(Rank(Rrank2)),Suit.valueOf(suit)));
+		    		
+		    		if(rank.equals("2"))cardrank = Rank.TWO;
+		    		if(rank.equals("3"))cardrank = Rank.THREE;
+		    		if(rank.equals("4"))cardrank = Rank.FOUR;
+		    		if(rank.equals("5"))cardrank = Rank.FIVE;
+		    		if(rank.equals("6"))cardrank = Rank.SIX;
+		    		if(rank.equals("7"))cardrank = Rank.SEVEN;
+		    		if(rank.equals("8"))cardrank = Rank.EIGHT;
+		    		if(rank.equals("9"))cardrank = Rank.NINE;
+		    		if(rank.equals("10"))cardrank = Rank.TEN;
+		    		if(rank.equals("J"))cardrank = Rank.JACK;
+		    		if(rank.equals("Q"))cardrank = Rank.QUEEN;
+		    		if(rank.equals("K"))cardrank = Rank.KING;
+		    		if(rank.equals("A"))cardrank = Rank.ACE;
+		    		
+		    		if(suit.equals("H"))cardsuit = Suit.HEARTS;
+		    		if(suit.equals("S"))cardsuit = Suit.SPADES;
+		    		if(suit.equals("D"))cardsuit = Suit.DIAMONDS;
+		    		if(suit.equals("C"))cardsuit = Suit.CLUBS;
+
+			   	    sequence.add(new Card(cardrank,cardsuit));
 			   	 }
 		    	 i++;
 		    }
@@ -91,10 +114,8 @@ public class Shoe {
 		System.out.println(this.toString());
 	}
 
-
-*/
 	
-
+	/*
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		int shoe=4;
@@ -104,11 +125,7 @@ public class Shoe {
 		shoeGame.shuffleShoe();
 		System.out.println(shoeGame.toString());
 		//shoeGame.shuffleShoe();
-		//System.out.println(shoeGame.toString());
-
-		
-		
-		
-	}
-
+		//System.out.println(shoeGame.toString());	
+	}*/
+	
 }

@@ -1,7 +1,12 @@
 package blackjackG21;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Scanner;
+
 public class Player extends Person{
-	private int balance;
+	private float balance;
 	
 	//Constructor
 	public Player(int balance) {
@@ -10,15 +15,15 @@ public class Player extends Person{
 	}
 	
 	//Getters
-	public int getBalance() {
+	public float getBalance() {
 		return balance;
 	}
 	//Setters
-	public void setBalance(int balance) {
+	public void setBalance(float balance) {
 		this.balance = balance;
 	}
-	public void addBalance(int returnBalance){
-		this.balance+=returnBalance;
+	public void addBalance(float f){
+		this.balance+=f;
 	}
 	
 	//Methods
@@ -41,6 +46,28 @@ public class Player extends Person{
 			setBalance(getBalance()-bet);
 			return true;
 		}
+	}
+	
+	//Input from Stdin
+	public String getplayerInput() throws IOException{
+		BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
+		String s;
+		s = bufferRead.readLine();
+		Scanner scanner = new Scanner (s);
+	    String command =	scanner.next ();
+	    if(scanner.hasNextInt()){
+	        int bet=scanner.nextInt();
+	        scanner.close();
+	        return command+" "+Integer.toString(bet);
+	    }else{
+			scanner.close();
+			return command;
+		}
+	}
+	
+	//Input from File
+	public String getplayerCommandsfromFile(){
+		return null;
 	}
 	
 	public void insurance(){

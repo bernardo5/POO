@@ -46,11 +46,12 @@ public class Hand {
 	}
 	
 	public void addCard(Card card){
-		cards.add(card);
+		this.cards.add(card);
+		this.updatePoints();
 	}
 	
 	public void emptyHand(){
-		cards.clear();
+		this.cards.clear();
 	}
 	
 	@Override
