@@ -155,7 +155,7 @@ public class Shoe {
 	}
 	
 	public void shuffle(){
-		Collections.shuffle(sequence);
+		Collections.shuffle(Arrays.asList(sequence));
 	}
 
 	/*public static void main(String[] args) {
