@@ -91,7 +91,6 @@ public class Game {
 		boolean prevBetFlag=false;
 		int prevBet = 0;
 		boolean dealFlag=false;
-		boolean sideRules=false;
 		while((player.getBalance()>=minBet)||(playing)){
 			if(shoe.calculateUsagePercentage()>=shoe.getShufflePercentage()){
 				System.out.println("Shuffling...");
@@ -122,7 +121,6 @@ public class Game {
 				case "d":
 					if(prevBetFlag){
 						dealFlag=true;
-						sideRules=true;
 						this.distributeHands();
 						this.showCards();
 						if(player.hands.getFirst().getTotal()==21){//blackjack
@@ -140,14 +138,12 @@ public class Game {
 							dealer.hands.clear();
 							dealFlag=false;
 							prevBetFlag=false;
-							sideRules=false;
 						}
 					}else System.out.println("You havent placed your bet yet");
 					break;
 				case "h":
 					if(prevBetFlag){
 						System.out.println("hit option");
-						sideRules=false;
 						//get a new card to the hand
 						bust=player.hit(shoe.takeCard(), 0);
 						this.showCards();
@@ -211,24 +207,24 @@ public class Game {
 					}else System.out.println("You havent placed your bet yet");
 					break;
 				case "i":
-					if(prevBetFlag&&sideRules){
+					if(prevBetFlag){
 						System.out.println("insurance option");
-					}else System.out.println("You cannot use side rules at the moment");
+					}else System.out.println("You havent placed your bet yet");
 					break;
 				case "u":
-					if(prevBetFlag&&sideRules){
+					if(prevBetFlag){
 						System.out.println("surrender option");
-					}else System.out.println("You cannot use side rules at the moment");
+					}else System.out.println("You havent placed your bet yet");
 					break;
 				case "p":
-					if(prevBetFlag&&sideRules){
+					if(prevBetFlag){
 						System.out.println("splitting option");
-					}else System.out.println("You cannot use side rules at the moment");
+					}else System.out.println("You havent placed your bet yet");
 					break;
 				case "2":
-					if(prevBetFlag&&sideRules){
+					if(prevBetFlag){
 						System.out.println("double option");
-					}else System.out.println("You cannot use side rules at the moment");
+					}else System.out.println("You havent placed your bet yet");
 					break;
 				case "ad":
 					if(prevBetFlag){

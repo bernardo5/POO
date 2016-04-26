@@ -140,7 +140,6 @@ public class Game {
 							dealer.hands.clear();
 							dealFlag=false;
 							prevBetFlag=false;
-							sideRules=false;
 						}
 					}else System.out.println("You havent placed your bet yet");
 					break;
