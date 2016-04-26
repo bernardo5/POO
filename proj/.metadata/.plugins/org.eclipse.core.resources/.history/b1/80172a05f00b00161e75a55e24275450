@@ -7,31 +7,16 @@ import blackjackG21.Card.Rank;
 import blackjackG21.Card.Suit;
 
 public class Shoe {
-	private ArrayList<Card> sequence;
+	private Card[] sequence;
 	private int nbNextCard;
-	private int nDecks;
-	private int shufflePercentage;
 	
-	public Shoe(int numberDecks, int percentage){
-		this.sequence=new ArrayList<Card>(numberDecks*52);
+	public Shoe(int numberDecks){
+		sequence=new Card[numberDecks*52];
 		nbNextCard=0;
-		this.shufflePercentage=percentage;
-		this.nDecks=numberDecks;
-	}
-	
-	public int getShufflePercentage() {
-		return shufflePercentage;
-	}
-	
-	public int calculateUsagePercentage(){
-		return ((nDecks*52)-(nbNextCard+1))/(nDecks*52);
 	}
 	
 	public Card takeCard(){
-		if(nbNextCard<52){
-			nbNextCard++;
-			return this.sequence.remove(0);
-		}
+		if(nbNextCard<52)return sequence[nbNextCard++];
 		return null;
 	}
 	
@@ -48,10 +33,11 @@ public class Shoe {
 	}
 	
 	public void populateShoe(int nbDecks){
+		int positionToAdd=0;
 		for(int i=0; i<nbDecks; i++){
 			for(Rank c:Rank.values()){
 				for(Suit s:Suit.values()){
-					this.sequence.add(new Card(c, s));
+					sequence[positionToAdd++]=new Card(c, s);
 				}
 			}
 		}
@@ -142,7 +128,7 @@ public class Shoe {
 			   	    }
 			   	    
 			   	    //////////////////////////////////////////////////////////////
-			   	 this.sequence.add(new Card(rank, suits));
+			   	 sequence[positionToAdd++]=new Card(rank, suits);
 			   	 }
 		    	 i++;
 		     }

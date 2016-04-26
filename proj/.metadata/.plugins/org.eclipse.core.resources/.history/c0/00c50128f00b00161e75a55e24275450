@@ -48,10 +48,11 @@ public class Shoe {
 	}
 	
 	public void populateShoe(int nbDecks){
+		int positionToAdd=0;
 		for(int i=0; i<nbDecks; i++){
 			for(Rank c:Rank.values()){
 				for(Suit s:Suit.values()){
-					this.sequence.add(new Card(c, s));
+					sequence[positionToAdd++]=new Card(c, s);
 				}
 			}
 		}
@@ -142,7 +143,7 @@ public class Shoe {
 			   	    }
 			   	    
 			   	    //////////////////////////////////////////////////////////////
-			   	 this.sequence.add(new Card(rank, suits));
+			   	 sequence[positionToAdd++]=new Card(rank, suits);
 			   	 }
 		    	 i++;
 		     }

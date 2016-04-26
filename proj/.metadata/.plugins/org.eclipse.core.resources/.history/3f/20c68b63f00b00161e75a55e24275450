@@ -20,7 +20,7 @@ public class Game {
 		this.maxBet=maxBet;
 		this.nDecks=nDecks;
 		this.shufflePercentage=shufflePercentage;
-		shoe=new Shoe(nDecks, shufflePercentage);
+		shoe=new Shoe(nDecks);
 		shoe.populateShoeFromFile(file, nDecks);
 		player=new RegularPlayer(playersBalance);
 		dealer=new Dealer();
