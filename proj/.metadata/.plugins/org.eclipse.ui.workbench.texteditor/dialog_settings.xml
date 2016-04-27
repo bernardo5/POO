@@ -2,20 +2,24 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="System.exit" key="selection"/>
+		<item value="tight" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
-			<item value="system.exit"/>
-			<item value="add"/>
-			<item value="insurance"/>
+			<item value="tight"/>
+			<item value="playing"/>
+			<item value="balance"/>
 			<item value="insurance_flag"/>
-			<item value="hit"/>
-			<item value="addCard"/>
+			<item value="sideRules"/>
+			<item value="prevBetFlag"/>
+			<item value="prevBet"/>
+			<item value="dealFlag"/>
 		</list>
 		<list key="replacehistory">
+			<item value=""/>
+			<item value="player.getCurrentBet()!=0"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">

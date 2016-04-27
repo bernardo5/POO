@@ -5,6 +5,7 @@ import java.util.LinkedList;
 public class Hand {
 	private LinkedList<Card> hand;
 	private int bust;
+	private int currentBet;
 	
 	public LinkedList<Card> getHand(){
 		return hand;
@@ -15,10 +16,19 @@ public class Hand {
 		this.bust=0;
 	}
 	
-	public Hand(Card card1, Card card2){
+	public int getCurrentBet() {
+		return currentBet;
+	}
+
+	public void setCurrentBet(int currentBet) {
+		this.currentBet = currentBet;
+	}
+	
+	public Hand(Card card1, Card card2, int bet){
 		this();
 		hand.add(card1);
 		hand.add(card2);
+		this.setCurrentBet(bet);
 	}
 	
 	public void addCard(Card card){

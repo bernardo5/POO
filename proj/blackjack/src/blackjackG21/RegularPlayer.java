@@ -1,13 +1,13 @@
 package blackjackG21;
 
+
 public class RegularPlayer extends Player{
 	private float balance;
-	private int currentBet;
 	
-	public RegularPlayer(/*Card card1, Card card2,*/ int balance) {
-		super(/*card1, card2*/);
+	
+	public RegularPlayer(int balance) {
+		super();
 		this.setBalance(balance);
-		this.setCurrentBet(0);
 	}
 	
 	/*********************************************************
@@ -29,13 +29,6 @@ public class RegularPlayer extends Player{
 		return game;
 	}
 	
-	/*public void stand(Hand h){
-		if((h.getBust())==1){
-			//do something
-			System.out.println("You will now stand");
-		}
-	}*/
-
 	public float getBalance() {
 		return balance;
 	}
@@ -47,19 +40,5 @@ public class RegularPlayer extends Player{
 	public void addBalance(float returnBalance){
 		this.balance+=returnBalance;
 	}
-
-	public int getCurrentBet() {
-		return currentBet;
-	}
-
-	public void setCurrentBet(int currentBet) {
-		this.currentBet = currentBet;
-	}
-
-	/*public static void main(String[] args) {
-		RegularPlayer player=new RegularPlayer(new Card("Q",'S'), new Card("A",'S'), 15);
-		player.hit(new Card("A",'S'), 0);
-		System.out.println(player.showHands());
-	}*/
 
 }

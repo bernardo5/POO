@@ -18,8 +18,8 @@ public abstract class Player {
 	
 	//public abstract void stand(Hand h);
 	
-	public int hit(Card card, int index){
-		Hand handAux=hands.get(index);//so it wont be necessary to search twice for element
+	public int hit(Card card, Hand h){
+		Hand handAux=hands.get(hands.indexOf(h));//so it wont be necessary to search twice for element
 		handAux.addCard(card);
 		return handAux.bust();
 	}

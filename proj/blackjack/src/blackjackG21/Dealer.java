@@ -9,13 +9,6 @@ public class Dealer extends Player{
 	public Dealer(/*Card card1, Card card2*/) {
 		super(/*card1, card2*/);
 	}
-
-	/*public void stand(Hand h){
-		if((h.getTotal())>=17){
-			//do something
-			System.out.println("You will now stand");
-		}
-	}*/
 	
 	public Rank returnShownCard(){
 		return this.hands.getFirst().getHand().get(1).getRank();
