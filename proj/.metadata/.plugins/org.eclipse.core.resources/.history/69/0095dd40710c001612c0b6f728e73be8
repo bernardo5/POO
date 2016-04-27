@@ -272,45 +272,29 @@ public class Game {
 
 	public static void main(String[] args) {
 		Game game=null;
-		char mode='k';
+		char mode='e';
 		if(args.length<6){
-			//System.out.println(args.length);
 			System.out.println("Wrong command input. Please use one of the following:");
 			System.out.println("Usage for interactive mode: -i min-bet max-bet balance shoe shuffle");
 			System.out.println("Usage for debug mode: -d min-bet max-bet balance shoe-file cmd-file");
 			System.out.println("Usage for simulation mode: -s min-bet max-bet balance shuffle s-number strategy");
 			System.exit(1);//minumum arguments of every mode are six
 		}
-		//System.out.println(args.length);
 		
-		if(Integer.parseInt(args[1])<1){
-			System.out.println("minBet should be at least 1");
-			System.exit(3);//minbet>1
-		}
-		if(Integer.parseInt(args[2])<10*Integer.parseInt(args[1]) ||Integer.parseInt(args[2])>20*Integer.parseInt(args[1])){
-			System.out.println("maxBet not in correct parameters");
-			System.exit(4);//10*minbet<=maxbet<=20*minbet
-		}
-		if(Integer.parseInt(args[3])<50*Integer.parseInt(args[1])){
-			System.out.println("Balance should be 50 times superior to minBet");
-			System.exit(5);//balance>=50*minbet
-		}
+		
+		if(Integer.parseInt(args[1])<1)System.exit(3);//minbet>1
+		if(Integer.parseInt(args[2])<10*Integer.parseInt(args[1]) ||Integer.parseInt(args[2])>20*Integer.parseInt(args[1])) System.exit(4);//10*minbet<=maxbet<=20*minbet
+		if(Integer.parseInt(args[3])<50*Integer.parseInt(args[1]))System.exit(5);//balance>=50*minbet
 		
 		if(args[0].equals("-i")){
 			if(args.length != 6) System.out.println("Usage for interactive mode: -i min-bet max-bet balance shoe shuffle");
 			int shoe=Integer.parseInt(args[4]);
-			if(shoe<4||shoe>8){
-				System.out.println("Not enough shoes");
-				System.exit(6);
-			}
+			if(shoe<4||shoe>8)System.exit(6);
 			int shuffle=Integer.parseInt(args[5]);
 			int balance=Integer.parseInt(args[3]);
 			int maxBet=Integer.parseInt(args[2]);
 			int minBet=Integer.parseInt(args[1]);
-			if(shuffle<10||shuffle>100){
-				System.out.println("Wrong shuffling percentage");
-				System.exit(7);
-			}
+			if(shuffle<10||shuffle>100)System.exit(7);
 			//(int minBet,	int maxBet, int playersBalance,	int nDecks,	int shufflePercentage
 			System.out.println("Entering interactive mode");
 			game= new Game(minBet,	maxBet, balance,	shoe,	shuffle);
@@ -321,7 +305,7 @@ public class Game {
 			if(args.length != 6) System.out.println("Usage for debug mode: -d min-bet max-bet balance shoe-file cmd-file");
 			//inicializar o game e fazer load do barulho de um file
 			
-			game= new Game(1,	1000, 50,	4,	58);
+			game= new Game(1,	1000, 50,	4,	58/*, "src/shoe-file.txt"*/);
 			mode='d';
 		}
 		//simulation mode
@@ -336,8 +320,9 @@ public class Game {
 			System.out.println("Usage for simulation mode: -s min-bet max-bet balance shuffle s-number strategy");
 			System.exit(2);
 		}
-		game= new Game(1,	1000, 50,	4,	58);
-		game.play(mode);
+		
+		game= new Game(1,	1000, 50,	4,	58/*, "src/shoe-file.txt"*/);
+		game.play('i');
 		//System.out.println("Error");
 	}
 

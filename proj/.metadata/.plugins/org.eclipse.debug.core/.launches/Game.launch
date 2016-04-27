@@ -7,5 +7,6 @@
 <listEntry value="1"/>
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="blackjackG21.Game"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-i 10 200 500 4 58"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="blackjack"/>
 </launchConfiguration>

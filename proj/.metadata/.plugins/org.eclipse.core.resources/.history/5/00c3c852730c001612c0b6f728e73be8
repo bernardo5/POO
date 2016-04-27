@@ -287,19 +287,13 @@ public class Game {
 			System.out.println("minBet should be at least 1");
 			System.exit(3);//minbet>1
 		}
-		if(Integer.parseInt(args[2])<10*Integer.parseInt(args[1]) ||Integer.parseInt(args[2])>20*Integer.parseInt(args[1])){
-			System.out.println("maxBet not in correct parameters");
-			System.exit(4);//10*minbet<=maxbet<=20*minbet
-		}
-		if(Integer.parseInt(args[3])<50*Integer.parseInt(args[1])){
-			System.out.println("Balance should be 50 times superior to minBet");
-			System.exit(5);//balance>=50*minbet
-		}
+		if(Integer.parseInt(args[2])<10*Integer.parseInt(args[1]) ||Integer.parseInt(args[2])>20*Integer.parseInt(args[1])) System.exit(4);//10*minbet<=maxbet<=20*minbet
+		if(Integer.parseInt(args[3])<50*Integer.parseInt(args[1]))System.exit(5);//balance>=50*minbet
 		
 		if(args[0].equals("-i")){
 			if(args.length != 6) System.out.println("Usage for interactive mode: -i min-bet max-bet balance shoe shuffle");
 			int shoe=Integer.parseInt(args[4]);
-			if(shoe<4||shoe>8){
+			if(shoe<=4||shoe>=8){
 				System.out.println("Not enough shoes");
 				System.exit(6);
 			}
