@@ -3,7 +3,6 @@ package blackjackG21;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.LinkedList;
 import java.util.Scanner;
 
 import blackjackG21.Card.Rank;
@@ -254,19 +253,17 @@ public class Game {
 				case "p":
 					if(prevBetFlag&&sideRules){
 						System.out.println("splitting option");
-						
-						LinkedList<Hand> copy = (LinkedList<Hand>) player.hands.clone();
-						for(Hand h:copy){
+						/*for(Hand h:player.hands){
 							//if cards have the same face value
 							if(h.getHand().get(0).getRank().getRankPoints()==h.getHand().get(1).getRank().getRankPoints()){
 								System.out.println("split");
 								//if it is the first split-ok  //cant split an hand with an Ace from splitted hand
 								if((player.hands.size()==1)||(h.getHand().getFirst().getRank()!=Rank.ACE))
-								player.hands.add(new Hand(player.hands.get(player.hands.indexOf(h)).getHand().removeLast(), shoe.takeCard()));
-								player.hands.get(player.hands.indexOf(h)).addCard(shoe.takeCard());
+								player.hands.add(new Hand(h.getHand().removeLast(), shoe.takeCard()));
+								h.addCard(shoe.takeCard());
 								this.showCards();
 							}
-						}
+						}*/
 					}else System.out.println("You cannot use side rules at the moment");
 					break;
 				case "2":
