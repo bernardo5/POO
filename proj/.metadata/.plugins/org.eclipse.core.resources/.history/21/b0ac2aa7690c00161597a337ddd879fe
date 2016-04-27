@@ -272,44 +272,9 @@ public class Game {
 
 	public static void main(String[] args) {
 		
-		if(args.length<6){
-			System.out.println("Wrong command input. Please use one of the following:");
-			System.out.println("Usage for interactive mode: -i min-bet max-bet balance shoe shuffle");
-			System.out.println("Usage for debug mode: -d min-bet max-bet balance shoe-file cmd-file");
-			System.out.println("Usage for simulation mode: -s min-bet max-bet balance shuffle s-number strategy");
-			System.exit(1);//minumum arguments of every mode are six
-		}
+		if(args.length<6)System.exit(1);//minumum arguments of every mode are six
 		
-		if(Integer.parseInt(args[1])<1)System.exit(3);//minbet>1
-		if(Integer.parseInt(args[2])<10*Integer.parseInt(args[1]) ||Integer.parseInt(args[2])>20*Integer.parseInt(args[1])) System.exit(4);//10*minbet<=maxbet<=20*minbet
-		if(Integer.parseInt(args[3])<50*Integer.parseInt(args[1]))System.exit(5);//balance>=50*minbet
 		
-		if(args[0].equals("-i")){
-			if(args.length != 6) System.out.println("Usage for interactive mode: -i min-bet max-bet balance shoe shuffle");
-			int shoe=Integer.parseInt(args[4]);
-			if(shoe<4||shoe>8)System.exit(6);
-			int shuffle=Integer.parseInt(args[5]);
-			if(shuffle<10||shuffle>100)System.exit(7);
-			
-			//Game game = new Game(minbet,maxbet,balance,shoe,shuffle);
-			//inicializar o game e fazer shuffle do baralho
-		}
-		//debug mode
-		else if(args[0].equals("-d")){
-			if(args.length != 6) System.out.println("Usage for debug mode: -d min-bet max-bet balance shoe-file cmd-file");
-			//inicializar o game e fazer load do barulho de um file
-		}
-		//simulation mode
-		else if(args[0].equals("-s")){
-			if(args.length != 8) System.out.println("Usage for simulation mode: -s min-bet max-bet balance shuffle s-number strategy");
-			//
-		}else{
-			System.out.println("Wrong command input. Please use one of the following:");
-			System.out.println("Usage for interactive mode: -i min-bet max-bet balance shoe shuffle");
-			System.out.println("Usage for debug mode: -d min-bet max-bet balance shoe-file cmd-file");
-			System.out.println("Usage for simulation mode: -s min-bet max-bet balance shuffle s-number strategy");
-			System.exit(2);
-		}
 		
 		Game game= new Game(1,	1000, 50,	4,	58/*, "src/shoe-file.txt"*/);
 		game.play('i');

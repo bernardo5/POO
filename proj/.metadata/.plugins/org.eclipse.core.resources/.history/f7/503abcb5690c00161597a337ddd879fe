@@ -272,13 +272,7 @@ public class Game {
 
 	public static void main(String[] args) {
 		
-		if(args.length<6){
-			System.out.println("Wrong command input. Please use one of the following:");
-			System.out.println("Usage for interactive mode: -i min-bet max-bet balance shoe shuffle");
-			System.out.println("Usage for debug mode: -d min-bet max-bet balance shoe-file cmd-file");
-			System.out.println("Usage for simulation mode: -s min-bet max-bet balance shuffle s-number strategy");
-			System.exit(1);//minumum arguments of every mode are six
-		}
+		if(args.length<6)System.exit(1);//minumum arguments of every mode are six
 		
 		if(Integer.parseInt(args[1])<1)System.exit(3);//minbet>1
 		if(Integer.parseInt(args[2])<10*Integer.parseInt(args[1]) ||Integer.parseInt(args[2])>20*Integer.parseInt(args[1])) System.exit(4);//10*minbet<=maxbet<=20*minbet
