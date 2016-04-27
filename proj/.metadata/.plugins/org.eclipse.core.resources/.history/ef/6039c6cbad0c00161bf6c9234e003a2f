@@ -160,7 +160,7 @@ public class Game {
 							player.hands.clear();
 							dealer.hands.clear();
 						}
-					}else System.out.println("cards not dealed yet");
+					}else System.out.println("You havent placed your bet yet");
 						break;
 				case "s":
 					if(player.getCurrentBet()!=0){

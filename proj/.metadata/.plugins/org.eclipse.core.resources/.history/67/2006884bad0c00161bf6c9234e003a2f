@@ -98,11 +98,9 @@ public class Game {
 		boolean tight=false;
 		int bust=0;
 		int bDealer=0;
-		String[] command=new String[2];
-		command[0]=" ";
-		command[1]=" ";
+		String[] command;
 		int prevBet = 0;
-		while(!command[0].equals("q")){
+		while(command[0].equals("q")){
 			if(shoe.calculateUsagePercentage()>=shoe.getShufflePercentage()){
 				System.out.println("Shuffling...");
 				shoe.shuffle();
@@ -148,7 +146,7 @@ public class Game {
 					}else System.out.println("You havent placed your bet yet");
 					break;
 				case "h":
-					if((player.getCurrentBet()!=0)&&(player.hands.peekFirst()!=null)){
+					if(player.getCurrentBet()!=0){
 						System.out.println("hit option");
 						//get a new card to the hand
 						bust=player.hit(shoe.takeCard(), 0);
@@ -160,7 +158,7 @@ public class Game {
 							player.hands.clear();
 							dealer.hands.clear();
 						}
-					}else System.out.println("cards not dealed yet");
+					}else System.out.println("You havent placed your bet yet");
 						break;
 				case "s":
 					if(player.getCurrentBet()!=0){
