@@ -112,7 +112,7 @@ public class Game {
 			command=this.getCommand(mode);
 			switch(command[0]){
 				case "b": 
-					if(player.hands.peekFirst()==null){
+					if(player.hands.getFirst().getTotal()!=0){
 						playing=true;
 						if(prevBetFlag){
 							if(Integer.parseInt(command[1])==-1){

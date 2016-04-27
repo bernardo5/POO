@@ -102,6 +102,7 @@ public class Game {
 		String[] command;
 		boolean prevBetFlag=false;
 		int prevBet = 0;
+		boolean dealFlag=false;
 		boolean sideRules=false;
 		boolean insurance_flag=false;//says if it is possible to ask for insurance
 		while((player.getBalance()>=minBet)||(playing)){
@@ -112,7 +113,7 @@ public class Game {
 			command=this.getCommand(mode);
 			switch(command[0]){
 				case "b": 
-					if(player.hands.peekFirst()==null){
+					if(!dealFlag){
 						playing=true;
 						if(prevBetFlag){
 							if(Integer.parseInt(command[1])==-1){
@@ -133,6 +134,7 @@ public class Game {
 					break;
 				case "d":
 					if(prevBetFlag){
+						dealFlag=true;
 						sideRules=true;
 						this.distributeHands();
 						this.showCards();
@@ -152,6 +154,7 @@ public class Game {
 							player.setCurrentBet(0);
 							player.hands.clear();
 							dealer.hands.clear();
+							dealFlag=false;
 							prevBetFlag=false;
 							sideRules=false;
 						}
@@ -167,6 +170,7 @@ public class Game {
 						if(bust==1){
 							//dealer won
 							player.setCurrentBet(0);
+							dealFlag=false;
 							prevBetFlag=false;
 							bust=0;
 							player.hands.clear();
@@ -224,6 +228,7 @@ public class Game {
 						player.setCurrentBet(0);
 						player.hands.clear();
 						dealer.hands.clear();
+						dealFlag=false;
 						prevBetFlag=false;
 					}else System.out.println("You havent placed your bet yet");
 					break;
@@ -242,6 +247,7 @@ public class Game {
 						player.setCurrentBet(0);
 						player.hands.clear();
 						dealer.hands.clear();
+						dealFlag=false;
 						prevBetFlag=false;
 					}else System.out.println("You cannot use side rules at the moment");
 					break;
@@ -255,11 +261,10 @@ public class Game {
 							if(h.getHand().get(0).getRank().getRankPoints()==h.getHand().get(1).getRank().getRankPoints()){
 								System.out.println("split");
 								//if it is the first split-ok  //cant split an hand with an Ace from splitted hand
-								if((player.hands.size()==1)||(h.getHand().getFirst().getRank()!=Rank.ACE)){
-									player.hands.add(new Hand(player.hands.get(player.hands.indexOf(h)).getHand().removeLast(), shoe.takeCard()));
-									player.hands.get(player.hands.indexOf(h)).addCard(shoe.takeCard());
-									this.showCards();
-								}
+								if((player.hands.size()==1)||(h.getHand().getFirst().getRank()!=Rank.ACE))
+								player.hands.add(new Hand(player.hands.get(player.hands.indexOf(h)).getHand().removeLast(), shoe.takeCard()));
+								player.hands.get(player.hands.indexOf(h)).addCard(shoe.takeCard());
+								this.showCards();
 							}
 						}
 					}else System.out.println("You cannot use side rules at the moment");
