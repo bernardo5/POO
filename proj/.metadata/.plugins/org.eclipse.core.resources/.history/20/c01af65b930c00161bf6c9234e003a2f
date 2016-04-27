@@ -97,7 +97,6 @@ public class Game {
 		boolean tight=false;
 		boolean playing=false;
 		int bust=0;
-		int bDealer=0;
 		String[] command;
 		boolean prevBetFlag=false;
 		int prevBet = 0;
@@ -187,40 +186,36 @@ public class Game {
 						//fazer a parte do dealer
 						
 						while(dealer.hands.getFirst().getTotal()<=17){
-							bDealer=dealer.hit(shoe.takeCard(), 0);
+							dealer.hit(shoe.takeCard(), 0);
 						}
 						this.showCards();
-						if(bDealer==0){//dealer didnot bust
-							for(Hand h:player.hands){//check if a players hand beats the dealer's hand
-								if(h.getTotal()>=dealer.hands.getFirst().getTotal()){
-									if(h.getTotal()==dealer.hands.getFirst().getTotal()){
-										//check who has less cards
-										if(h.getHand().size()<dealer.hands.getFirst().getHand().size()){
-											//player has less cards
-											player.setBalance(player.getBalance()+(2*player.getCurrentBet()));
-											System.out.println("You won this round!!!");
-										}else if(h.getHand().size()==dealer.hands.getFirst().getHand().size()){
-											//same card number
-											tight=true;
-										}
-									}else{
-										//player won
+						
+						for(Hand h:player.hands){//check if a players hand beats the dealer's hand
+							if(h.getTotal()>=dealer.hands.getFirst().getTotal()){
+								if(h.getTotal()==dealer.hands.getFirst().getTotal()){
+									//check who has less cards
+									if(h.getHand().size()<dealer.hands.getFirst().getHand().size()){
+										//player has less cards
 										player.setBalance(player.getBalance()+(2*player.getCurrentBet()));
 										System.out.println("You won this round!!!");
+									}else if(h.getHand().size()==dealer.hands.getFirst().getHand().size()){
+										//same card number
+										tight=true;
 									}
-									
-									break;
+								}else{
+									//player won
+									player.setBalance(player.getBalance()+(2*player.getCurrentBet()));
+									System.out.println("You won this round!!!");
 								}
+								
+								break;
 							}
-							
-							if(tight){
-								player.setBalance(player.getBalance()+player.getCurrentBet());
-								System.out.println("Nobody won this round!!!");
-								tight=false;
-							}
-						}else{//player won
-							player.setBalance(player.getBalance()+(2*player.getCurrentBet()));
-							System.out.println("You won this round!!!");
+						}
+						
+						if(tight){
+							player.setBalance(player.getBalance()+player.getCurrentBet());
+							System.out.println("Nobody won this round!!!");
+							tight=false;
 						}
 						
 						System.out.println("end of turn");
@@ -253,17 +248,16 @@ public class Game {
 				case "p":
 					if(prevBetFlag&&sideRules){
 						System.out.println("splitting option");
-						/*for(Hand h:player.hands){
+						for(Hand h:player.hands){
 							//if cards have the same face value
 							if(h.getHand().get(0).getRank().getRankPoints()==h.getHand().get(1).getRank().getRankPoints()){
-								System.out.println("split");
 								//if it is the first split-ok  //cant split an hand with an Ace from splitted hand
 								if((player.hands.size()==1)||(h.getHand().getFirst().getRank()!=Rank.ACE))
 								player.hands.add(new Hand(h.getHand().removeLast(), shoe.takeCard()));
 								h.addCard(shoe.takeCard());
 								this.showCards();
 							}
-						}*/
+						}
 					}else System.out.println("You cannot use side rules at the moment");
 					break;
 				case "2":
