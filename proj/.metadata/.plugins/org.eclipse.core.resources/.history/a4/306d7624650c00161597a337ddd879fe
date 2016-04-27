@@ -44,7 +44,7 @@ public class RegularPlayer extends Player{
 		this.balance = balance;
 	}
 
-	public void addBalance(float returnBalance){
+	public void addBalance(int returnBalance){
 		this.balance+=returnBalance;
 	}
 

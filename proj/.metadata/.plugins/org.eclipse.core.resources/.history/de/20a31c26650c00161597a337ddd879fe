@@ -229,7 +229,7 @@ public class Game {
 				case "u":
 					if(prevBetFlag&&sideRules){
 						System.out.println("surrender option");
-						player.addBalance((float)player.getCurrentBet()/2);
+						player.addBalance(player.getCurrentBet()/2);
 						player.setCurrentBet(0);
 						player.hands.clear();
 						dealer.hands.clear();
