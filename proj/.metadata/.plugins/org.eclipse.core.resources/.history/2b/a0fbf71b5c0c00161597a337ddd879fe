@@ -29,7 +29,8 @@ public class Shoe {
 	
 	public Card takeCard(){
 		if(nbNextCard<52){
-			return this.sequence.get(nbNextCard++);
+			nbNextCard++;
+			return this.sequence.remove(0);
 		}
 		return null;
 	}
@@ -64,8 +65,12 @@ public class Shoe {
 		int positionToAdd=0;
 		int i=0;
 		try{
-			BufferedReader br = new BufferedReader(new FileReader(file));
-		     while (((line = br.readLine()) != null)&&(i<shoe)) {
+			 FileInputStream fileInputStream = new FileInputStream(file);
+		     InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+		     
+		     BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+		     StringBuffer stringBuffer = new StringBuffer();
+		     while (((line = bufferedReader.readLine()) != null)&&(i<shoe)) {
 		    	 String[] arr = line.split(" ");
 		    	 for ( String card : arr) {
 			   	       System.out.println(card);
@@ -141,7 +146,6 @@ public class Shoe {
 			   	 }
 		    	 i++;
 		     }
-		     br.close();
 	     }catch(FileNotFoundException e){
 	            e.printStackTrace();
 	     }catch(IOException e){

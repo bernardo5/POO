@@ -2,8 +2,6 @@ package blackjackG21;
 
 import java.util.LinkedList;
 
-import blackjackG21.Card.Rank;
-
 public class Dealer extends Player{
 
 	public Dealer(/*Card card1, Card card2*/) {
@@ -16,10 +14,6 @@ public class Dealer extends Player{
 			System.out.println("You will now stand");
 		}
 	}*/
-	
-	public Rank returnShownCard(){
-		return this.hands.getFirst().getHand().get(1).getRank();
-	}
 	
 	public String showHands(){
 		/*Dealer only has one hand and shows all cards except the first*/

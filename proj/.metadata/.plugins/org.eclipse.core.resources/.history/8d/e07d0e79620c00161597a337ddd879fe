@@ -95,6 +95,7 @@ public class Game {
 		boolean dealFlag=false;
 		boolean sideRules=false;
 		boolean insurance_flag=false;//says if it is possible to ask for insurance
+		boolean insurance=false;//says if player asked for it
 		while((player.getBalance()>=minBet)||(playing)){
 			if(shoe.calculateUsagePercentage()>=shoe.getShufflePercentage()){
 				System.out.println("Shuffling...");
@@ -163,10 +164,9 @@ public class Game {
 							dealFlag=false;
 							prevBetFlag=false;
 							bust=0;
-							player.hands.clear();
-							dealer.hands.clear();
 							playing=false;
 							insurance_flag=false;
+							insurance=false;
 						}
 					}else System.out.println("You havent placed your bet yet");
 						break;
@@ -216,14 +216,13 @@ public class Game {
 						dealer.hands.clear();
 						dealFlag=false;
 						prevBetFlag=false;
+						insurance=false;
 					}else System.out.println("You havent placed your bet yet");
 					break;
 				case "i":
-					if(prevBetFlag&&sideRules&&insurance_flag){
+					if(prevBetFlag&&sideRules){
 						System.out.println("insurance option");
-						if(dealer.hands.getFirst().getTotal()==21){//dealer has blackjack
-							player.addBalance(player.getCurrentBet());
-						}
+						insurance=true;
 					}else System.out.println("You cannot use side rules at the moment");
 					break;
 				case "u":

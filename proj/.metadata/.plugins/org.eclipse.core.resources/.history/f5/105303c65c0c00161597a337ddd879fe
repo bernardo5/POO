@@ -29,7 +29,8 @@ public class Shoe {
 	
 	public Card takeCard(){
 		if(nbNextCard<52){
-			return this.sequence.get(nbNextCard++);
+			nbNextCard++;
+			return this.sequence.remove(0);
 		}
 		return null;
 	}
