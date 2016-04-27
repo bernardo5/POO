@@ -23,8 +23,7 @@ public class Game {
 		this.nDecks=nDecks;
 		this.shufflePercentage=shufflePercentage;
 		shoe=new Shoe(nDecks, shufflePercentage);
-		//shoe.populateShoeFromFile(file, nDecks);
-		shoe.populateShoe(nDecks);
+		shoe.populateShoeFromFile(file, nDecks);
 		player=new RegularPlayer(playersBalance);
 		dealer=new Dealer();
 	}

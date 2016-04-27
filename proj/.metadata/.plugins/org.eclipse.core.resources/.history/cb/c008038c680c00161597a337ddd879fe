@@ -54,9 +54,7 @@ public class Shoe {
 				}
 			}
 		}
-		this.shuffle();
 		System.out.println(this.toString());
-		
 	}
 	
 	public void populateShoeFromFile(String file, int shoe){
