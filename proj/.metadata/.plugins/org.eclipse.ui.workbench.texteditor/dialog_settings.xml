@@ -2,22 +2,23 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="tight" key="selection"/>
+		<item value="clear" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="clear"/>
+			<item value="cle"/>
+			<item value="getFirst"/>
+			<item value="insurance_flag"/>
+			<item value="firstHandBet"/>
+			<item value="h"/>
 			<item value="tight"/>
 			<item value="playing"/>
-			<item value="balance"/>
-			<item value="insurance_flag"/>
-			<item value="sideRules"/>
-			<item value="prevBetFlag"/>
-			<item value="prevBet"/>
-			<item value="dealFlag"/>
 		</list>
 		<list key="replacehistory">
+			<item value="bet"/>
 			<item value=""/>
 			<item value="player.getCurrentBet()!=0"/>
 		</list>

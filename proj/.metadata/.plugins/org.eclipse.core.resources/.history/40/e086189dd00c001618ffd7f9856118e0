@@ -231,7 +231,7 @@ public class Game {
 								
 								System.out.println("end of turn");
 								h.setCurrentBet(0);
-								if(player.hands.getLast().equals(h)){//Ver e excepcao
+								if(player.hands.getLast().equals(h)){
 									player.hands.clear();
 									dealer.hands.clear();
 									bet=0;
