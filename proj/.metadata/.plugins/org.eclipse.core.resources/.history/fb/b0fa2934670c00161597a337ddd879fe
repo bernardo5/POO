@@ -61,6 +61,7 @@ public class Shoe {
 		char suit;
 		Rank rank=null;
 		Suit suits=null;
+		int positionToAdd=0;
 		int i=0;
 		try{
 			BufferedReader br = new BufferedReader(new FileReader(file));

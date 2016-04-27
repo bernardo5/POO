@@ -61,13 +61,14 @@ public class Shoe {
 		char suit;
 		Rank rank=null;
 		Suit suits=null;
+		int positionToAdd=0;
 		int i=0;
 		try{
 			BufferedReader br = new BufferedReader(new FileReader(file));
 		     while (((line = br.readLine()) != null)&&(i<shoe)) {
 		    	 String[] arr = line.split(" ");
 		    	 for ( String card : arr) {
-			   	       //System.out.println(card);
+			   	       System.out.println(card);
 			   	       
 			   	    if(card.length()==2){/*all except 10's*/
 						name=String.valueOf(card.charAt(0));
@@ -146,7 +147,7 @@ public class Shoe {
 	     }catch(IOException e){
 	            e.printStackTrace();
 	     } 
-		//System.out.println(this.toString());
+		System.out.println(this.toString());
 	}
 	
 	public void shuffle(){
