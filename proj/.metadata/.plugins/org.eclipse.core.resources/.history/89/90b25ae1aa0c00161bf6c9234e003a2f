@@ -123,6 +123,7 @@ public class Game {
 							} 
 						}else{
 							prevBet=this.placeFirstBet(Integer.parseInt(command[1]));
+							prevBetFlag=true;
 						}
 					}else System.out.println("b: Illegal command");
 					break;
@@ -130,7 +131,7 @@ public class Game {
 					System.out.println("Your current balance is: "+player.getBalance());
 					break;
 				case "d":
-					if(player.getCurrentBet()!=0){
+					if(prevBetFlag){
 						sideRules=true;
 						this.distributeHands();
 						this.showCards();
@@ -150,12 +151,13 @@ public class Game {
 							player.setCurrentBet(0);
 							player.hands.clear();
 							dealer.hands.clear();
+							prevBetFlag=false;
 							sideRules=false;
 						}
 					}else System.out.println("You havent placed your bet yet");
 					break;
 				case "h":
-					if(player.getCurrentBet()!=0){
+					if(prevBetFlag){
 						System.out.println("hit option");
 						sideRules=false;
 						//get a new card to the hand
@@ -164,6 +166,7 @@ public class Game {
 						if(bust==1){
 							//dealer won
 							player.setCurrentBet(0);
+							prevBetFlag=false;
 							bust=0;
 							player.hands.clear();
 							dealer.hands.clear();
@@ -173,7 +176,7 @@ public class Game {
 					}else System.out.println("You havent placed your bet yet");
 						break;
 				case "s":
-					if(player.getCurrentBet()!=0){
+					if(prevBetFlag){
 						playing=false;
 						insurance_flag=false;
 						System.out.println("stand option");
@@ -220,10 +223,11 @@ public class Game {
 						player.setCurrentBet(0);
 						player.hands.clear();
 						dealer.hands.clear();
+						prevBetFlag=false;
 					}else System.out.println("You havent placed your bet yet");
 					break;
 				case "i":
-					if(player.getCurrentBet()!=0&&sideRules&&insurance_flag){
+					if(prevBetFlag&&sideRules&&insurance_flag){
 						System.out.println("insurance option");
 						if(dealer.hands.getFirst().getTotal()==21){//dealer has blackjack
 							player.addBalance(player.getCurrentBet());
@@ -231,16 +235,17 @@ public class Game {
 					}else System.out.println("You cannot use side rules at the moment");
 					break;
 				case "u":
-					if(player.getCurrentBet()!=0&&sideRules){
+					if(prevBetFlag&&sideRules){
 						System.out.println("surrender option");
 						player.addBalance((float)player.getCurrentBet()/2);
 						player.setCurrentBet(0);
 						player.hands.clear();
 						dealer.hands.clear();
+						prevBetFlag=false;
 					}else System.out.println("You cannot use side rules at the moment");
 					break;
 				case "p":
-					if(player.getCurrentBet()!=0&&sideRules){
+					if(prevBetFlag&&sideRules){
 						System.out.println("splitting option");
 						
 						LinkedList<Hand> copy = (LinkedList<Hand>) player.hands.clone();
@@ -259,17 +264,17 @@ public class Game {
 					}else System.out.println("You cannot use side rules at the moment");
 					break;
 				case "2":
-					if(player.getCurrentBet()!=0&&sideRules){
+					if(prevBetFlag&&sideRules){
 						System.out.println("double option");
 					}else System.out.println("You cannot use side rules at the moment");
 					break;
 				case "ad":
-					if(player.getCurrentBet()!=0){
+					if(prevBetFlag){
 						System.out.println("advice option");
 					}else System.out.println("You havent placed your bet yet");
 					break;
 				case "st":
-					if(player.getCurrentBet()!=0){
+					if(prevBetFlag){
 						System.out.println("statistics option");
 					}else System.out.println("You havent placed your bet yet");
 					break;

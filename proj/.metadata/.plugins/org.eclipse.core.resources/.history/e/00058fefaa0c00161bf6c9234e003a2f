@@ -164,6 +164,7 @@ public class Game {
 						if(bust==1){
 							//dealer won
 							player.setCurrentBet(0);
+							player.getCurrentBet()!=0=false;
 							bust=0;
 							player.hands.clear();
 							dealer.hands.clear();
@@ -220,6 +221,7 @@ public class Game {
 						player.setCurrentBet(0);
 						player.hands.clear();
 						dealer.hands.clear();
+						player.getCurrentBet()!=0=false;
 					}else System.out.println("You havent placed your bet yet");
 					break;
 				case "i":
