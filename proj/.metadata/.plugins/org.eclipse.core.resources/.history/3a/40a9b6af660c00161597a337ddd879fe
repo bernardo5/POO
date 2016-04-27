@@ -66,33 +66,26 @@ public class Game {
 		}
 	}
 	
-	public String[] getCommand(char mode){
-		if(mode=='i'){//interactive mode
-			String s=new String();
-			String command=new String();
-			Scanner scanner;
-			int bet=-1;
-			BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
-	        try {
-				s = bufferRead.readLine();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	        scanner = new Scanner (s);
-	        command =	scanner.next ();
-	        if(scanner.hasNextInt())bet=scanner.nextInt();
-			scanner.close();
-			return new String[]{command, Integer.toString(bet)};
-		}else if(mode=='d'){//debug mode
-			
-		}else if(mode=='s'){//simulation mode
-			
+	public String[] getCommand(){
+		String s=new String();
+		String command=new String();
+		Scanner scanner;
+		int bet=-1;
+		BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
+        try {
+			s = bufferRead.readLine();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		return null;
+        scanner = new Scanner (s);
+        command =	scanner.next ();
+        if(scanner.hasNextInt())bet=scanner.nextInt();
+		scanner.close();
+		return new String[]{command, Integer.toString(bet)};
 	}
 	
-	public void play(char mode){
+	public void play(){
 		boolean tight=false;
 		boolean playing=false;
 		int bust=0;
@@ -107,7 +100,7 @@ public class Game {
 				System.out.println("Shuffling...");
 				shoe.shuffle();
 			}
-			command=this.getCommand(mode);
+			command=this.getCommand();
 			switch(command[0]){
 				case "b": 
 					if(!dealFlag){
@@ -272,7 +265,7 @@ public class Game {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		Game game= new Game(1,	1000, 50,	4,	58, "src/shoe-file.txt");
-		game.play('i');
+		game.play();
 	}
 
 }
