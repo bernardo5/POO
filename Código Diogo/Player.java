@@ -3,10 +3,12 @@ package blackjackG21;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Player extends Person{
 	private float balance;
+	protected LinkedList<Hand> hands=new LinkedList<Hand>();
 	
 	//Constructor
 	public Player(int balance) {
@@ -25,6 +27,10 @@ public class Player extends Person{
 	public void addBalance(float f){
 		this.balance+=f;
 	}
+	public void subtractBalance(float f){
+		this.balance-=f;
+	}
+	
 	
 	//Methods
 	public String showHands(){
@@ -69,20 +75,8 @@ public class Player extends Person{
 	public String getplayerCommandsfromFile(){
 		return null;
 	}
-	
-	public void insurance(){
-	}
-	
-	public void surrender(){
-	}
-	
-	public void splitting(){
-	}
-	
-	public void doubledown(){
-	}
-	
 
+/*
 	public static void main(String[] args) {
 		Card card1 = new Card(Rank.valueOf("ACE"), Suit.valueOf("SPADES"));
 		Card card2 = new Card(Rank.valueOf("QUEEN"), Suit.valueOf("HEARTS"));
@@ -95,6 +89,6 @@ public class Player extends Person{
 		player1.hands.getFirst().addCard(card3);
 
 		System.out.println(player1.showHands());
-	}
+	}*/
 
 }

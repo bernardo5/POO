@@ -3,18 +3,32 @@ package blackjackG21;
 import java.util.LinkedList;
 
 public class Dealer extends Person{
-
+	private Hand hand;
+	
+	//Getters
+	public Hand getHand(){
+		return this.hand;
+	}
+	//Setters
+	public void setHand(Hand hand){
+		this.hand=hand;
+	}
+	//Constructors
 	public Dealer() {
 		super();
+		this.hand= new Hand();
+	}
+	//Methods
+	public void addHand(Hand hand){
+		this.hand=hand;
 	}
 	
 	public String showHands(){
 		/*Dealer only has one hand and shows all cards except the first*/
 		String game=new String();
-		Hand h=hands.getFirst();
-		LinkedList<Card> cardsss=h.getCards();
+		LinkedList<Card> cards = this.hand.getCards();
 		int i=0;
-		for(Card c:cardsss){
+		for(Card c:cards){
 			if(i!=0){
 				if(i!=1)game+=", ";
 				game+=c.toString();
@@ -22,7 +36,7 @@ public class Dealer extends Person{
 			i++;
 		}
 		
-		game+=" with "+hands.getFirst().getPoints()+" points";
+		//game+=" with "+hand.getPoints()+" points";
 		
 		return game;
 	}

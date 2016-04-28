@@ -5,6 +5,7 @@ import java.util.*;
 public class Hand {
 	private LinkedList<Card> cards;
 	private int points;
+	private int bet;
 	
 	//Getters
 	public LinkedList<Card> getCards(){
@@ -13,18 +14,35 @@ public class Hand {
 	public int getPoints(){
 		return this.points;
 	}
+	public int getBet() {
+		return bet;
+	}
+	public int getSizeofCards(){
+		return cards.size();
+	}
 	
+	//Setters
+	public void setBet(int bet) {
+		this.bet = bet;
+	}
 	//Constructors
 	public Hand(){
 		this.cards= new LinkedList<Card>();
 		this.points=0;
 	}
-	
 	public Hand(Card card1, Card card2){
 		this();
 		this.cards.add(card1);
 		this.cards.add(card2);
 		updatePoints();
+		this.bet=0;
+	}
+	public Hand(Card card1, Card card2,int bet){
+		this();
+		this.cards.add(card1);
+		this.cards.add(card2);
+		updatePoints();
+		this.bet=bet;
 	}
 	
 	//Methods
@@ -53,6 +71,11 @@ public class Hand {
 	public void emptyHand(){
 		this.cards.clear();
 	}
+	
+	public boolean isEmpty(){
+		return cards.isEmpty();
+	}
+	
 	
 	@Override
 	public String toString() {

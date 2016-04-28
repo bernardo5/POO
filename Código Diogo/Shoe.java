@@ -37,8 +37,8 @@ public class Shoe {
 		System.out.println("shuffling the shoe...");
 	}
 	
-	public void populateShoe(int nbDecks){
-		for(int i=0; i<nbDecks; i++){
+	public void populateShoe(){
+		for(int i=0; i<this.nDecks; i++){
 			for(Rank c:Rank.values()){
 				for(Suit s:Suit.values()){
 					Card card= new Card(c,s);
