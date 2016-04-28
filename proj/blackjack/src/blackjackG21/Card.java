@@ -1,22 +1,6 @@
 package blackjackG21;
 
 public class Card {
-	/*private String name;	
-	private char suit;
-	
-	public Card(String name, char suit){
-		this.name=name;
-		this.suit=suit;
-	}
-	
-	public String getName(){
-		return this.name;
-	}
-
-	@Override
-	public String toString() {
-		return "Card=(" + name + suit + ")";
-	}*/
 	
 	 public enum Rank {
 	        DEUCE(2), THREE(3), FOUR(4), FIVE(5), SIX(6), SEVEN(7), EIGHT(8), NINE(
@@ -58,15 +42,6 @@ public class Card {
 
 	    public String toString() {
 	        return rank + " of " + suit;
-	    }
-	    
-	  /*  public static void main(String[] args) {
-			// TODO Auto-generated method stub
-			Card AceOfSpades=new Card(Rank.ACE, Suit.SPADES);
-			System.out.println(AceOfSpades.toString()+" with value "+AceOfSpades.rank.getRankPoints());
-			
-		}*/
-
-	
+	    }	
 	
 }

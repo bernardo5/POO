@@ -156,19 +156,4 @@ public class Shoe {
 		Collections.shuffle(sequence);
 	}
 
-	/*public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		int shoe=4;
-		Shoe shoeGame=new Shoe(shoe);
-		shoeGame.populateShoeFromFile("src/shoe-file.txt", shoe);
-		System.out.println(shoeGame.toString());
-		shoeGame.shuffle();
-		
-		System.out.println(shoeGame.toString());
-
-		
-		
-		
-	}*/
-
 }

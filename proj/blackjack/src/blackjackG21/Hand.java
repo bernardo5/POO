@@ -70,19 +70,4 @@ public class Hand {
 		}
 		return this.bust;
 	}
-	
-
-	/*public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		Hand hand=new Hand(new Card("Q",'S', null), new Card("A",'S', null));
-		
-		System.out.println(hand.toString());
-		
-		hand.addCard(new Card("A", 'H', null));
-		//hand.addCard(new Card("K", 'H', null));
-		
-		System.out.println(hand.toString());
-		hand.bust();
-	}*/
-
 }
