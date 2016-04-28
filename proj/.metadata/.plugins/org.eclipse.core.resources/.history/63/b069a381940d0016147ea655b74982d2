@@ -137,7 +137,7 @@ public class Game {
 			}
 			
 			if(HandBust){//player has no valid hand
-				System.out.println("Dealer won");
+				System.out.println("All your hands busted! Dealer won");
 			}
 		}else{//player won
 			player.setBalance(player.getBalance()+(2*player.getCurrentHand().getCurrentBet()));

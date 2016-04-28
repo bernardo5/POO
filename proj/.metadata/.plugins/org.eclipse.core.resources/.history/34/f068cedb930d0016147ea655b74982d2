@@ -137,7 +137,7 @@ public class Game {
 			}
 			
 			if(HandBust){//player has no valid hand
-				System.out.println("Dealer won");
+				System.out.println("All your hands busted! Dealer won");
 			}
 		}else{//player won
 			player.setBalance(player.getBalance()+(2*player.getCurrentHand().getCurrentBet()));
@@ -226,9 +226,12 @@ public class Game {
 								bust=player.hit(shoe.takeCard());
 								this.showCards();
 								if(bust==1){
+									//dealer won
+									player.getCurrentHand().setCurrentBet(0);
 									bust=0;
+									
 									if(player.getNextHand()==null){
-										if(player.hands.size()!=1)this.decidePlayOutcome();//player lost
+										this.decidePlayOutcome();
 										player.hands.clear();
 										player.currentHand(null);
 										dealer.currentHand(null);
@@ -248,6 +251,10 @@ public class Game {
 									//AQUIIIIIIIIIIIIIIIIIIII!!!!!!!!!!!!!!!!!!!!!!!!!
 									this.decidePlayOutcome();
 									System.out.println("end of turn");
+									player.getCurrentHand().setCurrentBet(0);
+									
+									
+									
 									player.hands.clear();
 									player.currentHand(null);
 									dealer.currentHand(null);

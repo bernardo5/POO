@@ -98,7 +98,6 @@ public class Game {
 	
 	public void decidePlayOutcome(){
 		int bDealer=0;
-		boolean HandBust=true;
 		boolean tight=false;
 		while(dealer.getCurrentHand().getTotal()<=17){
 			bDealer=dealer.hit(shoe.takeCard());
@@ -106,8 +105,7 @@ public class Game {
 		this.showCards();
 		if(bDealer==0){//dealer didnot bust
 			for(Hand ha:player.hands){//check if a players hand beats the dealer's hand
-				if((ha.getTotal()>=dealer.getCurrentHand().getTotal())&&(ha.bust()!=1)){
-					HandBust=false;
+				if(ha.getTotal()>=dealer.getCurrentHand().getTotal()){
 					if(ha.getTotal()==dealer.getCurrentHand().getTotal()){
 						//check who has less cards
 						if(player.getCurrentHand().getHand().size()<dealer.getCurrentHand().getHand().size()){
@@ -134,10 +132,6 @@ public class Game {
 				player.setBalance(player.getBalance()+player.getCurrentHand().getCurrentBet());
 				System.out.println("Nobody won this round!!!");
 				tight=false;
-			}
-			
-			if(HandBust){//player has no valid hand
-				System.out.println("Dealer won");
 			}
 		}else{//player won
 			player.setBalance(player.getBalance()+(2*player.getCurrentHand().getCurrentBet()));
@@ -226,9 +220,12 @@ public class Game {
 								bust=player.hit(shoe.takeCard());
 								this.showCards();
 								if(bust==1){
+									//dealer won
+									player.getCurrentHand().setCurrentBet(0);
 									bust=0;
+									
 									if(player.getNextHand()==null){
-										if(player.hands.size()!=1)this.decidePlayOutcome();//player lost
+										this.decidePlayOutcome();
 										player.hands.clear();
 										player.currentHand(null);
 										dealer.currentHand(null);
@@ -248,6 +245,10 @@ public class Game {
 									//AQUIIIIIIIIIIIIIIIIIIII!!!!!!!!!!!!!!!!!!!!!!!!!
 									this.decidePlayOutcome();
 									System.out.println("end of turn");
+									player.getCurrentHand().setCurrentBet(0);
+									
+									
+									
 									player.hands.clear();
 									player.currentHand(null);
 									dealer.currentHand(null);
