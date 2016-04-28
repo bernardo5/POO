@@ -97,50 +97,11 @@ public class Game {
 	}
 	
 	public void decidePlayOutcome(){
-		int bDealer=0;
-		boolean tight=false;
-		while(dealer.getCurrentHand().getTotal()<=17){
-			bDealer=dealer.hit(shoe.takeCard());
-		}
-		this.showCards();
-		if(bDealer==0){//dealer didnot bust
-			for(Hand ha:player.hands){//check if a players hand beats the dealer's hand
-				if(ha.getTotal()>=dealer.getCurrentHand().getTotal()){
-					if(ha.getTotal()==dealer.getCurrentHand().getTotal()){
-						//check who has less cards
-						if(player.getCurrentHand().getHand().size()<dealer.getCurrentHand().getHand().size()){
-							//player has less cards
-							player.setBalance(player.getBalance()+(2*player.getCurrentHand().getCurrentBet()));
-							System.out.println("You won this round!!!");
-						}else if(ha.getHand().size()==dealer.getCurrentHand().getHand().size()){
-							//same card number
-							tight=true;
-						}
-					}else{
-						//player won
-						player.setBalance(player.getBalance()+(2*player.getCurrentHand().getCurrentBet()));
-						System.out.println("You won this round!!!");
-						tight=false;
-						break;
-					}
-					
-					
-				}
-			}
-			
-			if(tight){
-				player.setBalance(player.getBalance()+player.getCurrentHand().getCurrentBet());
-				System.out.println("Nobody won this round!!!");
-				tight=false;
-			}
-		}else{//player won
-			player.setBalance(player.getBalance()+(2*player.getCurrentHand().getCurrentBet()));
-			System.out.println("You won this round!!!");
-		}
+		
 	}
 	
 	public void play(char mode){
-		
+		boolean tight=false;
 		int bust=0;
 		int bDealer=0;
 		String[] command=new String[2];
@@ -225,7 +186,6 @@ public class Game {
 									bust=0;
 									
 									if(player.getNextHand()==null){
-										this.decidePlayOutcome();
 										player.hands.clear();
 										player.currentHand(null);
 										dealer.currentHand(null);
@@ -243,7 +203,7 @@ public class Game {
 								
 								if(player.getNextHand()==null){
 									//AQUIIIIIIIIIIIIIIIIIIII!!!!!!!!!!!!!!!!!!!!!!!!!
-									this.decidePlayOutcome();
+									
 									System.out.println("end of turn");
 									player.getCurrentHand().setCurrentBet(0);
 									

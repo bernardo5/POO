@@ -97,7 +97,7 @@ public class Game {
 	}
 	
 	public void decidePlayOutcome(){
-		int bDealer=0;
+		int bDealer;
 		boolean tight=false;
 		while(dealer.getCurrentHand().getTotal()<=17){
 			bDealer=dealer.hit(shoe.takeCard());
@@ -225,7 +225,6 @@ public class Game {
 									bust=0;
 									
 									if(player.getNextHand()==null){
-										this.decidePlayOutcome();
 										player.hands.clear();
 										player.currentHand(null);
 										dealer.currentHand(null);

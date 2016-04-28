@@ -225,7 +225,6 @@ public class Game {
 									bust=0;
 									
 									if(player.getNextHand()==null){
-										this.decidePlayOutcome();
 										player.hands.clear();
 										player.currentHand(null);
 										dealer.currentHand(null);
