@@ -34,8 +34,9 @@ public class Game {
 	public void distributeHands(int bet){
 		Hand p=new Hand(shoe.takeCard(), shoe.takeCard(), bet);
 		Hand d=new Hand(shoe.takeCard(), shoe.takeCard(), 0);
-		player.getHand(p);
-		dealer.getHand(d);
+		player.currentHand(p);
+		player.addHand(p);
+		dealer.currentHand(d);
 	}
 	
 	public void showCards(){
@@ -110,7 +111,7 @@ public class Game {
 			
 			switch(command[0]){
 				case "b": 
-					if((player.hands.peekFirst()==null)&&(player.getBalance()>minBet)){//can only bet before deal
+					if((player.getCurrentHand()==null)&&(player.getBalance()>minBet)){//can only bet before deal
 							if(Integer.parseInt(command[1])==-1){
 								if(prevBet>player.getBalance()){
 									System.out.println("You cannot afford this bet. Your balance is:"+player.getBalance());
@@ -139,7 +140,7 @@ public class Game {
 						this.showCards();
 						if(player.hands.getFirst().getTotal()==21){//blackjack
 							//fzr parte da seguranca
-							if(dealer.hands.getFirst().getTotal()==21){//dealer also has blackjack
+							if(dealer.getCurrentHand().getTotal()==21){//dealer also has blackjack
 								player.setBalance(player.getBalance()+((player.hands.getFirst().getCurrentBet())));
 								System.out.println("nobody won this round!!!");
 							}else{
@@ -149,15 +150,14 @@ public class Game {
 							}
 							System.out.println("end of turn");
 							player.hands.clear();
-							dealer.hands.clear();
+							player.currentHand(null);
+							dealer.currentHand(null);
 						}
 					}else System.out.println("You havent placed your bet yet");
 					break;
 			}
 			
-			for(Hand h:player.hands/*Iterator<Hand> hand = player.hands.iterator(); hand.hasNext();*/){
-				//Hand h=hand.next() ;
-				while(!command[0].equals("s")){
+				while(player.getCurrentHand()!=null){
 					command=this.getCommand(mode);
 					if(shoe.calculateUsagePercentage()>=shoe.getShufflePercentage()){
 						System.out.println("Shuffling...");
@@ -171,144 +171,103 @@ public class Game {
 							break;
 						
 						case "h":
-							if((h.getCurrentBet()!=0)&&(player.hands.peekFirst()!=null)){
+							if((player.getCurrentHand().getCurrentBet()!=0)&&(player.hands.peekFirst()!=null)){
 								System.out.println("hit option");
 								//get a new card to the hand
-								bust=player.hit(shoe.takeCard(), h);
+								bust=player.hit(shoe.takeCard());
 								this.showCards();
 								if(bust==1){
 									//dealer won
-									h.setCurrentBet(0);
+									player.getCurrentHand().setCurrentBet(0);
 									bust=0;
-									player.hands.clear();
-									dealer.hands.clear();
-									command[0]="s";
+									
+									if(player.getNextHand()==null){
+										player.hands.clear();
+										player.currentHand(null);
+										dealer.currentHand(null);
+									}else{//there is another hand to play with
+										player.currentHand(player.getNextHand());
+									}
 									bet=0;
 								}
 							}else System.out.println("cards not dealed yet");
 								break;
 						case "s":
-							if(h.getCurrentBet()!=0){
+							if(player.getCurrentHand().getCurrentBet()!=0){
 								System.out.println("stand option");
 								//fazer a parte do dealer
 								
-								while(dealer.hands.getFirst().getTotal()<=17){
-									bDealer=dealer.hit(shoe.takeCard(), dealer.hands.getFirst());
+								while(dealer.getCurrentHand().getTotal()<=17){
+									bDealer=dealer.hit(shoe.takeCard());
 								}
 								this.showCards();
 								if(bDealer==0){//dealer didnot bust
 									for(Hand ha:player.hands){//check if a players hand beats the dealer's hand
-										if(ha.getTotal()>=dealer.hands.getFirst().getTotal()){
-											if(ha.getTotal()==dealer.hands.getFirst().getTotal()){
+										if(ha.getTotal()>=dealer.getCurrentHand().getTotal()){
+											if(ha.getTotal()==dealer.getCurrentHand().getTotal()){
 												//check who has less cards
-												if(h.getHand().size()<dealer.hands.getFirst().getHand().size()){
+												if(player.getCurrentHand().getHand().size()<dealer.getCurrentHand().getHand().size()){
 													//player has less cards
-													player.setBalance(player.getBalance()+(2*h.getCurrentBet()));
+													player.setBalance(player.getBalance()+(2*player.getCurrentHand().getCurrentBet()));
 													System.out.println("You won this round!!!");
-												}else if(ha.getHand().size()==dealer.hands.getFirst().getHand().size()){
+												}else if(ha.getHand().size()==dealer.getCurrentHand().getHand().size()){
 													//same card number
 													tight=true;
 												}
 											}else{
 												//player won
-												player.setBalance(player.getBalance()+(2*h.getCurrentBet()));
+												player.setBalance(player.getBalance()+(2*player.getCurrentHand().getCurrentBet()));
 												System.out.println("You won this round!!!");
+												tight=false;
+												break;
 											}
 											
-											break;
+											
 										}
 									}
 									
 									if(tight){
-										player.setBalance(player.getBalance()+h.getCurrentBet());
+										player.setBalance(player.getBalance()+player.getCurrentHand().getCurrentBet());
 										System.out.println("Nobody won this round!!!");
 										tight=false;
 									}
 								}else{//player won
-									player.setBalance(player.getBalance()+(2*h.getCurrentBet()));
+									player.setBalance(player.getBalance()+(2*player.getCurrentHand().getCurrentBet()));
 									System.out.println("You won this round!!!");
 								}
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
-							}
-							
-							if(tight){lha
-								player.setBalance(player.getBalance()+player.getCurrentBet());
-								System.out.println("Nobody won this round!!!");
-							o
-						System.out.println("end of turn");DI
-						player.setCurrentBet(0);
-						player.hands.clear();
-						dealer.hands.clear();
-					}else System.out.println("You havent placed your bet yet");
-					break;
-				case "i":
-					if(player.getCurrentBet()!=0&&(player.hands.peekFirst()!=null)&&(player.hands.size()!=2)&&((dealer.returnShownCard()).equals(Rank.ACE))){
-						System.out.println("insurance option");
-						if(dealer.hands.getFirst().getTotal()==21){//dealer has blackjack
-							player.addBalance(player.getCurrentBet());
-						}
-					}else System.out.println("You cannot use side rules at the moment");
-					break;
-				case "u":
-					if(player.getCurrentBet()!=0&&(player.hands.peekFirst()!=null)&&(player.hands.size()!=2)){
-						System.out.println("surrender option");
-						player.addBalance((float)player.getCurrentBet()/2);
-						player.setCurrentBet(0);
-						player.hands.clear();
-						dealer.hands.clear();
-					}else System.out.println("You cannot use side rules at the moment");
-					break;
-				case "p":
-					if(player.getCurrentBet()!=0&&(player.hands.peekFirst()!=null)&&(player.hands.size()!=2)){
-						System.out.println("splitting option");
-						
-						LinkedList<Hand> copy = (LinkedList<Hand>) player.hands.clone();
-						for(Hand h:copy){
-							//if cards have the same face value
-							if(h.getHand().get(0).getRank().getRankPoints()==h.getHand().get(1).getRank().getRankPoints()){
-								System.out.println("split");
-								//if it is the first split-ok  //cant split an hand with an Ace from splitted hand
-								if((player.hands.size()==1)||(h.getHand().getFirst().getRank()!=Rank.ACE)){
-									player.hands.add(new Hand(player.hands.get(player.hands.indexOf(h)).getHand().removeLast(), shoe.takeCard()));
-									player.hands.get(player.hands.indexOf(h)).addCard(shoe.takeCard());
-									this.showCards();
-=======
->>>>>>> Stashed changes
 								
 								System.out.println("end of turn");
-								h.setCurrentBet(0);
-								if(player.hands.getLast().equals(h)){//Ver e excepcao
+								player.getCurrentHand().setCurrentBet(0);
+								if(player.getNextHand()==null){
 									player.hands.clear();
-									dealer.hands.clear();
+									player.currentHand(null);
+									dealer.currentHand(null);
 									bet=0;
-<<<<<<< Updated upstream
-=======
->>>>>>> origin/master
->>>>>>> Stashed changes
+								}else{//there is another hand to play with
+									player.currentHand(player.getNextHand());
 								}
 							}else System.out.println("You havent placed your bet yet");
 							break;
 						case "i":
-							if(h.getCurrentBet()!=0&&(player.hands.peekFirst()!=null)&&(player.hands.size()!=2)&&((dealer.returnShownCard()).equals(Rank.ACE))){
+							if(player.getCurrentHand().getCurrentBet()!=0&&(player.hands.peekFirst()!=null)&&(player.hands.size()!=2)&&((dealer.returnShownCard()).equals(Rank.ACE))){
 								System.out.println("insurance option");
-								if(dealer.hands.getFirst().getTotal()==21){//dealer has blackjack
-									player.addBalance(h.getCurrentBet());
+								if(dealer.getCurrentHand().getTotal()==21){//dealer has blackjack
+									player.addBalance(player.getCurrentHand().getCurrentBet());
 								}
 							}else System.out.println("You cannot use side rules at the moment");
 							break;
 						case "u":
-							if(h.getCurrentBet()!=0&&(player.hands.peekFirst()!=null)&&(player.hands.size()!=2)){
+							if(player.getCurrentHand().getCurrentBet()!=0&&(player.hands.peekFirst()!=null)&&(player.hands.size()!=2)){
 								System.out.println("surrender option");
-								player.addBalance((float)h.getCurrentBet()/2);
-								h.setCurrentBet(0);
+								player.addBalance((float)player.getCurrentHand().getCurrentBet()/2);
 								player.hands.clear();
-								dealer.hands.clear();
+								player.currentHand(null);
+								dealer.currentHand(null);
+								bet=0;
 							}else System.out.println("You cannot use side rules at the moment");
 							break;
 						case "p":
-							if(h.getCurrentBet()!=0&&(player.hands.peekFirst()!=null)&&(player.hands.size()!=2)){
+							if(player.getCurrentHand().getCurrentBet()!=0&&(player.hands.peekFirst()!=null)&&(player.hands.size()!=2)){
 								System.out.println("splitting option");
 								
 								LinkedList<Hand> copy = (LinkedList<Hand>) player.hands.clone();
@@ -330,23 +289,23 @@ public class Game {
 							}else System.out.println("You cannot use side rules at the moment");
 							break;
 						case "2":
-							if(h.getCurrentBet()!=0&&(player.hands.peekFirst()!=null)&&(player.hands.size()!=2)){
+							if(player.getCurrentHand().getCurrentBet()!=0&&(player.hands.peekFirst()!=null)&&(player.hands.size()!=2)){
 								System.out.println("double option");
 							}else System.out.println("You cannot use side rules at the moment");
 							break;
 						case "ad":
-							if(h.getCurrentBet()!=0){
+							if(player.getCurrentHand().getCurrentBet()!=0){
 								System.out.println("advice option");
 							}else System.out.println("You havent placed your bet yet");
 							break;
 						case "st":
-							if(h.getCurrentBet()!=0){
+							if(player.getCurrentHand().getCurrentBet()!=0){
 								System.out.println("statistics option");
 							}else System.out.println("You havent placed your bet yet");
 							break;
 					}
 				}
-			}
+			
 		}
 	}
 

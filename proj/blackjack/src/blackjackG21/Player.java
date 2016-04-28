@@ -1,28 +1,31 @@
 package blackjackG21;
 
-import java.util.LinkedList;
-
 public abstract class Player {
-	protected LinkedList<Hand> hands;
+	private Hand current;
 	
-	public Player(/*Card card1, Card card2*/){
+	/*public Player(){
 		hands= new LinkedList<Hand>();
 		//hands.add(new Hand(card1, card2));
-	}
+	}*/
 	
-	public void getHand(Hand hand){
-		hands.add(hand);
+	public void currentHand(Hand hand){
+		current=hand;
 	}
 	
 	public abstract String showHands();
 	
+	public Hand getCurrentHand(){
+		return current;
+	}
+	
 	//public abstract void stand(Hand h);
 	
-	public int hit(Card card, Hand h){
-		Hand handAux=hands.get(hands.indexOf(h));//so it wont be necessary to search twice for element
-		handAux.addCard(card);
-		return handAux.bust();
+	public int hit(Card card){
+		current.addCard(card);
+		return current.bust();
 	}
+	
+	
 	
 	
 }
