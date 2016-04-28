@@ -228,6 +228,54 @@ public class Game {
 									player.setBalance(player.getBalance()+(2*h.getCurrentBet()));
 									System.out.println("You won this round!!!");
 								}
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+							}
+							
+							if(tight){lha
+								player.setBalance(player.getBalance()+player.getCurrentBet());
+								System.out.println("Nobody won this round!!!");
+							o
+						System.out.println("end of turn");DI
+						player.setCurrentBet(0);
+						player.hands.clear();
+						dealer.hands.clear();
+					}else System.out.println("You havent placed your bet yet");
+					break;
+				case "i":
+					if(player.getCurrentBet()!=0&&(player.hands.peekFirst()!=null)&&(player.hands.size()!=2)&&((dealer.returnShownCard()).equals(Rank.ACE))){
+						System.out.println("insurance option");
+						if(dealer.hands.getFirst().getTotal()==21){//dealer has blackjack
+							player.addBalance(player.getCurrentBet());
+						}
+					}else System.out.println("You cannot use side rules at the moment");
+					break;
+				case "u":
+					if(player.getCurrentBet()!=0&&(player.hands.peekFirst()!=null)&&(player.hands.size()!=2)){
+						System.out.println("surrender option");
+						player.addBalance((float)player.getCurrentBet()/2);
+						player.setCurrentBet(0);
+						player.hands.clear();
+						dealer.hands.clear();
+					}else System.out.println("You cannot use side rules at the moment");
+					break;
+				case "p":
+					if(player.getCurrentBet()!=0&&(player.hands.peekFirst()!=null)&&(player.hands.size()!=2)){
+						System.out.println("splitting option");
+						
+						LinkedList<Hand> copy = (LinkedList<Hand>) player.hands.clone();
+						for(Hand h:copy){
+							//if cards have the same face value
+							if(h.getHand().get(0).getRank().getRankPoints()==h.getHand().get(1).getRank().getRankPoints()){
+								System.out.println("split");
+								//if it is the first split-ok  //cant split an hand with an Ace from splitted hand
+								if((player.hands.size()==1)||(h.getHand().getFirst().getRank()!=Rank.ACE)){
+									player.hands.add(new Hand(player.hands.get(player.hands.indexOf(h)).getHand().removeLast(), shoe.takeCard()));
+									player.hands.get(player.hands.indexOf(h)).addCard(shoe.takeCard());
+									this.showCards();
+=======
+>>>>>>> Stashed changes
 								
 								System.out.println("end of turn");
 								h.setCurrentBet(0);
@@ -235,6 +283,10 @@ public class Game {
 									player.hands.clear();
 									dealer.hands.clear();
 									bet=0;
+<<<<<<< Updated upstream
+=======
+>>>>>>> origin/master
+>>>>>>> Stashed changes
 								}
 							}else System.out.println("You havent placed your bet yet");
 							break;
