@@ -68,11 +68,11 @@ public class Game {
 							player1.subtractBalance(bet);
 							b_d++;
 						}else if(bets.length==2){
-							if(Integer.parseInt(bets[1])>=table.getMinBet()){
+							if(Integer.parseInt(bets[1])>=player1.getBalance()){
 								bet=Integer.parseInt(bets[1]);
 								player1.subtractBalance(bet);
 								b_d++;
-							}else System.out.println("b: Illegal command");//< minBet
+							}else System.out.println("b: Illegal command");//< balance
 						}else System.out.println("b: Illegal command");//more than 2 arguments
 					}else System.out.println("b: Illegal command");//Can´t use bet
 				}else if(command.equals("d")){//Deal
@@ -129,6 +129,7 @@ public class Game {
 			//---------------------After Bet and Deal-------------------------------
 			for(Iterator<Hand> handiterator = player1.hands.iterator();handiterator.hasNext();){
 			//for(Hand hand:player1.hands){
+				
 				Hand hand = handiterator.next();
 				
 				while(!command.equals("s")){
@@ -155,10 +156,14 @@ public class Game {
 						}
 					}else if(command.equals("s")){//Stand
 						System.out.println("player stands");
+						
 						//se for a ultima mão fazer a parte do dealer
 						if(hand == player1.hands.getLast()){
 							if(dealer.getHand().getPoints()==21){//Sem fazer hit ver se tem blackjack
-								if(player1.getInsurance())player1.addBalance(2*bet);
+								if(player1.getInsurance()){
+									player1.addBalance(2*bet);
+									player1.changeInsurance(false);
+								}
 							}
 							while(dealer.getHand().getPoints()<=17){
 								System.out.println("dealer hits");
@@ -189,8 +194,8 @@ public class Game {
 								System.out.println("player splits");
 								Card card1 = hand.getCards().get(0);
 								Card card2 = hand.getCards().get(1);
-								player1.hands.add(new Hand(card1,shoe.takeCard()));
-								player1.hands.add(new Hand(card2,shoe.takeCard()));
+								player1.hands.add(new Hand(card1,shoe.takeCard(),bet));
+								player1.hands.add(new Hand(card2,shoe.takeCard(),bet));
 								player1.hands.remove(hand);
 								player1.subtractBalance(bet);
 								System.out.println(player1.showHands());
