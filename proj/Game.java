@@ -148,12 +148,18 @@ public class Game {
 						System.out.println("player hits");
 						if(player1.hit(shoe.takeCard())){
 							System.out.println("dealer wins");
-							if(player1.getNextHand()==null)break;
-							else player1.setCurrentHand(player1.getNextHand());
+							System.out.println(player1.showHands());
+							if(player1.getNextHand()==null){
+								player1.hands.remove(player1.getCurrentHand());
+								break;
+							}else {
+								Hand remove=player1.getCurrentHand();
+								player1.setCurrentHand(player1.getNextHand());
+								player1.hands.remove(remove);
+							}
 							
 							//player1.hands.remove(hand);
-						}
-						player1.showHands();
+						}else System.out.println(player1.showHands());
 					}else if(command.equals("s")){//Stand
 						System.out.println("player stands");
 						if(player1.getNextHand()==null)break;
@@ -222,7 +228,7 @@ public class Game {
 				
 			}
 			//-----------------dealer part-------------------------------
-			if(dealer.getCurrentHand()!=null){
+			if((dealer.getCurrentHand()!=null)&&(player1.getCurrentHand()!=null)){
 				if(dealer.getCurrentHand().getPoints()==21){//Sem fazer hit ver se tem blackjack
 					if(player1.getInsurance()){
 						player1.addBalance(2*bet);
@@ -232,7 +238,7 @@ public class Game {
 				while(dealer.getCurrentHand().getPoints()<=17){
 					System.out.println("dealer hits");
 					dealer.hit(shoe.takeCard());
-					dealer.showHands();
+					System.out.println(dealer.showHands());
 				}
 				for(Hand h:player1.hands){//check if a players hand beats the dealer's hand
 					if((h.getPoints()>dealer.getCurrentHand().getPoints())||(dealer.getCurrentHand().getPoints()<=21)){
