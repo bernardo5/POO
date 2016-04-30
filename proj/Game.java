@@ -198,7 +198,13 @@ public class Game {
 						
 						
 					}else if(command.equals("u")){
-						
+						if((player1.hands.peekFirst()!=null)&&(player1.hands.size()==1)){
+							System.out.println("surrender option");
+							player1.addBalance((float)player1.getCurrentHand().getBet()/2);
+							player1.hands.clear();
+							player1.setCurrentHand(null);
+							dealer.setCurrentHand(null);
+						}else System.out.println("You cannot use side rules at the moment");
 					}else if(command.equals("p")){//allow resplitting until the player has as many as four hands and doubling a hand after splitting
 						if(player1.getBalance()>=table.getMinBet() && player1.getCurrentHand().getSizeofCards()==2 && player1.hands.size()<4){
 							//if cards have the same face value
