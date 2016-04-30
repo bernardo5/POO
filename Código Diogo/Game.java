@@ -39,7 +39,7 @@ public class Game {
 		Player player1 = new Player(Integer.parseInt(args[3]));
 		Dealer dealer = new Dealer();
 		Shoe shoe = new Shoe(Integer.parseInt(args[4]),Integer.parseInt(args[5]));
-		//Populateshoe dependendo do ficheiro
+		//Populateshoe depende dos argumentos
 		shoe.populateShoe();
 		shoe.shuffleShoe();
 		
@@ -47,7 +47,6 @@ public class Game {
 		int bet = table.getMinBet();
 		String command = " ";
 		int b_d = 0;
-		boolean insurance=false;
 		
 		while(true){
 			
@@ -94,10 +93,10 @@ public class Game {
 									System.out.println("Want to make insurance?(y/n)");
 									command = player1.getplayerInput();
 									if(command.equals("y")){
-										insurance = true;
+										player1.changeInsurance(true);
 										player1.subtractBalance(bet);
 									}
-									if(command.equals("n"))insurance = false;
+									if(command.equals("n"))player1.changeInsurance(false);
 								}
 							}else System.out.println("no money for insurance");
 						}
@@ -152,13 +151,14 @@ public class Game {
 						if(hand.getPoints()>21){
 							System.out.println("dealer wins");
 							player1.hands.remove(hand);
+							break;
 						}
 					}else if(command.equals("s")){//Stand
 						System.out.println("player stands");
 						//se for a ultima mão fazer a parte do dealer
 						if(hand == player1.hands.getLast()){
 							if(dealer.getHand().getPoints()==21){//Sem fazer hit ver se tem blackjack
-								if(insurance)player1.addBalance(2*bet);
+								if(player1.getInsurance())player1.addBalance(2*bet);
 							}
 							while(dealer.getHand().getPoints()<=17){
 								System.out.println("dealer hits");

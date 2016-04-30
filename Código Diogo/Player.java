@@ -1,25 +1,36 @@
 package blackjackG21;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Player extends Person{
-	private float balance;
+	
 	protected LinkedList<Hand> hands=new LinkedList<Hand>();
+	private float balance;
+	private boolean insurance;
+	//private int prevBet;
 	
 	//Constructor
 	public Player(int balance) {
 		super();
 		this.setBalance(balance);
+		this.insurance=false;
 	}
 	
 	//Getters
 	public float getBalance() {
 		return balance;
 	}
+	public boolean getInsurance(){
+		return insurance;
+	}
+	
 	//Setters
 	public void setBalance(float balance) {
 		this.balance = balance;
@@ -30,11 +41,14 @@ public class Player extends Person{
 	public void subtractBalance(float f){
 		this.balance-=f;
 	}
+	public void changeInsurance(boolean insurance){
+		this.insurance=insurance;
+	}
 	
 	
 	//Methods
 	public String showHands(){
-		/*player may have more than one hand and shows all cards*/
+		//player may have more than one hand and shows all cards
 		String game=new String();
 		int i=1;
 		for(Hand aux:hands){
@@ -43,7 +57,7 @@ public class Player extends Person{
 		return game;
 	}
 	
-	public boolean placeBet(int bet){//the player has to do at least a bet
+	public boolean placeBet(int bet){
 		System.out.println("bet command");
 		if(bet>getBalance()){
 			System.out.println("You cannot afford this bet. Your balance is:"+getBalance());
@@ -72,7 +86,9 @@ public class Player extends Person{
 	}
 	
 	//Input from File
-	public String getplayerCommandsfromFile(){
+	public String getplayerCommandsfromFile(File file){
+		//String line, command;
+	
 		return null;
 	}
 

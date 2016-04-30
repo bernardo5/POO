@@ -1,15 +1,11 @@
 package blackjackG21;
 
-import java.util.LinkedList;
+public abstract class Person {
 
-public class Person {
-	
-	/*protected LinkedList<Hand> hands;
-	
+	//Constructor
 	public Person(){
-		hands = new LinkedList<Hand>();
 	}
-	*/
-	
+	//Methods to Override
+	public abstract String showHands();
 	
 }
