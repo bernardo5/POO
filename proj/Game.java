@@ -151,6 +151,7 @@ public class Game {
 							System.out.println(player1.showHands());
 							if(player1.getNextHand()==null){
 								player1.hands.remove(player1.getCurrentHand());
+								player1.setCurrentHand(null);
 								break;
 							}else {
 								Hand remove=player1.getCurrentHand();
@@ -228,7 +229,7 @@ public class Game {
 				
 			}
 			//-----------------dealer part-------------------------------
-			if((dealer.getCurrentHand()!=null)&&(player1.getCurrentHand()!=null)){
+			if((dealer.getCurrentHand()!=null)&&(player1.hands.size()>0)){
 				if(dealer.getCurrentHand().getPoints()==21){//Sem fazer hit ver se tem blackjack
 					if(player1.getInsurance()){
 						player1.addBalance(2*bet);
