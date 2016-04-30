@@ -86,21 +86,6 @@ public class Game {
 						//printCards();
 						System.out.println("Player hand: "+ player1.showHands());
 						System.out.println("Dealer's hand: "+ dealer.showHands());	
-						
-						/*if(dealer.getCurrentHand().getCards().getFirst().getRank().equals(Rank.ACE)){
-							//pergunta se quer fazer insurance
-							if(player1.getBalance()>= bet){
-								while(!command.equals("y") || !command.equals("n")){
-									System.out.println("Want to make insurance?(y/n)");
-									command = player1.getplayerInput();
-									if(command.equals("y")){
-										player1.changeInsurance(true);
-										player1.subtractBalance(bet);
-									}
-									if(command.equals("n"))player1.changeInsurance(false);
-								}
-							}else System.out.println("no money for insurance");
-						}*/
 
 						if(player1.hands.getFirst().getPoints()==21){//blackjack
 							if(dealer.getCurrentHand().getPoints()==21){//dealer also has blackjack
