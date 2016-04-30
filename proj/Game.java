@@ -241,7 +241,7 @@ public class Game {
 					System.out.println(dealer.showHands());
 				}
 				for(Hand h:player1.hands){//check if a players hand beats the dealer's hand
-					if((h.getPoints()>dealer.getCurrentHand().getPoints())||(dealer.getCurrentHand().getPoints()<=21)){
+					if((h.getPoints()>dealer.getCurrentHand().getPoints())||(dealer.getCurrentHand().getPoints()>21)){
 						player1.addBalance(2*bet);
 						System.out.println("player wins and his current balance is "+player1.getBalance());
 					}else if(h.getPoints()==dealer.getCurrentHand().getPoints()){
