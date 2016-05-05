@@ -8,7 +8,8 @@ public class Game {
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 		if(args.length<1)System.exit(1);
-		
+		/*System.out.println(args[0]);
+		System.exit(0);*/
 		if(Integer.parseInt(args[1])<1)System.exit(3);//minbet>1
 		if(Integer.parseInt(args[2])<10*Integer.parseInt(args[1]) ||Integer.parseInt(args[2])>20*Integer.parseInt(args[1])) System.exit(4);//10*minbet<=maxbet<=20*minbet
 		if(Integer.parseInt(args[3])<50*Integer.parseInt(args[1]))System.exit(5);//balance>=50*minbet
@@ -54,9 +55,9 @@ public class Game {
 			
 			//----------------------Before Bet and Deal----------------------------
 			while(b_d<2){
-				if(args[0].equals("-i")){//interactive mode
-					command = player1.getplayerInput();
-				}
+				
+				command = player1.getplayerInput(args[0]);
+				
 				
 				//if(args[0].equals("-d"))command -  ir buscar ao ficheiro
 				//if(args[0].equals("-s"))command -  pedir a estrategia
@@ -117,11 +118,11 @@ public class Game {
 			while(player1.getCurrentHand()!=null){
 				
 				
+				//Check if player doubled down
 					
-					if(args[0].equals("-i")){//interactive mode
-						if(player1.getCurrentHand().getBet()==2*bet) command = "s";//fez double down
-						else command = player1.getplayerInput();
-					}
+					if(player1.getCurrentHand().getBet()==2*bet) command = "s";
+						else command = player1.getplayerInput(args[0]);
+					
 					//if(args[0].equals("-d"))command -  ir buscar ao ficheiro
 					//if(args[0].equals("-s"))command -  pedir a estrategia
 				  

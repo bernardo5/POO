@@ -69,20 +69,22 @@ public class Player extends Person{
 	}*/
 	
 	//Input from Stdin
-	public String getplayerInput() throws IOException{
-		BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
-		String s;
-		s = bufferRead.readLine();
-		Scanner scanner = new Scanner (s);
-	    String command =	scanner.next ();
-	    if(scanner.hasNextInt()){
-	        int bet=scanner.nextInt();
-	        scanner.close();
-	        return command+" "+Integer.toString(bet);
-	    }else{
-			scanner.close();
-			return command;
-		}
+	public String getplayerInput(String mode) throws IOException{
+		if(mode.equals("-i")){
+			BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
+			String s;
+			s = bufferRead.readLine();
+			Scanner scanner = new Scanner (s);
+		    String command =	scanner.next ();
+		    if(scanner.hasNextInt()){
+		        int bet=scanner.nextInt();
+		        scanner.close();
+		        return command+" "+Integer.toString(bet);
+		    }else{
+				scanner.close();
+				return command;
+			}
+		}else return "ups";
 	}
 	
 	//Input from File
