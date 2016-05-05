@@ -80,7 +80,7 @@ public class Game {
 			while(b_d<2){
 				
 				command = player1.getplayerInput(args[0]);
-				
+				System.out.println(command);
 				
 				//if(args[0].equals("-d"))command -  ir buscar ao ficheiro
 				//if(args[0].equals("-s"))command -  pedir a estrategia
@@ -92,7 +92,8 @@ public class Game {
 							player1.subtractBalance(bet);
 							b_d++;
 						}else if(bets.length==2){
-							if(Integer.parseInt(bets[1])>=player1.getBalance()){
+							//System.out.println(bets[1]+" bets[1]");
+							if(Integer.parseInt(bets[1])<=player1.getBalance()){
 								bet=Integer.parseInt(bets[1]);
 								player1.subtractBalance(bet);
 								b_d++;

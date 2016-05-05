@@ -103,8 +103,19 @@ public class Player extends Person{
 				return command;
 			}
 		}else if(mode.equals("-d")){
-			if(commands.isEmpty())return "q";
-				else return this.commands.removeFirst();
+			if(commands.isEmpty())return "q"; //no more commands to read
+				else{
+					String s=this.commands.removeFirst();
+					if(s.equals("b")){
+						try{
+							System.out.println("top:"+Integer.parseInt(commands.getFirst()));
+							return s+=" "+commands.removeFirst();
+						}catch(NumberFormatException e){
+							return s;
+						}
+					}else return s;
+					
+				}
 		}else return "ups";
 	}
 	
