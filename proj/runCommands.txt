@@ -1,0 +1,3 @@
+-i 10 150 600 4 80
+
+-d 10 150 600 src/shoe-file.txt src/commands.txt

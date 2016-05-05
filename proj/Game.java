@@ -7,6 +7,8 @@ public class Game {
 
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
+		Player player1;
+		Shoe shoe;
 		if(args.length<1)System.exit(1);
 		/*System.out.println(args[0]);
 		System.exit(0);*/
@@ -16,33 +18,53 @@ public class Game {
 
 		//interactive mode
 		if(args[0].equals("-i")){
-			if(args.length != 6) System.out.println("Usage for interactive mode: -i min-bet max-bet balance shoe shuffle");
-			int shoe=Integer.parseInt(args[4]);
-			if(shoe<4||shoe>8)System.exit(6);
+			if(args.length != 6){
+				System.out.println("Usage for interactive mode: -i min-bet max-bet balance shoe shuffle");
+				System.exit(0);
+			}
+			int nshoe=Integer.parseInt(args[4]);
+			if(nshoe<4||nshoe>8)System.exit(6);
 			int shuffle=Integer.parseInt(args[5]);
 			if(shuffle<10||shuffle>100)System.exit(7);
+			player1 = new Player(Integer.parseInt(args[3]));
+			//populate shoe
+			shoe= new Shoe(Integer.parseInt(args[4]),Integer.parseInt(args[5]));
+			shoe.populateShoe();
+			shoe.shuffleShoe();
 		}
 		//debug mode
 		else if(args[0].equals("-d")){
-			if(args.length != 6) System.out.println("Usage for debug mode: -d min-bet max-bet balance shoe-file cmd-file");
-			//Carregar ficheiros
+			if(args.length != 6){
+				System.out.println("Usage for debug mode: -d min-bet max-bet balance shoe-file cmd-file");
+				System.exit(0);
+			}
+			player1 = new Player(Integer.parseInt(args[3]));
+			//load file and get commands to a linkedList of commands
+			player1.ReadFile(args[5]);
+			shoe= new Shoe();
+			shoe.populateShoeFromFile(args[4]);
+			/*System.out.println(shoe.toString());
+			System.exit(0);*/
 		}
 		//simulation mode
 		else if(args[0].equals("-s")){
-			if(args.length != 8) System.out.println("Usage for simulation mode: -s min-bet max-bet balance shuffle s-number strategy");
+			
+			if(args.length != 8){
+				System.out.println("Usage for simulation mode: -s min-bet max-bet balance shuffle s-number strategy");
+				System.exit(0);
+			}
+			player1 = new Player(Integer.parseInt(args[3]));
+			shoe= new Shoe();
 			//Carregar estrategia
 		}else{
+			shoe= new Shoe();
+			player1 = new Player(Integer.parseInt(args[3]));
 			System.exit(2);
 		}
 		
-		//Instanciate objects
+		//Instanciate generic objects
 		Table table = new Table(Integer.parseInt(args[1]),Integer.parseInt(args[2]));
-		Player player1 = new Player(Integer.parseInt(args[3]));
 		Dealer dealer = new Dealer();
-		Shoe shoe = new Shoe(Integer.parseInt(args[4]),Integer.parseInt(args[5]));
-		//Populateshoe depende dos argumentos
-		shoe.populateShoe();
-		shoe.shuffleShoe();
 		
 		//-----------------------Begining of the game------------------------------//
 		int bet = table.getMinBet();
@@ -50,8 +72,9 @@ public class Game {
 		int b_d = 0;
 		
 		while(true){
-			
-			if(shoe.calculateUsagePercentage()>=shoe.getShufflePercentage())shoe.shuffleShoe();//Shuffle
+			if(shoe.getShufflePercentage()!=100)
+				if(shoe.calculateUsagePercentage()>=shoe.getShufflePercentage())
+					shoe.shuffleShoe();//Shuffle
 			
 			//----------------------Before Bet and Deal----------------------------
 			while(b_d<2){

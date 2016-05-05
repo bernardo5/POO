@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Player extends Person{
-	
+	 protected LinkedList<String>commands;
 	protected LinkedList<Hand> hands=new LinkedList<Hand>();
 	private float balance;
 	private boolean insurance;
@@ -21,6 +21,24 @@ public class Player extends Person{
 		super();
 		this.setBalance(balance);
 		this.insurance=false;
+		commands=new LinkedList<String>();
+	}
+	
+	public void ReadFile(String file){
+		String line;
+		try{
+			BufferedReader br = new BufferedReader(new FileReader(file));
+		    while ((line = br.readLine()) != null) {
+		    	String[] arr = line.split(" ");
+		    	for(String c:arr){
+		    		commands.addLast(c);
+		    	}
+		    }
+		}catch(FileNotFoundException e){
+	    	 e.printStackTrace();
+	     }catch(IOException e){
+           e.printStackTrace();
+	     } 
 	}
 	
 	//Getters
@@ -84,6 +102,9 @@ public class Player extends Person{
 				scanner.close();
 				return command;
 			}
+		}else if(mode.equals("-d")){
+			if(commands.isEmpty())return "q";
+				else return this.commands.removeFirst();
 		}else return "ups";
 	}
 	

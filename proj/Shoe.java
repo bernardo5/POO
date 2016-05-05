@@ -15,11 +15,17 @@ public class Shoe {
 		return shufflePercentage;
 	}
 	
-	//Constructor
+	//Constructor for interactive mode
 	public Shoe(int numberDecks, int percentage){
 		this.sequence=new ArrayList<Card>(nDecks*52);
 		this.nDecks=numberDecks;
 		this.shufflePercentage=percentage;
+		this.nbNextCard=0;
+	}
+	//Constructor for debug mode
+	public Shoe(){
+		this.sequence=new ArrayList<Card>();//size depends on file with the cards
+		this.shufflePercentage=100;//dont want to shuffle
 		this.nbNextCard=0;
 	}
 	
@@ -65,11 +71,11 @@ public class Shoe {
 		try{
 			BufferedReader br = new BufferedReader(new FileReader(file));
 		    
-		    int i=0;
-		    while (((line = br.readLine()) != null)&&(i<nDecks)) {
+		    while (((line = br.readLine()) != null)) {
+		    	//System.out.println(line);
 		    	String[] arr = line.split(" ");
-		    	for ( String card : arr) {
-		    		System.out.println(card);
+		    	for (String card : arr) {
+		    		//System.out.println(card);
 			   	    
 		    		if(card.length()==2){//all except 10's
 						rank=String.valueOf(card.charAt(0));
@@ -100,7 +106,6 @@ public class Shoe {
 
 			   	    sequence.add(new Card(cardrank,cardsuit));
 			   	 }
-		    	 i++;
 		    }
 		    br.close();
 		    
@@ -109,7 +114,7 @@ public class Shoe {
 	     }catch(IOException e){
             e.printStackTrace();
 	     } 
-		System.out.println(this.toString());
+		//System.out.println(this.toString());
 	}
 
 	
