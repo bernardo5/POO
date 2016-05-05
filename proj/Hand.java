@@ -80,15 +80,11 @@ public class Hand {
 	@Override
 	public String toString() {
 		
-		return "Hand [" + cards + "] with " + points +" points";
+		return cards + " (" + points +")";
 	}	
 
 	public boolean bust(){
-		if(this.points>21){
-			System.out.println("player busts");
-			return true;
-		}
-		return false;
+		return this.points>21 ? true:false;
 	}
 	
 	/*public static void main(String[] args) {

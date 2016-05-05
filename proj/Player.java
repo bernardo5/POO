@@ -1,44 +1,29 @@
 package blackjack;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
+
 
 public class Player extends Person{
-	 protected LinkedList<String>commands;
+	protected LinkedList<String> commands;
 	protected LinkedList<Hand> hands=new LinkedList<Hand>();
 	private float balance;
 	private boolean insurance;
 	//private int prevBet;
 	
-	//Constructor
+	//Constructors
 	public Player(int balance) {
 		super();
 		this.setBalance(balance);
 		this.insurance=false;
-		commands=new LinkedList<String>();
 	}
 	
-	public void ReadFile(String file){
-		String line;
-		try{
-			BufferedReader br = new BufferedReader(new FileReader(file));
-		    while ((line = br.readLine()) != null) {
-		    	String[] arr = line.split(" ");
-		    	for(String c:arr){
-		    		commands.addLast(c);
-		    	}
-		    }
-		}catch(FileNotFoundException e){
-	    	 e.printStackTrace();
-	     }catch(IOException e){
-           e.printStackTrace();
-	     } 
+	public Player(int balance,String file) {
+		super();
+		this.setBalance(balance);
+		this.insurance=false;
+		this.commands=new LinkedList<String>();
+		ReadFile(file);
 	}
 	
 	//Getters
@@ -63,14 +48,18 @@ public class Player extends Person{
 		this.insurance=insurance;
 	}
 	
-	
 	//Methods
 	public String showHands(){
 		//player may have more than one hand and shows all cards
 		String game=new String();
 		int i=1;
-		for(Hand aux:hands){
-			game+="Hand "+i+": "+aux.toString()+"\n";
+		if(hands.size()==1){
+			game = "Hand : "+hands.toString()+"\n";
+		}else{
+			for(Hand aux:hands){
+				game+="Hand "+ i+": "+aux.toString()+"\n";
+				i++;
+			}
 		}
 		return game;
 	}
@@ -85,6 +74,24 @@ public class Player extends Person{
 			return true;
 		}
 	}*/
+	
+	public void ReadFile(String file){
+		String line;
+		try{
+			BufferedReader br = new BufferedReader(new FileReader(file));
+		    while ((line = br.readLine()) != null) {
+		    	String[] arr = line.split(" ");
+		    	for(String c:arr){
+		    		commands.addLast(c);
+		    	}
+		    }
+		    br.close();
+		}catch(FileNotFoundException e){
+	    	 e.printStackTrace();
+	    }catch(IOException e){
+           e.printStackTrace();
+	    } 
+	}
 	
 	//Input from Stdin
 	public String getplayerInput(String mode) throws IOException{
@@ -102,29 +109,22 @@ public class Player extends Person{
 				scanner.close();
 				return command;
 			}
-		}else if(mode.equals("-d")){
-			if(commands.isEmpty())return "q"; //no more commands to read
-				else{
-					String s=this.commands.removeFirst();
-					if(s.equals("b")){
-						try{
-							System.out.println("top:"+Integer.parseInt(commands.getFirst()));
-							return s+=" "+commands.removeFirst();
-						}catch(NumberFormatException e){
-							return s;
-						}
-					}else return s;
-					
-				}
-		}else return "ups";
+		}else /*if(mode.equals("-d"))*/{
+			if(commands.isEmpty()) return "q"; //no more commands to read
+			else{
+				String s=this.commands.removeFirst();
+				if(s.equals("b")){
+					try{
+						System.out.println("top:"+Integer.parseInt(commands.getFirst()));
+						return s+=" "+commands.removeFirst();
+					}catch(NumberFormatException e){
+						return s;
+					}
+				}else return s;					
+			}
+		}
 	}
 	
-	//Input from File
-	public String getplayerCommandsfromFile(File file){
-		//String line, command;
-	
-		return null;
-	}
 	
 	public Hand getNextHand(){
 		int indexCurrentHand=hands.indexOf(this.getCurrentHand());
@@ -133,7 +133,7 @@ public class Player extends Person{
 		return null;
 	}
 
-/*
+	/*
 	public static void main(String[] args) {
 		Card card1 = new Card(Rank.valueOf("ACE"), Suit.valueOf("SPADES"));
 		Card card2 = new Card(Rank.valueOf("QUEEN"), Suit.valueOf("HEARTS"));

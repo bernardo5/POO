@@ -1,7 +1,7 @@
 package blackjack;
 
 import java.io.*;
-import java.util.*;
+//import java.util.*;
 
 public class Game {
 
@@ -38,9 +38,7 @@ public class Game {
 				System.out.println("Usage for debug mode: -d min-bet max-bet balance shoe-file cmd-file");
 				System.exit(0);
 			}
-			player1 = new Player(Integer.parseInt(args[3]));
-			//load file and get commands to a linkedList of commands
-			player1.ReadFile(args[5]);
+			player1 = new Player(Integer.parseInt(args[3]),args[5]);
 			shoe= new Shoe();
 			shoe.populateShoeFromFile(args[4]);
 			/*System.out.println(shoe.toString());
@@ -82,7 +80,6 @@ public class Game {
 				command = player1.getplayerInput(args[0]);
 				System.out.println(command);
 				
-				//if(args[0].equals("-d"))command -  ir buscar ao ficheiro
 				//if(args[0].equals("-s"))command -  pedir a estrategia
 				
 				if(command.startsWith("b")){//Bet
@@ -109,7 +106,7 @@ public class Game {
 						player1.setCurrentHand(p);
 						dealer.setCurrentHand(d);
 						//printCards();
-						System.out.println("Player hand: "+ player1.showHands());
+						System.out.println("Player's hand: "+ player1.showHands());
 						System.out.println("Dealer's hand: "+ dealer.showHands());	
 
 						if(player1.hands.getFirst().getPoints()==21){//blackjack
