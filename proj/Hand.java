@@ -7,24 +7,6 @@ public class Hand {
 	private int points;
 	private int bet;
 	
-	//Getters
-	public LinkedList<Card> getCards(){
-		return cards;
-	}
-	public int getPoints(){
-		return this.points;
-	}
-	public int getBet() {
-		return bet;
-	}
-	public int getSizeofCards(){
-		return cards.size();
-	}
-	
-	//Setters
-	public void setBet(int bet) {
-		this.bet = bet;
-	}
 	//Constructors
 	public Hand(){
 		this.cards= new LinkedList<Card>();
@@ -45,6 +27,25 @@ public class Hand {
 		this.bet=bet;
 	}
 	
+	//Getters
+	public LinkedList<Card> getCards(){
+		return cards;
+	}
+	public int getPoints(){
+		return this.points;
+	}
+	public int getBet() {
+		return bet;
+	}
+	public int getSizeofCards(){
+		return cards.size();
+	}
+	
+	//Setters
+	public void setBet(int bet) {
+		this.bet = bet;
+	}
+
 	//Methods
 	public void updatePoints(){
 		int sum=0;
@@ -87,17 +88,12 @@ public class Hand {
 		return this.points>21 ? true:false;
 	}
 	
-	/*public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		Hand hand=new Hand(new Card("Q",'S', null), new Card("A",'S', null));
-		
-		System.out.println(hand.toString());
-		
-		hand.addCard(new Card("A", 'H', null));
-		//hand.addCard(new Card("K", 'H', null));
-		
-		System.out.println(hand.toString());
-		hand.bust();
-	}*/
+	public int numberAces(){
+		int num=0;
+		for(Card c : this.getCards()){
+			if(c.getRank() == Rank.ACE) num++;
+		}
+		return num;
+	}
 
 }

@@ -6,7 +6,7 @@ import java.util.*;
 
 public class Player extends Person{
 	protected LinkedList<String> commands;
-	protected LinkedList<Hand> hands=new LinkedList<Hand>();
+	protected LinkedList<Hand> hands = new LinkedList<Hand>();
 	private float balance;
 	private boolean insurance;
 	//private int prevBet;
@@ -16,6 +16,7 @@ public class Player extends Person{
 		super();
 		this.setBalance(balance);
 		this.insurance=false;
+		this.commands=null;
 	}
 	
 	public Player(int balance,String file) {
@@ -63,18 +64,7 @@ public class Player extends Person{
 		}
 		return game;
 	}
-	
-	/*public boolean placeBet(int bet){
-		System.out.println("bet command");
-		if(bet>getBalance()){
-			System.out.println("You cannot afford this bet. Your balance is:"+getBalance());
-			return false;
-		}else{
-			setBalance(getBalance()-bet);
-			return true;
-		}
-	}*/
-	
+
 	public void ReadFile(String file){
 		String line;
 		try{
@@ -94,20 +84,27 @@ public class Player extends Person{
 	}
 	
 	//Input from Stdin
-	public String getplayerInput(String mode) throws IOException{
+	public String getplayerInput(String mode) /*throws IOException*/{
 		if(mode.equals("-i")){
 			BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
 			String s;
-			s = bufferRead.readLine();
-			Scanner scanner = new Scanner (s);
-		    String command =	scanner.next ();
-		    if(scanner.hasNextInt()){
+			try {
+				s = bufferRead.readLine();
+			
+				Scanner scanner = new Scanner (s);
+				String command =	scanner.next ();
+				if(scanner.hasNextInt()){
 		        int bet=scanner.nextInt();
 		        scanner.close();
 		        return command+" "+Integer.toString(bet);
-		    }else{
-				scanner.close();
-				return command;
+		    	}else{
+					scanner.close();
+					return command;
+		    	}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
 			}
 		}else /*if(mode.equals("-d"))*/{
 			if(commands.isEmpty()) return "q"; //no more commands to read
@@ -125,27 +122,18 @@ public class Player extends Person{
 		}
 	}
 	
-	
+	@Override
+	public void win() {
+		// TODO Auto-generated method stub
+		super.win();
+		System.out.println("player wins");
+	}
+
 	public Hand getNextHand(){
 		int indexCurrentHand=hands.indexOf(this.getCurrentHand());
 		if((indexCurrentHand!=-1)&&((indexCurrentHand+1)<hands.size()))
 			return hands.get(indexCurrentHand+1);
 		return null;
 	}
-
-	/*
-	public static void main(String[] args) {
-		Card card1 = new Card(Rank.valueOf("ACE"), Suit.valueOf("SPADES"));
-		Card card2 = new Card(Rank.valueOf("QUEEN"), Suit.valueOf("HEARTS"));
-		Card card3 = new Card(Rank.valueOf("TEN"), Suit.valueOf("DIAMONDS"));
-		Player player1 = new Player(100);
-		
-		Hand hand1 = new Hand(card1, card2);
-		
-		player1.addHand(hand1);
-		player1.hands.getFirst().addCard(card3);
-
-		System.out.println(player1.showHands());
-	}*/
 
 }

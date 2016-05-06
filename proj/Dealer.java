@@ -28,18 +28,12 @@ public class Dealer extends Person{
 		
 		return game;
 	}
-	
-	/*public static void main(String[] args) {
-		Card card1 = new Card(Rank.valueOf("ACE"), Suit.valueOf("S"));
-		Card card2 = new Card(Rank.valueOf("QUEEN"), Suit.valueOf("C"));
-		Card card3 = new Card(Rank.valueOf("TEN"), Suit.valueOf("C"));
-		Dealer dealer = new Dealer();
-		
-		Hand hand1 = new Hand(card1, card2);
-		
-		dealer.addHand(hand1);
 
-		System.out.println(dealer.showHands());
-	}*/
+	@Override
+	public void win() {
+		// TODO Auto-generated method stub
+		super.win();
+		System.out.println("dealer wins");
+	}
 
 }

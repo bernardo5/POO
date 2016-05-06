@@ -27,18 +27,7 @@ package blackjack;
 	}
 	
 	enum Suit{
-		CLUBS('C'), DIAMONDS('D'), HEARTS('H'), SPADES('S');
-		
-		private char c;
-		
-		//Constructor
-		Suit(char c){
-			this.c = c;
-		}
-	    //Getter
-	    public char getSuitValue() {
-	        return c;
-	    }
+		CLUBS, DIAMONDS, HEARTS, SPADES;
 	}
 		
 public class Card {
@@ -49,7 +38,7 @@ public class Card {
 	//Constructors
 	public Card(Rank rank, Suit suit){
 		this.rank = rank;
-		this.suit=suit;
+		this.suit = suit;
 	}
 	
 	//Getters
@@ -59,16 +48,13 @@ public class Card {
 	public Suit getSuit(){
 		return this.suit;
 	}
+	public int getValue(){
+		return this.getRank().getRankValue();
+	}
 
 	@Override
 	public String toString() {
 		return "Card (" + rank +" "+ suit + ")";
 	}	
-	
-	/*
-	public static void main(String[] args){
-		Card card = new Card(Rank.ACE,Suit.CLUBS);
-		System.out.println(card);
-	}*/
 
 }

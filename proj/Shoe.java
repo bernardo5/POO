@@ -6,18 +6,13 @@ import java.util.*;
 
 public class Shoe {
 	private ArrayList<Card> sequence;
-	private int nbNextCard = 0;
+	private int nbNextCard;
 	private int nDecks;
 	private int shufflePercentage;
 	
-	//Getters
-	public int getShufflePercentage() {
-		return shufflePercentage;
-	}
-	
 	//Constructor for interactive mode
 	public Shoe(int numberDecks, int percentage){
-		this.sequence=new ArrayList<Card>(nDecks*52);
+		this.sequence=new ArrayList<Card>(numberDecks*52);
 		this.nDecks=numberDecks;
 		this.shufflePercentage=percentage;
 		this.nbNextCard=0;
@@ -27,6 +22,11 @@ public class Shoe {
 		this.sequence=new ArrayList<Card>();//size depends on file with the cards
 		this.shufflePercentage=100;//dont want to shuffle
 		this.nbNextCard=0;
+	}
+	
+	//Getters
+	public int getShufflePercentage() {
+		return shufflePercentage;
 	}
 	
 	//Methods
@@ -43,6 +43,15 @@ public class Shoe {
 		System.out.println("shuffling the shoe...");
 	}
 	
+	@Override
+	public String toString() {
+		String message= "Shoe: \n";
+		for(Card c:sequence){
+			message+=c.toString()+"\n";
+		}
+		return message;
+	}
+	
 	public void populateShoe(){
 		for(int i=0; i<this.nDecks; i++){
 			for(Rank c:Rank.values()){
@@ -54,15 +63,6 @@ public class Shoe {
 		}
 	}
 	
-	@Override
-	public String toString() {
-		String message= "Shoe: \n";
-		for(Card c:sequence){
-			message+=c.toString()+"\n";
-		}
-		return message;
-	}
-	
 	public void populateShoeFromFile(String file){
 		String line, rank,suit;
 		Rank cardrank = null;
@@ -70,15 +70,12 @@ public class Shoe {
 		
 		try{
 			BufferedReader br = new BufferedReader(new FileReader(file));
-		    
 		    while (((line = br.readLine()) != null)) {
-		    	//System.out.println(line);
 		    	String[] arr = line.split(" ");
 		    	for (String card : arr) {
-		    		//System.out.println(card);
-			   	    
 		    		if(card.length()==2){//all except 10's
-						rank=String.valueOf(card.charAt(0));
+					
+		    			rank=String.valueOf(card.charAt(0));
 						suit=String.valueOf(card.charAt(1));
 					}else{
 						rank="10";
@@ -114,21 +111,6 @@ public class Shoe {
 	     }catch(IOException e){
             e.printStackTrace();
 	     } 
-		//System.out.println(this.toString());
 	}
-
-	
-	/*
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		int shoe=4;
-		Shoe shoeGame=new Shoe(shoe,50);
-		//shoeGame.populateShoeFromFile("Código/shoe-file.txt");
-		shoeGame.populateShoe(shoe);
-		shoeGame.shuffleShoe();
-		System.out.println(shoeGame.toString());
-		//shoeGame.shuffleShoe();
-		//System.out.println(shoeGame.toString());	
-	}*/
 	
 }
