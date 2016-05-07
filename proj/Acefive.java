@@ -1,6 +1,6 @@
 package blackjack;
 
-public class Acefive implements IStrategy{
+public class Acefive implements ActionStrategy,BetStrategy{
 
 	private int count = 0;
 	

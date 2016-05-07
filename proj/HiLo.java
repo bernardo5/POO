@@ -1,6 +1,6 @@
 package blackjack;
 
-public class HiLo implements IStrategy{
+public class HiLo implements ActionStrategy{
 	
 	private int runningcount;
 	private int nbdeckstotal;

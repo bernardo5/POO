@@ -65,6 +65,7 @@ public class Game {
 		int bet = table.getMinBet();
 		String command = " ";
 		int bet_deal = 0;
+		Basic basic=new Basic();
 		
 		while(true){
 			if(shoe.getShufflePercentage()!=100)
@@ -216,6 +217,7 @@ public class Game {
 						player1.getCurrentHand().addCard(shoe.takeCard());
 					}else System.out.println("u: illegal command");
 				}else if(command.equals("ad")){
+					System.out.println("According to Basic strategy: " + basic.advice(player1.getCurrentHand(),dealer.getVisibleCard()));
 				}else if(command.equals("st")){
 					if(dealer.getblackjacks()!=0)
 						System.out.println("BJ P/D" + player1.getblackjacks()/dealer.getblackjacks());

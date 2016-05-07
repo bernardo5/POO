@@ -11,6 +11,10 @@ public class Dealer extends Person{
 		return current.getCards().getFirst().getRank();
 	}
 	
+	public Card getVisibleCard(){
+		return current.getCards().getFirst();
+	}
+	
 	public String showHands(){
 		/*Dealer only has one hand and shows all cards except the first*/
 		String game=new String();
