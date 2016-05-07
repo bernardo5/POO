@@ -18,19 +18,19 @@ public abstract class Person {
 	}
 	public void win(){
 		this.wins++;
-		System.out.println("wins");
+		//System.out.println("wins");
 	}
 	public void draw(){
 		this.draws++;
-		System.out.println("draw");
+		//System.out.println("draw");
 	}
 	public void lost(){
 		this.loses++;
-		System.out.println("loses");
+		//System.out.println("loses");
 	}
 	public void blackjack(){
 		this.blackjacks++;
-		System.out.println("wins");
+		//System.out.println("wins");
 	}
 		
 	//Getters

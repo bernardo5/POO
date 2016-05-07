@@ -129,6 +129,21 @@ public class Game {
 					
 				}else if(command.equals("q")){
 					System.exit(0);
+				}else if(command.equals("st")){
+					if(dealer.getblackjacks()!=0)
+						System.out.println("BJ P/D" + player1.getblackjacks()/dealer.getblackjacks());
+					else System.out.println("Dealer has no Blackjacks yet");
+					if(player1.roundsplayed()!=0){
+						System.out.println("Win " + (float)player1.getwins()/player1.roundsplayed());
+						System.out.println("Lose " + (float)player1.getloses()/player1.roundsplayed());
+						System.out.println("Push " + (float)player1.getdraws()/player1.roundsplayed());
+					}else{
+						System.out.println("Win " + player1.getwins());
+						System.out.println("Lose " + player1.getloses());
+						System.out.println("Push " + player1.getdraws());
+					}
+					
+					System.out.println("Balance" + player1.getBalance() + "("+ 100*(float)(player1.getBalance()/Integer.parseInt(args[3])) +"%)" );
 				}else System.out.println("Illegal command");
 			}
 			bet_deal=0;
@@ -152,6 +167,8 @@ public class Game {
 					System.out.println("player hits");
 					if(player1.hit(shoe.takeCard())){
 						System.out.println("dealer wins");
+						dealer.win();
+						player1.lost();
 						System.out.println(player1.showHands());
 						if(player1.getNextHand()==null){
 							player1.hands.remove(player1.getCurrentHand());
@@ -200,11 +217,19 @@ public class Game {
 					}else System.out.println("u: illegal command");
 				}else if(command.equals("ad")){
 				}else if(command.equals("st")){
-					System.out.println("BJ P/D" + player1.getblackjacks()/dealer.getblackjacks());
-					System.out.println("Win " + player1.getwins()/player1.roundsplayed());
-					System.out.println("Lose " + player1.getloses()/player1.roundsplayed());
-					System.out.println("Push " + player1.getdraws()/player1.roundsplayed());
-					System.out.println("Balance" + player1.getBalance() + "("+ 100*(player1.getBalance()/Integer.parseInt(args[3])) +"%)" );
+					if(dealer.getblackjacks()!=0)
+						System.out.println("BJ P/D" + player1.getblackjacks()/dealer.getblackjacks());
+					else System.out.println("Dealer has no Blackjacks yet");
+					if(player1.roundsplayed()!=0){
+						System.out.println("Win " + (float)player1.getwins()/player1.roundsplayed());
+						System.out.println("Lose " + (float)player1.getloses()/player1.roundsplayed());
+						System.out.println("Push " + (float)player1.getdraws()/player1.roundsplayed());
+					}else{
+						System.out.println("Win " + player1.getwins());
+						System.out.println("Lose " + player1.getloses());
+						System.out.println("Push " + player1.getdraws());
+					}
+					System.out.println("Balance" + player1.getBalance() + "("+ 100*(float)(player1.getBalance()/Integer.parseInt(args[3])) +"%)" );
 				}else if(command.equals("q")){
 					System.exit(0);
 				}else System.out.println("Illegal command");			
@@ -225,12 +250,18 @@ public class Game {
 				for(Hand h:player1.hands){//check if a players hand beats the dealer's hand
 					if((h.getPoints()>dealer.getCurrentHand().getPoints())||(dealer.getCurrentHand().getPoints()>21)){
 						player1.addBalance(2*bet);
+						player1.win();
+						dealer.lost();
 						System.out.println("player wins and his current balance is "+player1.getBalance());
 					}else if(h.getPoints()==dealer.getCurrentHand().getPoints()){
 						player1.addBalance(bet);
+						player1.draw();
+						dealer.draw();
 						System.out.println("draw");
 					}else{
 						System.out.println("dealer wins");
+						dealer.win();
+						player1.lost();
 					}
 				}
 				//collectCards();
