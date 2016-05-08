@@ -10,6 +10,10 @@ public class Shoe {
 	private int nDecks;
 	private int shufflePercentage;
 	
+	public int nCards(){
+		return sequence.size();
+	}
+	
 	//Constructor for interactive mode
 	public Shoe(int numberDecks, int percentage){
 		this.sequence=new ArrayList<Card>(numberDecks*52);

@@ -6,7 +6,7 @@ public class Game {
 
 		Player player1 = null;
 		Shoe shoe = null;
-		
+		int nshoe=0;
 		if(args.length<6)System.exit(1);
 		if(Integer.parseInt(args[1])<1)System.exit(3);//minbet>1
 		if(Integer.parseInt(args[2])<10*Integer.parseInt(args[1]) ||Integer.parseInt(args[2])>20*Integer.parseInt(args[1])) System.exit(4);//10*minbet<=maxbet<=20*minbet
@@ -18,7 +18,7 @@ public class Game {
 				System.out.println("Usage for interactive mode: -i min-bet max-bet balance shoe shuffle");
 				System.exit(0);
 			}
-			int nshoe=Integer.parseInt(args[4]);
+			nshoe=Integer.parseInt(args[4]);
 			if(nshoe<4||nshoe>8)System.exit(6);
 			int shuffle=Integer.parseInt(args[5]);
 			if(shuffle<10||shuffle>100)System.exit(7);
@@ -67,11 +67,13 @@ public class Game {
 		int bet_deal = 0;
 		Basic basic=new Basic();
 		Acefive aceFive=new Acefive();
+		HiLo hilo=new HiLo(shoe.nCards()/52);
 		
 		while(true){
 			if(shoe.getShufflePercentage()!=100)
 				if(shoe.calculateUsagePercentage()>=shoe.getShufflePercentage()){
 					aceFive.resetCount();
+					hilo.restartRunningCount();
 					shoe.shuffleShoe();//Shuffle
 				}
 					
@@ -106,9 +108,12 @@ public class Game {
 						Card b=shoe.takeCard();
 						aceFive.cardRevealed(a);
 						aceFive.cardRevealed(b);
+						hilo.cardRevealed(a);
+						hilo.cardRevealed(b);
 						Hand p=new Hand(a, b,bet);
 						a=shoe.takeCard();
 						aceFive.cardRevealed(a);
+						hilo.cardRevealed(a);
 						Hand d=new Hand(a, shoe.takeCard(),0);
 						player1.hands.add(p);
 						player1.setCurrentHand(p);
@@ -180,6 +185,7 @@ public class Game {
 					System.out.println("player hits");
 					Card a=shoe.takeCard();
 					aceFive.cardRevealed(a);
+					hilo.cardRevealed(a);
 					if(player1.hit(a)){
 						//System.out.println("dealer wins");
 						dealer.win();
@@ -233,6 +239,7 @@ public class Game {
 				}else if(command.equals("ad")){
 					System.out.println("According to Basic strategy: " + basic.advice(player1.getCurrentHand(),dealer.getVisibleCard()));
 					System.out.println("According to Ace-Five strategy: " + aceFive.advice(player1.getCurrentHand(),dealer.getVisibleCard()));
+					System.out.println("According to Hi-Low strategy: " + hilo.advice(player1.getCurrentHand(),dealer.getVisibleCard()));
 				}else if(command.equals("st")){
 					if(dealer.getblackjacks()!=0)
 						System.out.println("BJ P/D" + player1.getblackjacks()/dealer.getblackjacks());
@@ -263,6 +270,7 @@ public class Game {
 					System.out.println("dealer hits");
 					Card card=shoe.takeCard();
 					aceFive.cardRevealed(card);
+					hilo.cardRevealed(card);
 					dealer.hit(card);
 					System.out.println(dealer.showHands());
 				}
@@ -286,6 +294,7 @@ public class Game {
 				//see what card the dealer had
 				Card hidden=dealer.returnHiddenCard();
 				aceFive.cardRevealed(hidden);
+				hilo.cardRevealed(hidden);
 				//collectCards();
 				player1.hands.clear();
 				player1.setCurrentHand(null);
