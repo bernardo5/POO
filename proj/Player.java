@@ -13,6 +13,9 @@ public class Player extends Person{
 	Acefive acefive;
 	Basic basic;
 	HiLo hilo;
+	private String Last;
+	
+	String followedStretegy;
 	
 	//Constructors
 	public Player(int balance, int ncards) {
@@ -25,6 +28,18 @@ public class Player extends Person{
 		hilo=new HiLo(ncards);
 	}
 	
+	public Player(int balance, int ncards, String strategy) {
+		super();
+		this.setBalance(balance);
+		this.insurance=false;
+		this.commands=null;
+		basic=new Basic();
+		acefive=new Acefive();
+		hilo=new HiLo(ncards);
+		followedStretegy=strategy;
+		Last="first";
+	}
+	
 	public Player(int balance,String file, int ncards) {
 		super();
 		this.setBalance(balance);
@@ -34,6 +49,10 @@ public class Player extends Person{
 		basic=new Basic();
 		acefive=new Acefive();
 		hilo=new HiLo(ncards);
+	}
+	
+	public void SetLast(String l){
+		this.Last=l;
 	}
 	
 	//Getters
@@ -93,7 +112,7 @@ public class Player extends Person{
 	}
 	
 	//Input from Stdin
-	public String getplayerInput(String mode) /*throws IOException*/{
+	public String getplayerInput(int bet_deal, String mode, boolean bet_flag, int minBet, int lastBet, Hand hand, Card card) /*throws IOException*/{
 		if(mode.equals("-i")){
 			BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
 			String s;
@@ -101,7 +120,7 @@ public class Player extends Person{
 				s = bufferRead.readLine();
 			
 				Scanner scanner = new Scanner (s);
-				String command =	scanner.next ();
+				String command = scanner.next ();
 				if(scanner.hasNextInt()){
 		        int bet=scanner.nextInt();
 		        scanner.close();
@@ -115,7 +134,7 @@ public class Player extends Person{
 				e.printStackTrace();
 				return null;
 			}
-		}else /*if(mode.equals("-d"))*/{
+		}else if(mode.equals("-d")){
 			if(commands.isEmpty()) return "q"; //no more commands to read
 			else{
 				String s=this.commands.removeFirst();
@@ -128,7 +147,38 @@ public class Player extends Person{
 					}
 				}else return s;					
 			}
+		}else{//strategy mode
+			if(bet_flag){//want to know the amount of money to bet
+				if(bet_deal==0){
+					if(followedStretegy.equals("BS")||followedStretegy.equals("HL")){//follow normal bet strategy
+						System.out.println("ok");
+						int plus=lastBet+minBet;
+						int minus=lastBet-minBet;
+						if(Last.equals("first"))return "b "+minBet;
+						else if(Last.equals("W"))return "b "+(plus);
+						else if(Last.equals("L"))return "b "+(minus);
+						else /*draw*/return "b "+lastBet;
+					}else{//follow ace-five bet strategy
+						if(acefive.advice().equals("min_bet"))return "b "+minBet;
+						else if(acefive.advice().equals("double last bet"))return "b "+2*lastBet;
+						else return acefive.advice();
+					}
+				}else return "d";
+			}else{//want to know what action to perform
+				if(followedStretegy.equals("BS")){
+					return basic.advice(hand, card);
+				}else if(followedStretegy.equals("BS-AF")){
+					return basic.advice(hand, card);//at this point the action taken is the same as the basic
+				}else if(followedStretegy.equals("HL")){
+					if(hilo.advice(hand, card).contains("Using basic:")) return basic.advice(hand, card);
+					else return hilo.advice(hand, card);
+				}else{//HL-AF
+					if(hilo.advice(hand, card).contains("Using basic:")) return basic.advice(hand, card);
+					else return hilo.advice(hand, card);
+				}
+			}
 		}
+		//return null;
 	}
 	
 	@Override
@@ -288,7 +338,7 @@ public class Player extends Person{
 		public String advice() {
 			if(count>=2)return "2";
 				else if(count<=1) return "min_bet";
-			return "";
+			return "double last bet";
 		}
 
 	}

@@ -3,7 +3,6 @@ package blackjack;
 public class Game {
 
 	public static void main(String[] args){
-		String strategy=new String();
 		Player player1 = null;
 		Shoe shoe = null;
 		int s_number=0;
@@ -19,7 +18,6 @@ public class Game {
 				System.out.println("Usage for interactive mode: -i min-bet max-bet balance shoe shuffle");
 				System.exit(0);
 			}
-			strategy="doesnt matter";
 			nshoe=Integer.parseInt(args[4]);
 			if(nshoe<4||nshoe>8)System.exit(6);
 			int shuffle=Integer.parseInt(args[5]);
@@ -37,7 +35,6 @@ public class Game {
 				System.out.println("Usage for debug mode: -d min-bet max-bet balance shoe-file cmd-file");
 				System.exit(0);
 			}
-			strategy="doesnt matter";
 			shoe = new Shoe();
 			shoe.populateShoeFromFile(args[4]);
 			player1 = new Player(Integer.parseInt(args[3]),args[5], shoe.nCards()/52);
@@ -49,11 +46,11 @@ public class Game {
 				System.out.println("Usage for simulation mode: -s min-bet max-bet balance shuffle s-number strategy");
 				System.exit(0);
 			}
-			strategy=args[6];
-			shoe = new Shoe(Integer.parseInt(args[3]),Integer.parseInt(args[4]));
-			player1 = new Player(Integer.parseInt(args[3]), shoe.nCards()/52);						
+			shoe = new Shoe(Integer.parseInt(args[4]),Integer.parseInt(args[5]));
+			shoe.populateShoe();
+			shoe.shuffleShoe();
+			player1 = new Player(Integer.parseInt(args[3]), shoe.nCards()/52, args[7]);	
 		}else{
-			strategy="doesnt matter";
 			/*shoe= new Shoe();
 			player1 = new Player(Integer.parseInt(args[3]));*/
 			System.out.println("Bad input parameters");
@@ -70,25 +67,26 @@ public class Game {
 		int bet_deal = 0;
 		
 		while(true){
-			if((s_number==Integer.parseInt(args[5]))&&(args[0].equals("-s"))){//end simulation mode
+			if((s_number==Integer.parseInt(args[6]))&&(args[0].equals("-s"))){//end simulation mode
 				System.out.println("Your final balance is: "+ player1.getBalance());
 				System.exit(0);
 			}
 			if(shoe.getShufflePercentage()!=100)
+				System.out.println("PERCENTAGE: "+shoe.calculateUsagePercentage());
 				if(shoe.calculateUsagePercentage()>=shoe.getShufflePercentage()){
 					player1.acefive.resetCount();
 					player1.hilo.restartRunningCount();
 					shoe.shuffleShoe();//Shuffle
 					s_number++;
 				}
-					
+					System.out.println(player1.followedStretegy);
 			
 			//----------------------Before Bet and Deal----------------------------
 			while(bet_deal<2){
 				
-				command = player1.getplayerInput(args[0]);
+				command = player1.getplayerInput(bet_deal, args[0], true, table.getMinBet(), bet, null,null);
 				System.out.println(command);
-				
+				if(command.equals("2"))System.exit(1);
 				//if(args[0].equals("-s"))command -  pedir a estrategia
 				
 				if(command.startsWith("b")){//Bet
@@ -177,7 +175,7 @@ public class Game {
 				//Check if player doubled down
 					
 				if(player1.getCurrentHand().getBet()==2*bet) command = "s";
-				else command = player1.getplayerInput(args[0]);
+				else command = player1.getplayerInput(bet_deal, args[0], false, table.getMinBet(), bet, player1.getCurrentHand(),dealer.getVisibleCard());
 					
 				//if(args[0].equals("-d"))command -  ir buscar ao ficheiro
 				//if(args[0].equals("-s"))command -  pedir a estrategia
@@ -194,6 +192,7 @@ public class Game {
 					if(player1.hit(a)){
 						//System.out.println("dealer wins");
 						dealer.win();
+						player1.SetLast("L");
 						player1.lost();
 						System.out.println(player1.showHands());
 						if(player1.getNextHand()==null){
@@ -284,16 +283,19 @@ public class Game {
 						player1.addBalance(2*bet);
 						player1.win();
 						dealer.lost();
+						player1.SetLast("W");
 						System.out.println("player wins and his current balance is "+player1.getBalance());
 					}else if(h.getPoints()==dealer.getCurrentHand().getPoints()){
 						player1.addBalance(bet);
 						player1.draw();
 						dealer.draw();
+						player1.SetLast("D");
 						System.out.println("draw");
 					}else{
 						//System.out.println("dealer wins");
 						dealer.win();
 						player1.lost();
+						player1.SetLast("L");
 					}
 				}
 				//see what card the dealer had
