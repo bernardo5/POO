@@ -16,10 +16,7 @@ public abstract class Person {
 	public void setCurrentHand(Hand hand){
 		current=hand;
 	}
-	public void win(){
-		this.wins++;
-		//System.out.println("wins");
-	}
+	public abstract void win();
 	public void draw(){
 		this.draws++;
 		//System.out.println("draw");

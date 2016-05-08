@@ -2,9 +2,9 @@ package blackjack;
 
 public class HiLo implements ActionStrategy{
 	
-	private int runningcount;
-	private int nbdeckstotal;
-	private int nbcardsrevealed;
+	private float runningcount;
+	private float nbdeckstotal;
+	private float nbcardsrevealed;
 	
 	//Constructor
 	public HiLo(int nbDecks){

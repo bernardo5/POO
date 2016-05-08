@@ -66,11 +66,15 @@ public class Game {
 		String command = " ";
 		int bet_deal = 0;
 		Basic basic=new Basic();
+		Acefive aceFive=new Acefive();
 		
 		while(true){
 			if(shoe.getShufflePercentage()!=100)
-				if(shoe.calculateUsagePercentage()>=shoe.getShufflePercentage())
+				if(shoe.calculateUsagePercentage()>=shoe.getShufflePercentage()){
+					aceFive.resetCount();
 					shoe.shuffleShoe();//Shuffle
+				}
+					
 			
 			//----------------------Before Bet and Deal----------------------------
 			while(bet_deal<2){
@@ -98,8 +102,14 @@ public class Game {
 				}else if(command.equals("d")){//Deal
 					if(bet_deal==1){
 						//distributeCards();
-						Hand p=new Hand(shoe.takeCard(), shoe.takeCard(),bet);
-						Hand d=new Hand(shoe.takeCard(), shoe.takeCard(),0);
+						Card a=shoe.takeCard();
+						Card b=shoe.takeCard();
+						aceFive.cardRevealed(a);
+						aceFive.cardRevealed(b);
+						Hand p=new Hand(a, b,bet);
+						a=shoe.takeCard();
+						aceFive.cardRevealed(a);
+						Hand d=new Hand(a, shoe.takeCard(),0);
 						player1.hands.add(p);
 						player1.setCurrentHand(p);
 						dealer.setCurrentHand(d);
@@ -130,6 +140,8 @@ public class Game {
 					
 				}else if(command.equals("q")){
 					System.exit(0);
+				}else if(command.equals("ad")){
+						System.out.println("According to Ace-Five strategy: " + aceFive.advice());
 				}else if(command.equals("st")){
 					if(dealer.getblackjacks()!=0)
 						System.out.println("BJ P/D" + player1.getblackjacks()/dealer.getblackjacks());
@@ -166,8 +178,10 @@ public class Game {
 				}else if(command.equals("h")){//Hit
 					//Se fez double down so pode fazer hit uma vez
 					System.out.println("player hits");
-					if(player1.hit(shoe.takeCard())){
-						System.out.println("dealer wins");
+					Card a=shoe.takeCard();
+					aceFive.cardRevealed(a);
+					if(player1.hit(a)){
+						//System.out.println("dealer wins");
 						dealer.win();
 						player1.lost();
 						System.out.println(player1.showHands());
@@ -218,6 +232,7 @@ public class Game {
 					}else System.out.println("u: illegal command");
 				}else if(command.equals("ad")){
 					System.out.println("According to Basic strategy: " + basic.advice(player1.getCurrentHand(),dealer.getVisibleCard()));
+					System.out.println("According to Ace-Five strategy: " + aceFive.advice(player1.getCurrentHand(),dealer.getVisibleCard()));
 				}else if(command.equals("st")){
 					if(dealer.getblackjacks()!=0)
 						System.out.println("BJ P/D" + player1.getblackjacks()/dealer.getblackjacks());
@@ -244,9 +259,11 @@ public class Game {
 						player1.changeInsurance(false);
 					}
 				}
-				while(dealer.getCurrentHand().getPoints()<=17){
+				while(dealer.getCurrentHand().getPoints()<17){
 					System.out.println("dealer hits");
-					dealer.hit(shoe.takeCard());
+					Card card=shoe.takeCard();
+					aceFive.cardRevealed(card);
+					dealer.hit(card);
 					System.out.println(dealer.showHands());
 				}
 				for(Hand h:player1.hands){//check if a players hand beats the dealer's hand
@@ -261,11 +278,14 @@ public class Game {
 						dealer.draw();
 						System.out.println("draw");
 					}else{
-						System.out.println("dealer wins");
+						//System.out.println("dealer wins");
 						dealer.win();
 						player1.lost();
 					}
 				}
+				//see what card the dealer had
+				Card hidden=dealer.returnHiddenCard();
+				aceFive.cardRevealed(hidden);
 				//collectCards();
 				player1.hands.clear();
 				player1.setCurrentHand(null);

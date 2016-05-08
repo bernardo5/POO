@@ -125,7 +125,7 @@ public class Player extends Person{
 	@Override
 	public void win() {
 		// TODO Auto-generated method stub
-		super.win();
+		this.wins++;
 		System.out.println("player wins");
 	}
 

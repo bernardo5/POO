@@ -7,6 +7,8 @@ public class Dealer extends Person{
 		super();
 	}
 	
+	
+	
 	public Rank returnShownCard(){
 		return current.getCards().getFirst().getRank();
 	}
@@ -32,11 +34,14 @@ public class Dealer extends Person{
 		
 		return game;
 	}
+	
+	public Card returnHiddenCard(){
+		return current.getCards().get(1);
+	}
 
 	@Override
 	public void win() {
-		// TODO Auto-generated method stub
-		super.win();
+		this.wins++;
 		System.out.println("dealer wins");
 	}
 
