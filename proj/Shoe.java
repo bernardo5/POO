@@ -34,8 +34,8 @@ public class Shoe {
 	}
 	
 	//Methods
-	public int calculateUsagePercentage(){
-		return ((nDecks*52)-(nbNextCard+1))/(nDecks*52);
+	public int calculateUsagePercentage(){//percentage of shoe played before shuffle
+		return (/*(nDecks*52)-*/(nbNextCard+1))/(nDecks*52);
 	}
 	
 	public Card takeCard(){

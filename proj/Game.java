@@ -3,9 +3,10 @@ package blackjack;
 public class Game {
 
 	public static void main(String[] args){
-
+		String strategy=new String();
 		Player player1 = null;
 		Shoe shoe = null;
+		int s_number=0;
 		int nshoe=0;
 		if(args.length<6)System.exit(1);
 		if(Integer.parseInt(args[1])<1)System.exit(3);//minbet>1
@@ -18,15 +19,16 @@ public class Game {
 				System.out.println("Usage for interactive mode: -i min-bet max-bet balance shoe shuffle");
 				System.exit(0);
 			}
+			strategy="doesnt matter";
 			nshoe=Integer.parseInt(args[4]);
 			if(nshoe<4||nshoe>8)System.exit(6);
 			int shuffle=Integer.parseInt(args[5]);
 			if(shuffle<10||shuffle>100)System.exit(7);
-			player1 = new Player(Integer.parseInt(args[3]));
 			//populate shoe
 			shoe = new Shoe(Integer.parseInt(args[4]),Integer.parseInt(args[5]));
 			shoe.populateShoe();
 			shoe.shuffleShoe();
+			player1 = new Player(Integer.parseInt(args[3]), shoe.nCards()/52);
 		}
 		
 		//debug mode
@@ -35,9 +37,10 @@ public class Game {
 				System.out.println("Usage for debug mode: -d min-bet max-bet balance shoe-file cmd-file");
 				System.exit(0);
 			}
-			player1 = new Player(Integer.parseInt(args[3]),args[5]);
+			strategy="doesnt matter";
 			shoe = new Shoe();
 			shoe.populateShoeFromFile(args[4]);
+			player1 = new Player(Integer.parseInt(args[3]),args[5], shoe.nCards()/52);
 		}
 		
 		//simulation mode
@@ -46,11 +49,11 @@ public class Game {
 				System.out.println("Usage for simulation mode: -s min-bet max-bet balance shuffle s-number strategy");
 				System.exit(0);
 			}
-			player1 = new Player(Integer.parseInt(args[3]));
-			shoe= new Shoe();
-			//Carregar estrategia
-			
+			strategy=args[6];
+			shoe = new Shoe(Integer.parseInt(args[3]),Integer.parseInt(args[4]));
+			player1 = new Player(Integer.parseInt(args[3]), shoe.nCards()/52);						
 		}else{
+			strategy="doesnt matter";
 			/*shoe= new Shoe();
 			player1 = new Player(Integer.parseInt(args[3]));*/
 			System.out.println("Bad input parameters");
@@ -65,16 +68,18 @@ public class Game {
 		int bet = table.getMinBet();
 		String command = " ";
 		int bet_deal = 0;
-		Basic basic=new Basic();
-		Acefive aceFive=new Acefive();
-		HiLo hilo=new HiLo(shoe.nCards()/52);
 		
 		while(true){
+			if((s_number==Integer.parseInt(args[5]))&&(args[0].equals("-s"))){//end simulation mode
+				System.out.println("Your final balance is: "+ player1.getBalance());
+				System.exit(0);
+			}
 			if(shoe.getShufflePercentage()!=100)
 				if(shoe.calculateUsagePercentage()>=shoe.getShufflePercentage()){
-					aceFive.resetCount();
-					hilo.restartRunningCount();
+					player1.acefive.resetCount();
+					player1.hilo.restartRunningCount();
 					shoe.shuffleShoe();//Shuffle
+					s_number++;
 				}
 					
 			
@@ -106,14 +111,14 @@ public class Game {
 						//distributeCards();
 						Card a=shoe.takeCard();
 						Card b=shoe.takeCard();
-						aceFive.cardRevealed(a);
-						aceFive.cardRevealed(b);
-						hilo.cardRevealed(a);
-						hilo.cardRevealed(b);
+						player1.acefive.cardRevealed(a);
+						player1.acefive.cardRevealed(b);
+						player1.hilo.cardRevealed(a);
+						player1.hilo.cardRevealed(b);
 						Hand p=new Hand(a, b,bet);
 						a=shoe.takeCard();
-						aceFive.cardRevealed(a);
-						hilo.cardRevealed(a);
+						player1.acefive.cardRevealed(a);
+						player1.hilo.cardRevealed(a);
 						Hand d=new Hand(a, shoe.takeCard(),0);
 						player1.hands.add(p);
 						player1.setCurrentHand(p);
@@ -146,7 +151,7 @@ public class Game {
 				}else if(command.equals("q")){
 					System.exit(0);
 				}else if(command.equals("ad")){
-						System.out.println("According to Ace-Five strategy: " + aceFive.advice());
+						System.out.println("According to Ace-Five strategy: " + player1.acefive.advice());
 				}else if(command.equals("st")){
 					if(dealer.getblackjacks()!=0)
 						System.out.println("BJ P/D" + player1.getblackjacks()/dealer.getblackjacks());
@@ -184,8 +189,8 @@ public class Game {
 					//Se fez double down so pode fazer hit uma vez
 					System.out.println("player hits");
 					Card a=shoe.takeCard();
-					aceFive.cardRevealed(a);
-					hilo.cardRevealed(a);
+					player1.acefive.cardRevealed(a);
+					player1.hilo.cardRevealed(a);
 					if(player1.hit(a)){
 						//System.out.println("dealer wins");
 						dealer.win();
@@ -237,9 +242,9 @@ public class Game {
 						player1.getCurrentHand().addCard(shoe.takeCard());
 					}else System.out.println("u: illegal command");
 				}else if(command.equals("ad")){
-					System.out.println("According to Basic strategy: " + basic.advice(player1.getCurrentHand(),dealer.getVisibleCard()));
-					System.out.println("According to Ace-Five strategy: " + aceFive.advice(player1.getCurrentHand(),dealer.getVisibleCard()));
-					System.out.println("According to Hi-Low strategy: " + hilo.advice(player1.getCurrentHand(),dealer.getVisibleCard()));
+					System.out.println("According to Basic strategy: " + player1.basic.advice(player1.getCurrentHand(),dealer.getVisibleCard()));
+					System.out.println("According to Ace-Five strategy: " + player1.acefive.advice(player1.getCurrentHand(),dealer.getVisibleCard()));
+					System.out.println("According to Hi-Low strategy: " + player1.hilo.advice(player1.getCurrentHand(),dealer.getVisibleCard()));
 				}else if(command.equals("st")){
 					if(dealer.getblackjacks()!=0)
 						System.out.println("BJ P/D" + player1.getblackjacks()/dealer.getblackjacks());
@@ -269,8 +274,8 @@ public class Game {
 				while(dealer.getCurrentHand().getPoints()<17){
 					System.out.println("dealer hits");
 					Card card=shoe.takeCard();
-					aceFive.cardRevealed(card);
-					hilo.cardRevealed(card);
+					player1.acefive.cardRevealed(card);
+					player1.hilo.cardRevealed(card);
 					dealer.hit(card);
 					System.out.println(dealer.showHands());
 				}
@@ -293,8 +298,8 @@ public class Game {
 				}
 				//see what card the dealer had
 				Card hidden=dealer.returnHiddenCard();
-				aceFive.cardRevealed(hidden);
-				hilo.cardRevealed(hidden);
+				player1.acefive.cardRevealed(hidden);
+				player1.hilo.cardRevealed(hidden);
 				//collectCards();
 				player1.hands.clear();
 				player1.setCurrentHand(null);
