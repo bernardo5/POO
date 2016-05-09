@@ -84,9 +84,9 @@ public class Game {
 			//----------------------Before Bet and Deal----------------------------
 			while(bet_deal<2){
 				
-				command = player1.getplayerInput(bet_deal, args[0], true, table.getMinBet(), bet, null,null);
-				System.out.println(command);
-				if(command.equals("2"))System.exit(1);
+				command = player1.getplayerInput(bet_deal, args[0], true, table.getMinBet(), bet, null,null, table.getMaxBet());
+				//System.out.println(command);
+				//if(command.equals("2"))System.exit(1);
 				//if(args[0].equals("-s"))command -  pedir a estrategia
 				
 				if(command.startsWith("b")){//Bet
@@ -175,7 +175,7 @@ public class Game {
 				//Check if player doubled down
 					
 				if(player1.getCurrentHand().getBet()==2*bet) command = "s";
-				else command = player1.getplayerInput(bet_deal, args[0], false, table.getMinBet(), bet, player1.getCurrentHand(),dealer.getVisibleCard());
+				else command = player1.getplayerInput(bet_deal, args[0], false, table.getMinBet(), bet, player1.getCurrentHand(),dealer.getVisibleCard(), table.getMaxBet());
 					
 				//if(args[0].equals("-d"))command -  ir buscar ao ficheiro
 				//if(args[0].equals("-s"))command -  pedir a estrategia
@@ -233,7 +233,7 @@ public class Game {
 							player1.subtractBalance(bet);
 							System.out.println(player1.showHands());
 						}
-					}else System.out.println("u: illegal command");
+					}else System.out.println("p: illegal command");
 				}else if(command.equals("2")){//only on an opening hand worth 9,10,11 and always doubles the bet;take only one more card from the dealer
 					if(player1.getBalance()>=bet){
 						player1.subtractBalance(bet);

@@ -112,7 +112,7 @@ public class Player extends Person{
 	}
 	
 	//Input from Stdin
-	public String getplayerInput(int bet_deal, String mode, boolean bet_flag, int minBet, int lastBet, Hand hand, Card card) /*throws IOException*/{
+	public String getplayerInput(int bet_deal, String mode, boolean bet_flag, int minBet, int lastBet, Hand hand, Card card, int maxBet) /*throws IOException*/{
 		if(mode.equals("-i")){
 			BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
 			String s;
@@ -151,30 +151,49 @@ public class Player extends Person{
 			if(bet_flag){//want to know the amount of money to bet
 				if(bet_deal==0){
 					if(followedStretegy.equals("BS")||followedStretegy.equals("HL")){//follow normal bet strategy
+						int minus,plus;
 						System.out.println("ok");
-						int plus=lastBet+minBet;
-						int minus=lastBet-minBet;
+						if(lastBet+minBet<=maxBet)plus=lastBet+minBet; else plus=maxBet;
+						if((lastBet-minBet)>=minBet)minus=lastBet-minBet; else minus=minBet;
 						if(Last.equals("first"))return "b "+minBet;
 						else if(Last.equals("W"))return "b "+(plus);
 						else if(Last.equals("L"))return "b "+(minus);
 						else /*draw*/return "b "+lastBet;
 					}else{//follow ace-five bet strategy
 						if(acefive.advice().equals("min_bet"))return "b "+minBet;
-						else if(acefive.advice().equals("double last bet"))return "b "+2*lastBet;
-						else return acefive.advice();
+						else {
+							/*if(acefive.advice().equals("double last bet"))*/
+							if(2*lastBet<maxBet){
+								if(this.getBalance()<(2*lastBet))return "b "+this.getBalance();
+								else return "b "+(2*lastBet);
+							}else 
+								if(this.getBalance()<maxBet)return "b "+this.getBalance();
+										else return "b "+maxBet;
+						}
+						
+						//else return acefive.advice();
 					}
 				}else return "d";
 			}else{//want to know what action to perform
 				if(followedStretegy.equals("BS")){
-					return basic.advice(hand, card);
+					if(basic.advice(hand, card).equals("2")&&this.getBalance()<lastBet) return "h";
+					else return basic.advice(hand, card);
 				}else if(followedStretegy.equals("BS-AF")){
-					return basic.advice(hand, card);//at this point the action taken is the same as the basic
+					//at this point the action taken is the same as the basic
+					if(basic.advice(hand, card).equals("2")&&this.getBalance()<lastBet) return "h";
+					else return basic.advice(hand, card);
 				}else if(followedStretegy.equals("HL")){
 					if(hilo.advice(hand, card).contains("Using basic:")) return basic.advice(hand, card);
-					else return hilo.advice(hand, card);
+					else{
+						if(hilo.advice(hand, card).equals("2")&&this.getBalance()<lastBet) return "h";
+						else return hilo.advice(hand, card);
+					}
 				}else{//HL-AF
 					if(hilo.advice(hand, card).contains("Using basic:")) return basic.advice(hand, card);
-					else return hilo.advice(hand, card);
+					else{
+						if(hilo.advice(hand, card).equals("2")&&this.getBalance()<lastBet) return "h";
+						else return hilo.advice(hand, card);
+					}
 				}
 			}
 		}
@@ -240,8 +259,8 @@ public class Player extends Person{
 		public String advice(Hand hand, Card card) {
 			
 			float truecount = truecount();
-			int player_points = hand.getPoints();
-			int dealer_points = card.getValue();
+			//int player_points = hand.getPoints();
+			//int dealer_points = card.getValue();
 			
 			if((truecount>=3)&&(card.getRank()==Rank.ACE)){//insurance
 				return "i";
@@ -336,9 +355,8 @@ public class Player extends Person{
 
 		@Override
 		public String advice() {
-			if(count>=2)return "2";
-				else if(count<=1) return "min_bet";
-			return "double last bet";
+			if(count>=2)return "double last bet";
+				else /*if(count<=1)*/ return "min_bet";
 		}
 
 	}
