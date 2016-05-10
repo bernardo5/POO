@@ -24,9 +24,8 @@ public class Acefive implements ActionStrategy,BetStrategy{
 
 	@Override
 	public String advice() {
-		if(count>=2)return "2";
-			else if(count<=1) return "min_bet";
-		return "";
+		if(count>=2)return "double last bet";
+			else /*if(count<=1)*/ return "min_bet";
 	}
 
 }

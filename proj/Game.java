@@ -1,6 +1,69 @@
 package blackjack;
 
 public class Game {
+	
+	public String strategyCommand(int bet_deal, 
+			boolean bet_flag, int maxBet, int minBet, int lastBet, 
+			Acefive acefive, HiLo hilo, Basic basic, Player player, Card card){
+		//strategy mode
+			if(bet_flag){//want to know the amount of money to bet
+				System.out.println("bet/deal part: "+bet_deal);
+				if(bet_deal==0){
+					System.out.println("bet part");
+					if(player.getCurrentStrategy().equals("BS")||player.getCurrentStrategy().equals("HL")){//follow normal bet strategy
+						int minus,plus;
+						System.out.println("ok");
+						if(lastBet+minBet<=maxBet)plus=lastBet+minBet; else plus=maxBet;
+						if((lastBet-minBet)>=minBet)minus=lastBet-minBet; else minus=minBet;
+						if(player.getLast().equals("first"))return "b "+(int)minBet;
+						else if(player.getLast().equals("W"))return "b "+(int)(plus);
+						else if(player.getLast().equals("L"))return "b "+(int)(minus);
+						else /*draw*/return "b "+(int)lastBet;
+					}else{//follow ace-five bet strategy
+						if(acefive.advice().equals("min_bet"))return "b "+(int)minBet;
+						else {
+							/*if(acefive.advice().equals("double last bet"))*/
+							if(2*lastBet<maxBet){
+								if(player.getBalance()<(2*lastBet))return "b "+(int)player.getBalance();
+								else return "b "+(int)(2*lastBet);
+							}else 
+								if(player.getBalance()<maxBet)return "b "+(int)player.getBalance();
+										else return "b "+(int)maxBet;
+						}
+						
+						//else return acefive.advice();
+					}
+				}else return "d";
+			}else{//want to know what action to perform
+				if(player.getCurrentStrategy().equals("BS")){
+					if(basic.advice(player.current, card).equals("2")&&player.getBalance()<lastBet) return "h";
+					else return basic.advice(player.current, card);
+				}else if(player.getCurrentStrategy().equals("BS-AF")){
+					//at this point the action taken is the same as the basic
+					if(basic.advice(player.current, card).equals("2")&&player.getBalance()<lastBet) return "h";
+					else return basic.advice(player.current, card);
+				}else if(player.getCurrentStrategy().equals("HL")){
+					if(hilo.advice(player.current, card).contains("Using basic:")){
+						if(basic.advice(player.current, card).equals("2")&&player.getBalance()<lastBet) return "h";
+						else return basic.advice(player.current, card);
+					}
+					else{
+						if(hilo.advice(player.current, card).equals("2")&&player.getBalance()<lastBet) return "h";
+						else return hilo.advice(player.current, card);
+					}
+				}else{//HL-AF
+					if(hilo.advice(player.current, card).contains("Using basic:")){
+						if(basic.advice(player.current, card).equals("2")&&player.getBalance()<lastBet) return "h";
+						else return basic.advice(player.current, card);
+					}
+					else{
+						if(hilo.advice(player.current, card).equals("2")&&player.getBalance()<lastBet) return "h";
+						else return hilo.advice(player.current, card);
+					}
+				}
+			}
+		
+	}
 
 	public static void main(String[] args){
 		Player player1 = null;
@@ -65,6 +128,10 @@ public class Game {
 		int bet = table.getMinBet();
 		String command = " ";
 		int bet_deal = 0;
+		Acefive acefive=new Acefive();
+		Basic basic=new Basic();
+		HiLo hilo=new HiLo(shoe.nCards()/52);
+		Game game=new Game();
 		
 		while(true){
 			if((s_number==Integer.parseInt(args[6]))&&(args[0].equals("-s"))){//end simulation mode
@@ -74,22 +141,30 @@ public class Game {
 			if(shoe.getShufflePercentage()!=100)
 				System.out.println("PERCENTAGE: "+shoe.calculateUsagePercentage());
 				if(shoe.calculateUsagePercentage()>=shoe.getShufflePercentage()){
-					player1.acefive.resetCount();
-					player1.hilo.restartRunningCount();
+					acefive.resetCount();
+					hilo.restartRunningCount();
 					shoe.shuffleShoe();//Shuffle
 					s_number++;
 				}
-					System.out.println(player1.followedStretegy);
+					System.out.println(player1.getCurrentStrategy());
 			
 			//----------------------Before Bet and Deal----------------------------
 			while(bet_deal<2){
 				
-				command = player1.getplayerInput(bet_deal, args[0], true, table.getMinBet(), bet, null,null, table.getMaxBet());
+				if(args[0].equals("-i")||args[0].equals("-d")){
+					command = player1.getplayerInput(args[0]);
+				}else{
+					command=game.strategyCommand(bet_deal, true, table.getMaxBet(), table.getMinBet(), bet,
+							acefive, hilo, basic, player1, null);
+				} 
+				
+				
 				//System.out.println(command);
 				//if(command.equals("2"))System.exit(1);
 				//if(args[0].equals("-s"))command -  pedir a estrategia
 				
 				if(command.startsWith("b")){//Bet
+					//System.out.println("starts b: "+bet_deal);
 					if(player1.getBalance()>=table.getMinBet() && bet_deal == 0){//Se forem dadas as cartas ja nao pode apostar e so pode apostar se tiver maior balance que a aposta minima
 						String[] bets = command.split(" ");
 						if(bets.length==1){
@@ -101,22 +176,28 @@ public class Game {
 								bet=Integer.parseInt(bets[1]);
 								player1.subtractBalance(bet);
 								bet_deal++;
-							}else System.out.println("b: Illegal command");//< balance
-						}else System.out.println("b: Illegal command");//more than 2 arguments
-					}else System.out.println("b: Illegal command");//Can´t use bet
+							}else System.out.println("b: Illegal command-menor balance");//< balance
+						}else System.out.println("b: Illegal command-mais 2 args");//more than 2 arguments
+					}else{
+						System.out.println("b: Illegal command");/*Can´t use bet*/
+						if(args[0].equals("-s")){
+							System.out.println("Player loses(lost all money)-Balance="+player1.getBalance());
+							System.exit(1);
+						}
+					}
 				}else if(command.equals("d")){//Deal
 					if(bet_deal==1){
 						//distributeCards();
 						Card a=shoe.takeCard();
 						Card b=shoe.takeCard();
-						player1.acefive.cardRevealed(a);
-						player1.acefive.cardRevealed(b);
-						player1.hilo.cardRevealed(a);
-						player1.hilo.cardRevealed(b);
+						acefive.cardRevealed(a);
+						acefive.cardRevealed(b);
+						hilo.cardRevealed(a);
+						hilo.cardRevealed(b);
 						Hand p=new Hand(a, b,bet);
 						a=shoe.takeCard();
-						player1.acefive.cardRevealed(a);
-						player1.hilo.cardRevealed(a);
+						acefive.cardRevealed(a);
+						hilo.cardRevealed(a);
 						Hand d=new Hand(a, shoe.takeCard(),0);
 						player1.hands.add(p);
 						player1.setCurrentHand(p);
@@ -149,7 +230,7 @@ public class Game {
 				}else if(command.equals("q")){
 					System.exit(0);
 				}else if(command.equals("ad")){
-						System.out.println("According to Ace-Five strategy: " + player1.acefive.advice());
+						System.out.println("According to Ace-Five strategy: " + acefive.advice());
 				}else if(command.equals("st")){
 					if(dealer.getblackjacks()!=0)
 						System.out.println("BJ P/D" + player1.getblackjacks()/dealer.getblackjacks());
@@ -175,7 +256,14 @@ public class Game {
 				//Check if player doubled down
 					
 				if(player1.getCurrentHand().getBet()==2*bet) command = "s";
-				else command = player1.getplayerInput(bet_deal, args[0], false, table.getMinBet(), bet, player1.getCurrentHand(),dealer.getVisibleCard(), table.getMaxBet());
+				else{
+					if(args[0].equals("-i")||args[0].equals("-d")){
+						command = player1.getplayerInput(args[0]);
+					}else{
+						command=game.strategyCommand(bet_deal, false, table.getMaxBet(), table.getMinBet(), bet,
+								acefive, hilo, basic, player1, dealer.getVisibleCard());
+					} 
+				}
 					
 				//if(args[0].equals("-d"))command -  ir buscar ao ficheiro
 				//if(args[0].equals("-s"))command -  pedir a estrategia
@@ -187,8 +275,8 @@ public class Game {
 					//Se fez double down so pode fazer hit uma vez
 					System.out.println("player hits");
 					Card a=shoe.takeCard();
-					player1.acefive.cardRevealed(a);
-					player1.hilo.cardRevealed(a);
+					acefive.cardRevealed(a);
+					hilo.cardRevealed(a);
 					if(player1.hit(a)){
 						//System.out.println("dealer wins");
 						dealer.win();
@@ -241,9 +329,9 @@ public class Game {
 						player1.getCurrentHand().addCard(shoe.takeCard());
 					}else System.out.println("u: illegal command");
 				}else if(command.equals("ad")){
-					System.out.println("According to Basic strategy: " + player1.basic.advice(player1.getCurrentHand(),dealer.getVisibleCard()));
-					System.out.println("According to Ace-Five strategy: " + player1.acefive.advice(player1.getCurrentHand(),dealer.getVisibleCard()));
-					System.out.println("According to Hi-Low strategy: " + player1.hilo.advice(player1.getCurrentHand(),dealer.getVisibleCard()));
+					System.out.println("According to Basic strategy: " + basic.advice(player1.getCurrentHand(),dealer.getVisibleCard()));
+					System.out.println("According to Ace-Five strategy: " + acefive.advice(player1.getCurrentHand(),dealer.getVisibleCard()));
+					System.out.println("According to Hi-Low strategy: " + hilo.advice(player1.getCurrentHand(),dealer.getVisibleCard()));
 				}else if(command.equals("st")){
 					if(dealer.getblackjacks()!=0)
 						System.out.println("BJ P/D" + player1.getblackjacks()/dealer.getblackjacks());
@@ -273,8 +361,8 @@ public class Game {
 				while(dealer.getCurrentHand().getPoints()<17){
 					System.out.println("dealer hits");
 					Card card=shoe.takeCard();
-					player1.acefive.cardRevealed(card);
-					player1.hilo.cardRevealed(card);
+					acefive.cardRevealed(card);
+					hilo.cardRevealed(card);
 					dealer.hit(card);
 					System.out.println(dealer.showHands());
 				}
@@ -300,8 +388,8 @@ public class Game {
 				}
 				//see what card the dealer had
 				Card hidden=dealer.returnHiddenCard();
-				player1.acefive.cardRevealed(hidden);
-				player1.hilo.cardRevealed(hidden);
+				acefive.cardRevealed(hidden);
+				hilo.cardRevealed(hidden);
 				//collectCards();
 				player1.hands.clear();
 				player1.setCurrentHand(null);
