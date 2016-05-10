@@ -27,7 +27,28 @@ package blackjack;
 	}
 	
 	enum Suit{
-		CLUBS, DIAMONDS, HEARTS, SPADES;
+		CLUBS('C'), DIAMONDS('D'), HEARTS('H'), SPADES('S');
+		
+		private char index;
+		
+		
+		 Suit(char index){
+		    	this.index=index;
+		    }
+		    
+		    //Getters
+		    public char getSuitValue() {
+		        return index;
+		    }
+		    
+		    public Suit getSuit(char index){
+		    	for(Suit c:Suit.values()){
+		    		if(c.getSuitValue()==index){
+		    			return c;
+		    		}
+		    	}
+				return null;
+		    }
 	}
 		
 public class Card {
@@ -54,7 +75,7 @@ public class Card {
 
 	@Override
 	public String toString() {
-		return "Card (" + rank +" "+ suit + ")";
+		return Integer.toString(this.getValue())+this.getSuit().getSuitValue();
 	}	
 
 }

@@ -80,8 +80,9 @@ public class Hand {
 	
 	@Override
 	public String toString() {
-		
-		return cards + " (" + points +")";
+		String string=new String();
+		for(Card c:cards)string+=c.toString()+" ";
+		return string + "(" + points +")";
 	}	
 
 	public boolean bust(){

@@ -17,8 +17,8 @@ public class Dealer extends Person{
 		return current.getCards().getFirst();
 	}
 	
-	public String showHands(){
-		/*Dealer only has one hand and shows all cards except the first*/
+	/*public String showHands(){
+		//Dealer only has one hand and shows all cards except the first
 		String game=new String();
 		LinkedList<Card> cards=current.getCards();
 		int i=0;
@@ -33,6 +33,21 @@ public class Dealer extends Person{
 		game+=" ("+current.getPoints()+")";
 		
 		return game;
+	}*/
+	
+	@Override
+	public String showCurrentHand(){
+		String hand=new String();
+		LinkedList<Card> cards=current.getCards();
+		int i=0;
+		for(Card c:cards){
+			if(i!=1){
+				if(i!=0)hand+=" ";
+				hand+=c.toString();
+			}else hand+=" X";
+			i++;
+		}		
+		return hand;
 	}
 	
 	public Card returnHiddenCard(){

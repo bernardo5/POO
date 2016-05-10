@@ -58,6 +58,6 @@ public abstract class Person {
 	}
 	
 	//Methods to Override
-	public abstract String showHands();
+	public abstract String showCurrentHand();
 	
 }

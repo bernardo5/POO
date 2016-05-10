@@ -155,6 +155,15 @@ public class Game {
 				
 				if(args[0].equals("-i")||args[0].equals("-d")){
 					command = player1.getplayerInput(args[0]);
+					if(args[0].equals("-d")&&(command.indexOf("b")!=-1)){
+						System.out.println("\n-cmd "+command);
+						String[]aux=command.split(" ");
+						try{
+							System.out.println("player is betting "+aux[1]);
+						}catch(ArrayIndexOutOfBoundsException e){
+							System.out.println("player is betting "+bet);
+						}
+					}
 				}else{
 					command=game.strategyCommand(bet_deal, true, table.getMaxBet(), table.getMinBet(), bet,
 							acefive, hilo, basic, player1, null);
@@ -205,8 +214,8 @@ public class Game {
 						player1.setCurrentHand(p);
 						dealer.setCurrentHand(d);
 						//printCards();
-						System.out.println("Player's hand: "+ player1.showHands());
-						System.out.println("Dealer's hand: "+ dealer.showHands());	
+						System.out.println("dealer's hand "+ dealer.showCurrentHand());
+						System.out.println("player's hand "+ player1.showCurrentHand());
 
 						if(player1.hands.getFirst().getPoints()==21){//blackjack
 							if(dealer.getCurrentHand().getPoints()==21){//dealer also has blackjack
@@ -261,6 +270,7 @@ public class Game {
 				else{
 					if(args[0].equals("-i")||args[0].equals("-d")){
 						command = player1.getplayerInput(args[0]);
+						if(args[0].equals("-d"))System.out.println("\n-cmd "+command);
 					}else{
 						command=game.strategyCommand(bet_deal, false, table.getMaxBet(), table.getMinBet(), bet,
 								acefive, hilo, basic, player1, dealer.getVisibleCard());
@@ -284,7 +294,7 @@ public class Game {
 						dealer.win();
 						player1.SetLast("L");
 						player1.lost();
-						System.out.println(player1.showHands());
+						System.out.println("player's hand "+ player1.showCurrentHand());
 						if(player1.getNextHand()==null){
 							player1.hands.remove(player1.getCurrentHand());
 							player1.setCurrentHand(null);
@@ -295,7 +305,7 @@ public class Game {
 							player1.hands.remove(remove);
 						}				
 						//player1.hands.remove(hand);
-					}else System.out.println(player1.showHands());
+					}else System.out.println("player's hand "+ player1.showCurrentHand());
 				}else if(command.equals("s")){//Stand
 					System.out.println("player stands");
 					if(player1.getNextHand()==null)break;
@@ -321,7 +331,7 @@ public class Game {
 							player1.hands.remove(player1.getCurrentHand());
 							player1.setCurrentHand(hand1);
 							player1.subtractBalance(bet);
-							System.out.println(player1.showHands());
+							System.out.println(player1.showCurrentHand());
 						}
 					}else System.out.println("p: illegal command");
 				}else if(command.equals("2")){//only on an opening hand worth 9,10,11 and always doubles the bet;take only one more card from the dealer
@@ -366,7 +376,7 @@ public class Game {
 					acefive.cardRevealed(card);
 					hilo.cardRevealed(card);
 					dealer.hit(card);
-					System.out.println(dealer.showHands());
+					System.out.println("dealer's hand "+ dealer.showCurrentHand());
 				}
 				for(Hand h:player1.hands){//check if a players hand beats the dealer's hand
 					if((h.getPoints()>dealer.getCurrentHand().getPoints())||(dealer.getCurrentHand().getPoints()>21)){

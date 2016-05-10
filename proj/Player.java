@@ -74,7 +74,7 @@ public class Player extends Person{
 	}
 	
 	//Methods
-	public String showHands(){
+	/*public String showHands(){
 		//player may have more than one hand and shows all cards
 		String game=new String();
 		int i=1;
@@ -87,6 +87,10 @@ public class Player extends Person{
 			}
 		}
 		return game;
+	}*/
+	@Override
+	public String showCurrentHand(){
+		return current.toString();
 	}
 
 	public void ReadFile(String file){
@@ -136,7 +140,7 @@ public class Player extends Person{
 				String s=this.commands.removeFirst();
 				if(s.equals("b")){
 					try{
-						System.out.println("top:"+Integer.parseInt(commands.getFirst()));
+						Integer.parseInt(commands.getFirst());
 						return s+=" "+commands.removeFirst();
 					}catch(NumberFormatException e){
 						return s;
