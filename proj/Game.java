@@ -141,14 +141,14 @@ public class Game {
 				}
 			}
 			if(shoe.getShufflePercentage()!=100)
-				System.out.println("PERCENTAGE: "+shoe.calculateUsagePercentage());
+				//System.out.println("PERCENTAGE: "+shoe.calculateUsagePercentage());
 				if(shoe.calculateUsagePercentage()>=shoe.getShufflePercentage()){
 					acefive.resetCount();
 					hilo.restartRunningCount();
 					shoe.shuffleShoe();//Shuffle
 					s_number++;
 				}
-					System.out.println(player1.getCurrentStrategy());
+					//System.out.println(player1.getCurrentStrategy());
 			
 			//----------------------Before Bet and Deal----------------------------
 			while(bet_deal<2){
