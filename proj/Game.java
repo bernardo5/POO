@@ -134,9 +134,11 @@ public class Game {
 		Game game=new Game();
 		
 		while(true){
-			if((s_number==Integer.parseInt(args[6]))&&(args[0].equals("-s"))){//end simulation mode
+			if((args[0].equals("-s"))){//end simulation mode
+				if((s_number==Integer.parseInt(args[6]))){
 				System.out.println("Your final balance is: "+ player1.getBalance());
 				System.exit(0);
+				}
 			}
 			if(shoe.getShufflePercentage()!=100)
 				System.out.println("PERCENTAGE: "+shoe.calculateUsagePercentage());
@@ -189,16 +191,16 @@ public class Game {
 					if(bet_deal==1){
 						//distributeCards();
 						Card a=shoe.takeCard();
+						acefive.cardRevealed(a);
+						hilo.cardRevealed(a);
+						Hand d=new Hand(a, shoe.takeCard(),0);
+						a=shoe.takeCard();
 						Card b=shoe.takeCard();
 						acefive.cardRevealed(a);
 						acefive.cardRevealed(b);
 						hilo.cardRevealed(a);
 						hilo.cardRevealed(b);
 						Hand p=new Hand(a, b,bet);
-						a=shoe.takeCard();
-						acefive.cardRevealed(a);
-						hilo.cardRevealed(a);
-						Hand d=new Hand(a, shoe.takeCard(),0);
 						player1.hands.add(p);
 						player1.setCurrentHand(p);
 						dealer.setCurrentHand(d);

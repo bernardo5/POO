@@ -24,7 +24,7 @@ public class Shoe {
 	//Constructor for debug mode
 	public Shoe(){
 		this.sequence=new ArrayList<Card>();//size depends on file with the cards
-		this.shufflePercentage=100;//dont want to shuffle
+		this.shufflePercentage=101;//dont want to shuffle
 		this.nbNextCard=0;
 	}
 	
@@ -35,6 +35,8 @@ public class Shoe {
 	
 	//Methods
 	public float calculateUsagePercentage(){//percentage of shoe played before shuffle
+		if(this.shufflePercentage==101)return 0   ; 
+		else
 		return 100*((/*(nDecks*52)-*/(float)(nbNextCard+1))/(nDecks*52));
 	}
 	
