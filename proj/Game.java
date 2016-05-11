@@ -38,30 +38,35 @@ public class Game {
 				if(player.getCurrentStrategy().equals("BS")||player.getCurrentStrategy().equals("BS-AF")){
 					if(basic.advice(player.current, card).length()==2){
 						String first=Character.toString(basic.advice(player.current, card).charAt(0));
-						String second=Character.toString(basic.advice(player.current, card).charAt(0));
+						String second=Character.toString(basic.advice(player.current, card).charAt(1));
 						if(player.current.getCards().size()==2){
 							if(first.equals("2")&&player.getBalance()<lastBet) return second;
 							return first;
 						}
 						else return second;
 					}else return basic.advice(player.current, card);
-				}else if(player.getCurrentStrategy().equals("HL")){
-					if(hilo.advice(player.current, card).contains("Using basic:")){
-						if(basic.advice(player.current, card).equals("2")&&player.getBalance()<lastBet) return "h";
-						else return basic.advice(player.current, card);
+				}else /*if(player.getCurrentStrategy().equals("HL")ou HL-AF)*/{
+					if((hilo.advice(player.current, card).contains("Using basic:"))||((hilo.advice(player.current, card).equals("u"))&&(player.getCurrentHand().getCards().size()!=2))){
+						if(basic.advice(player.current, card).length()==2){
+							String first=Character.toString(basic.advice(player.current, card).charAt(0));
+							String second=Character.toString(basic.advice(player.current, card).charAt(1));
+							if(player.current.getCards().size()==2){
+								if(first.equals("2")&&player.getBalance()<lastBet) return second;
+								return first;
+							}
+							else return second;
+						}else return basic.advice(player.current, card);
 					}
 					else{
-						if(hilo.advice(player.current, card).equals("2")&&player.getBalance()<lastBet) return "h";
-						else return hilo.advice(player.current, card);
-					}
-				}else{//HL-AF
-					if(hilo.advice(player.current, card).contains("Using basic:")){
-						if(basic.advice(player.current, card).equals("2")&&player.getBalance()<lastBet) return "h";
-						else return basic.advice(player.current, card);
-					}
-					else{
-						if(hilo.advice(player.current, card).equals("2")&&player.getBalance()<lastBet) return "h";
-						else return hilo.advice(player.current, card);
+						if(hilo.advice(player.current, card).length()==2){//two options
+							String first=Character.toString(hilo.advice(player.current, card).charAt(0));
+							String second=Character.toString(hilo.advice(player.current, card).charAt(1));
+							if(player.current.getCards().size()==2){
+								if(first.equals("2")&&player.getBalance()<lastBet) return second;
+								return first;
+							}
+							else return second;
+						}else return hilo.advice(player.current, card);
 					}
 				}
 			}
@@ -330,7 +335,7 @@ public class Game {
 					if(player1.getNextHand()==null)break;
 					else player1.setCurrentHand(player1.getNextHand());
 				}else if(command.equals("u")){
-					if((player1.hands.peekFirst()!=null)&&(player1.hands.size()==1)){
+					if((player1.hands.peekFirst()!=null)&&(player1.current.getCards().size()==2)){
 						System.out.println("surrender option");
 						player1.addBalance((float)player1.getCurrentHand().getBet()/2);
 						player1.hands.clear();
@@ -352,13 +357,13 @@ public class Game {
 							player1.subtractBalance(bet);
 							System.out.println(player1.showCurrentHand());
 						}
-					}else System.out.println("p: illegal command");
+					}else System.out.println("p: illegal command->player hands:"+player1.hands.size()+" current is "+player1.getCurrentHand().toString());
 				}else if(command.equals("2")){//only on an opening hand worth 9,10,11 and always doubles the bet;take only one more card from the dealer
 					if(player1.getBalance()>=bet){
 						player1.subtractBalance(bet);
 						player1.getCurrentHand().setBet(2*bet);
 						player1.getCurrentHand().addCard(shoe.takeCard());
-					}else System.out.println("u: illegal command");
+					}else System.out.println("2: illegal command");
 				}else if(command.equals("ad")){
 					System.out.println("According to Basic strategy: " + basic.advice(player1.getCurrentHand(),dealer.getVisibleCard()));
 					System.out.println("According to Ace-Five strategy: " + acefive.advice(player1.getCurrentHand(),dealer.getVisibleCard()));

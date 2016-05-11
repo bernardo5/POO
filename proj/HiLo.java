@@ -42,35 +42,35 @@ public class HiLo implements ActionStrategy{
 			if(truecount<=0)return "s";
 			else return "h";
 		}else if((hand.getPoints()==15)&&(card.getValue()==10)){//15vt
-			if((truecount>=0)&&(truecount<=3))return "u";
+			if((truecount>=0)&&(truecount<=3))return "us";
 			else if(truecount>=4) return "s";
 			else return "h";
 		}else if((hand.getPoints()==20)&&(card.getValue()==5)){//ttv5
-			if(truecount>=5)return "p";
+			if(truecount>=5)return "ps";
 			else return "s";
 		}else if((hand.getPoints()==20)&&(card.getValue()==6)){//ttv6
-			if(truecount>=4)return "p";
+			if(truecount>=4)return "ps";
 			else return "s";
 		}else if((hand.getPoints()==10)&&(card.getValue()==10)){//10vt
 			if(truecount>=4)return "2";
 			else return "h";
 		}else if((hand.getPoints()==12)&&(card.getValue()==3)){//12v3
-			if(truecount>=2)return "s";
+			if(truecount>=2)return "sh";
 			else return "h";
 		}else if((hand.getPoints()==12)&&(card.getValue()==2)){//12v2
 			if(truecount>=3)return "s";
 			else return "h";
 		}else if((hand.getPoints()==11)&&(card.getValue()==11)){//11vA
-			if(truecount>=1)return "2";
+			if(truecount>=1)return "2h";
 			else return "h";
 		}else if((hand.getPoints()==9)&&(card.getValue()==2)){//9v2
-			if(truecount>=1)return "2";
+			if(truecount>=1)return "2h";
 			else return "h";
 		}else if((hand.getPoints()==10)&&(card.getValue()==11)){//10vA
-			if(truecount>=4)return "2";
+			if(truecount>=4)return "2h";
 			else return "h";
 		}else if((hand.getPoints()==9)&&(card.getValue()==7)){//9v7
-			if(truecount>=3)return "2";
+			if(truecount>=3)return "2h";
 			else return "h";
 		}else if((hand.getPoints()==16)&&(card.getValue()==9)){//16v9
 			if(truecount>=5)return "s";
