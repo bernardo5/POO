@@ -35,13 +35,16 @@ public class Game {
 					}
 				}else return "d";
 			}else{//want to know what action to perform
-				if(player.getCurrentStrategy().equals("BS")){
-					if(basic.advice(player.current, card).equals("2")&&player.getBalance()<lastBet) return "h";
-					else return basic.advice(player.current, card);
-				}else if(player.getCurrentStrategy().equals("BS-AF")){
-					//at this point the action taken is the same as the basic
-					if(basic.advice(player.current, card).equals("2")&&player.getBalance()<lastBet) return "h";
-					else return basic.advice(player.current, card);
+				if(player.getCurrentStrategy().equals("BS")||player.getCurrentStrategy().equals("BS-AF")){
+					if(basic.advice(player.current, card).length()==2){
+						String first=Character.toString(basic.advice(player.current, card).charAt(0));
+						String second=Character.toString(basic.advice(player.current, card).charAt(0));
+						if(player.current.getCards().size()==2){
+							if(first.equals("2")&&player.getBalance()<lastBet) return second;
+							return first;
+						}
+						else return second;
+					}else return basic.advice(player.current, card);
 				}else if(player.getCurrentStrategy().equals("HL")){
 					if(hilo.advice(player.current, card).contains("Using basic:")){
 						if(basic.advice(player.current, card).equals("2")&&player.getBalance()<lastBet) return "h";
