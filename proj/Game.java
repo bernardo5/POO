@@ -376,6 +376,8 @@ public class Game {
 					System.out.println("Balance" + player1.getBalance() + "("+ 100*(float)(player1.getBalance()/Integer.parseInt(args[3])) +"%)" );
 				}else if(command.equals("q")){
 					System.exit(0);
+				}else if(command.equals("i")){
+					player1.changeInsurance(true);
 				}else System.out.println("Illegal command");			
 			}
 			//-----------------Dealer-------------------------------
