@@ -155,13 +155,15 @@ public class Game {
 				
 				if(args[0].equals("-i")||args[0].equals("-d")){
 					command = player1.getplayerInput(args[0]);
-					if(args[0].equals("-d")&&(command.indexOf("b")!=-1)){
+					if(args[0].equals("-d")){
 						System.out.println("\n-cmd "+command);
-						String[]aux=command.split(" ");
-						try{
-							System.out.println("player is betting "+aux[1]);
-						}catch(ArrayIndexOutOfBoundsException e){
-							System.out.println("player is betting "+bet);
+						if((command.indexOf("b")!=-1)){
+							String[]aux=command.split(" ");
+							try{
+								System.out.println("player is betting "+aux[1]);
+							}catch(ArrayIndexOutOfBoundsException e){
+								System.out.println("player is betting "+bet);
+							}
 						}
 					}
 				}else{
@@ -218,15 +220,24 @@ public class Game {
 						System.out.println("player's hand "+ player1.showCurrentHand());
 
 						if(player1.hands.getFirst().getPoints()==21){//blackjack
+							System.out.println("blackjack!!");
+							System.out.println("dealer's hand "+dealer.showCurrentHandAll());
+							player1.blackjack();
 							if(dealer.getCurrentHand().getPoints()==21){//dealer also has blackjack
 								player1.setBalance(player1.getBalance()+bet);
-								System.out.println("draw");
+								dealer.blackjack();
+								player1.SetLast("Draw");
+								//draw
+								player1.draw();
+								dealer.draw();
 							}else{
 								//player won-blackjack pays 3 to 2
+								dealer.lost();
 								player1.addBalance((float)(1.5*bet+bet));
-								player1.blackjack();
+								player1.SetLast("W");
+								System.out.println("player wins and his current balance is "+player1.getBalance());
 							}
-							System.out.println("end of turn");
+							//System.out.println("end of turn");
 							//collect the cards
 							player1.hands.clear();
 							player1.setCurrentHand(null);
@@ -236,7 +247,7 @@ public class Game {
 					}else System.out.println("d: illegal command");
 					
 				}else if(command.equals("$")){//Current balance
-					System.out.println("Your current balance is: "+ player1.getBalance());
+					System.out.println("player current balance is "+ player1.getBalance());
 					
 				}else if(command.equals("q")){
 					System.exit(0);
@@ -281,7 +292,7 @@ public class Game {
 				//if(args[0].equals("-s"))command -  pedir a estrategia
 				  
 				if(command.equals("$")){//Current balance
-					System.out.println("Your current balance is: "+ player1.getBalance());
+					System.out.println("player current balance is "+ player1.getBalance());
 					
 				}else if(command.equals("h")){//Hit
 					//Se fez double down so pode fazer hit uma vez
@@ -290,14 +301,14 @@ public class Game {
 					acefive.cardRevealed(a);
 					hilo.cardRevealed(a);
 					if(player1.hit(a)){
-						//System.out.println("dealer wins");
+						System.out.println("player's hand "+ player1.showCurrentHand()+"\nplayer busts");
 						dealer.win();
 						player1.SetLast("L");
-						player1.lost();
-						System.out.println("player's hand "+ player1.showCurrentHand());
+						player1.loses();
 						if(player1.getNextHand()==null){
 							player1.hands.remove(player1.getCurrentHand());
 							player1.setCurrentHand(null);
+							System.out.println("dealer's hand "+dealer.showCurrentHandAll());
 							break;
 						}else{
 							Hand remove=player1.getCurrentHand();
@@ -308,6 +319,7 @@ public class Game {
 					}else System.out.println("player's hand "+ player1.showCurrentHand());
 				}else if(command.equals("s")){//Stand
 					System.out.println("player stands");
+					System.out.println("dealer's hand "+dealer.showCurrentHandAll());
 					if(player1.getNextHand()==null)break;
 					else player1.setCurrentHand(player1.getNextHand());
 				}else if(command.equals("u")){
@@ -376,15 +388,15 @@ public class Game {
 					acefive.cardRevealed(card);
 					hilo.cardRevealed(card);
 					dealer.hit(card);
-					System.out.println("dealer's hand "+ dealer.showCurrentHand());
+					System.out.println("dealer's hand "+ dealer.showCurrentHandAll());
 				}
+				System.out.println("dealer stands");
 				for(Hand h:player1.hands){//check if a players hand beats the dealer's hand
 					if((h.getPoints()>dealer.getCurrentHand().getPoints())||(dealer.getCurrentHand().getPoints()>21)){
 						player1.addBalance(2*bet);
 						player1.win();
 						dealer.lost();
 						player1.SetLast("W");
-						System.out.println("player wins and his current balance is "+player1.getBalance());
 					}else if(h.getPoints()==dealer.getCurrentHand().getPoints()){
 						player1.addBalance(bet);
 						player1.draw();
@@ -406,7 +418,14 @@ public class Game {
 				player1.hands.clear();
 				player1.setCurrentHand(null);
 				dealer.setCurrentHand(null);
+			}else{//player busted all hands
+				if(player1.hands.size()==0){
+					player1.lost();
+					dealer.win();
+					player1.SetLast("L");
+				}
 			}
+			
 		}
 	}
 }

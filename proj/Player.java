@@ -88,10 +88,11 @@ public class Player extends Person{
 		}
 		return game;
 	}*/
-	@Override
-	public String showCurrentHand(){
-		return current.toString();
+	
+	public void loses(){
+		super.lost();
 	}
+	
 
 	public void ReadFile(String file){
 		String line;
@@ -155,7 +156,18 @@ public class Player extends Person{
 	public void win() {
 		// TODO Auto-generated method stub
 		this.wins++;
-		System.out.println("player wins");
+		System.out.println("player wins and his current balance is "+this.getBalance());
+	}
+	
+	@Override
+	public void draw(){
+		this.draws++;
+		System.out.println("player pushes and his current balance is "+this.getBalance());
+	}
+	@Override
+	public void lost(){
+		this.loses++;
+		System.out.println("player loses and his current balance is "+this.getBalance());
 	}
 
 	public Hand getNextHand(){
@@ -163,6 +175,6 @@ public class Player extends Person{
 		if((indexCurrentHand!=-1)&&((indexCurrentHand+1)<hands.size()))
 			return hands.get(indexCurrentHand+1);
 		return null;
-	}	
+	}
 
 }

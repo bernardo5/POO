@@ -50,6 +50,10 @@ public class Dealer extends Person{
 		return hand;
 	}
 	
+	public String showCurrentHandAll(){
+		return super.showCurrentHand();
+	}
+	
 	public Card returnHiddenCard(){
 		return current.getCards().get(1);
 	}
@@ -57,7 +61,7 @@ public class Dealer extends Person{
 	@Override
 	public void win() {
 		this.wins++;
-		System.out.println("dealer wins");
+		//System.out.println("dealer wins");
 	}
 
 }

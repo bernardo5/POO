@@ -75,7 +75,14 @@ public class Card {
 
 	@Override
 	public String toString() {
-		return Integer.toString(this.getValue())+this.getSuit().getSuitValue();
+		String Card=Integer.toString(this.getValue());
+		if(Card.equals("11"))Card="A";
+		if(Card.equals("10")){
+			if(this.rank.equals(Rank.JACK))Card="J";
+			else if(this.rank.equals(Rank.QUEEN))Card="Q";
+			else if(this.rank.equals(Rank.KING))Card="K";
+		}
+		return Card+this.getSuit().getSuitValue();
 	}	
 
 }
