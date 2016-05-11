@@ -155,7 +155,7 @@ public class Game {
 				
 				if(args[0].equals("-i")||args[0].equals("-d")){
 					command = player1.getplayerInput(args[0]);
-					if(args[0].equals("-d")){
+					if(args[0].equals("-d")&&(!command.equals("q"))){
 						System.out.println("\n-cmd "+command);
 						if((command.indexOf("b")!=-1)){
 							String[]aux=command.split(" ");
@@ -220,28 +220,30 @@ public class Game {
 						System.out.println("player's hand "+ player1.showCurrentHand());
 
 						if(player1.hands.getFirst().getPoints()==21){//blackjack
-							System.out.println("blackjack!!");
-							System.out.println("dealer's hand "+dealer.showCurrentHandAll());
-							player1.blackjack();
-							if(dealer.getCurrentHand().getPoints()==21){//dealer also has blackjack
-								player1.setBalance(player1.getBalance()+bet);
-								dealer.blackjack();
-								player1.SetLast("Draw");
-								//draw
-								player1.draw();
-								dealer.draw();
-							}else{
-								//player won-blackjack pays 3 to 2
-								dealer.lost();
-								player1.addBalance((float)(1.5*bet+bet));
-								player1.SetLast("W");
-								System.out.println("player wins and his current balance is "+player1.getBalance());
-							}
-							//System.out.println("end of turn");
-							//collect the cards
-							player1.hands.clear();
-							player1.setCurrentHand(null);
-							dealer.setCurrentHand(null);
+							if(dealer.getVisibleCard().getValue()!=10&&dealer.getVisibleCard().getValue()!=11){
+								System.out.println("blackjack!!");
+								System.out.println("dealer's hand "+dealer.showCurrentHandAll());
+								player1.blackjack();
+								if(dealer.getCurrentHand().getPoints()==21){//dealer also has blackjack
+									player1.setBalance(player1.getBalance()+bet);
+									dealer.blackjack();
+									player1.SetLast("Draw");
+									//draw
+									player1.draw();
+									dealer.draw();
+								}else{
+									//player won-blackjack pays 3 to 2
+									dealer.lost();
+									player1.addBalance((float)(1.5*bet+bet));
+									player1.SetLast("W");
+									System.out.println("player wins and his current balance is "+player1.getBalance());
+								}
+								//System.out.println("end of turn");
+								//collect the cards
+								player1.hands.clear();
+								player1.setCurrentHand(null);
+								dealer.setCurrentHand(null);
+							}//else it is possible to insure and do other possibilities
 						}
 						bet_deal++;
 					}else System.out.println("d: illegal command");
@@ -281,7 +283,7 @@ public class Game {
 				else{
 					if(args[0].equals("-i")||args[0].equals("-d")){
 						command = player1.getplayerInput(args[0]);
-						if(args[0].equals("-d"))System.out.println("\n-cmd "+command);
+						if(args[0].equals("-d")&&(!command.equals("q")))System.out.println("\n-cmd "+command);
 					}else{
 						command=game.strategyCommand(bet_deal, false, table.getMaxBet(), table.getMinBet(), bet,
 								acefive, hilo, basic, player1, dealer.getVisibleCard());
@@ -304,13 +306,15 @@ public class Game {
 						System.out.println("player's hand "+ player1.showCurrentHand()+"\nplayer busts");
 						dealer.win();
 						player1.SetLast("L");
-						player1.loses();
+						
 						if(player1.getNextHand()==null){
-							player1.hands.remove(player1.getCurrentHand());
-							player1.setCurrentHand(null);
 							System.out.println("dealer's hand "+dealer.showCurrentHandAll());
+							player1.lost();
+							player1.hands.remove(player1.getCurrentHand());
+							player1.setCurrentHand(null);							
 							break;
 						}else{
+							player1.loses();
 							Hand remove=player1.getCurrentHand();
 							player1.setCurrentHand(player1.getNextHand());
 							player1.hands.remove(remove);
@@ -392,6 +396,7 @@ public class Game {
 				}
 				System.out.println("dealer stands");
 				for(Hand h:player1.hands){//check if a players hand beats the dealer's hand
+					if(h.getPoints()==21&&h.getCards().size()==2)System.out.println("blackjack!!");
 					if((h.getPoints()>dealer.getCurrentHand().getPoints())||(dealer.getCurrentHand().getPoints()>21)){
 						player1.addBalance(2*bet);
 						player1.win();
@@ -402,7 +407,7 @@ public class Game {
 						player1.draw();
 						dealer.draw();
 						player1.SetLast("D");
-						System.out.println("draw");
+						//System.out.println("draw");
 					}else{
 						//System.out.println("dealer wins");
 						dealer.win();
@@ -418,12 +423,6 @@ public class Game {
 				player1.hands.clear();
 				player1.setCurrentHand(null);
 				dealer.setCurrentHand(null);
-			}else{//player busted all hands
-				if(player1.hands.size()==0){
-					player1.lost();
-					dealer.win();
-					player1.SetLast("L");
-				}
 			}
 			
 		}
