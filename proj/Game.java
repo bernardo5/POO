@@ -336,7 +336,7 @@ public class Game {
 						//player1.hands.remove(hand);
 					}else {
 						if(player1.handnumber==1&&player1.hands.size()==1)
-							System.out.println("player's hand "+ player1.showCurrentHand());
+							System.out.println("player's hand "+ player1.showCurrentHand()); 
 						else System.out.println("player's hand ["+player1.handnumber+"] "+player1.showCurrentHand());
 					}
 				}else if(command.equals("s")){//Stand
