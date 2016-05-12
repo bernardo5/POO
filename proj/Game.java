@@ -274,6 +274,181 @@ public class Game {
 			bet_deal++;
 		}else System.out.println("d: illegal command");
 	}
+	
+	public boolean playableHand(){
+		if(player1.getCurrentHand()!=null)return true;
+		else return false;
+	}
+	
+	public boolean doubledDown(){
+		if(player1.getCurrentHand().getBet()==2*bet)return true;
+		else return false;
+	}
+
+	public String getPlayCommandFromPlayer(String mode){
+		String command=new String();
+		if(interactiveMode(mode)||debugMode(mode)){
+			command = player1.getplayerInput(mode);
+			if(debugMode(mode)&&(!command.equals("q")))System.out.println("\n-cmd "+command);
+		}else{
+			command=strategyCommand(bet_deal, false, table.getMaxBet(), table.getMinBet(), bet,
+					acefive, hilo, basic, player1, dealer.getVisibleCard());
+		} 
+		return command;
+	}
+	
+	public boolean hitAction(){
+		//Se fez double down so pode fazer hit uma vez
+		System.out.println("player hits");
+		Card a=shoe.takeCard();
+		acefive.cardRevealed(a);
+		hilo.cardRevealed(a);
+		if(player1.hit(a)){
+			if(player1.handnumber==1&&player1.hands.size()==1)
+				System.out.println("player's hand "+ player1.showCurrentHand()+"\nplayer busts");
+			else System.out.println("player's hand ["+player1.handnumber+"] "+player1.showCurrentHand());
+			dealer.win();
+			player1.SetLast("L");
+			
+			if(player1.getNextHand()==null){
+				System.out.println("dealer's hand "+dealer.showCurrentHandAll());
+				player1.lost();
+				player1.hands.remove(player1.getCurrentHand());
+				player1.setCurrentHand(null);							
+				return true;
+			}else{
+				player1.loses();
+				Hand remove=player1.getCurrentHand();
+				player1.setCurrentHand(player1.getNextHand());
+				player1.hands.remove(remove);
+				System.out.println("playing hand "+(++player1.handnumber)+"...");
+				System.out.println("player's hand ["+player1.handnumber+"] "+player1.showCurrentHand());
+			}				
+			//player1.hands.remove(hand);
+		}else {
+			if(player1.handnumber==1&&player1.hands.size()==1)
+				System.out.println("player's hand "+ player1.showCurrentHand()); 
+			else System.out.println("player's hand ["+player1.handnumber+"] "+player1.showCurrentHand());
+		}
+		return false;
+	}
+	
+	public boolean standAction(){
+		System.out.println("player stands"); 
+		if(player1.getNextHand()!=null){
+			player1.setCurrentHand(player1.getNextHand());
+			System.out.println("playing hand "+(++player1.handnumber)+"..."); 
+			System.out.println("player's hand "+player1.showCurrentHand());
+		}else{
+			System.out.println("dealer's hand "+dealer.showCurrentHandAll());
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean possibleToSurrender(){
+		if((player1.hands.peekFirst()!=null)&&(player1.current.getCards().size()==2))return true;
+		else return false;
+	}
+	
+	public void surrenderAction(){
+		if(possibleToSurrender()){
+			System.out.println("player surrends...");
+			player1.addBalance((float)player1.getCurrentHand().getBet()/2);
+			player1.hands.clear();
+			player1.setCurrentHand(null);
+			dealer.setCurrentHand(null);
+		}else System.out.println("You cannot surrender :(");
+	}
+	
+	public void splitAction(String mode){
+		if(player1.getBalance()>=table.getMinBet() && player1.getCurrentHand().getSizeofCards()==2 && player1.hands.size()<4){
+			//if cards have the same face value
+			if(player1.getCurrentHand().getCards().get(0).getRank().getRankValue() == player1.getCurrentHand().getCards().get(1).getRank().getRankValue()){
+				System.out.println("player is splitting");
+				Card card1 = player1.getCurrentHand().getCards().get(0);
+				Card card2 = player1.getCurrentHand().getCards().get(1);
+				Hand hand1=new Hand(card1,shoe.takeCard(),bet);
+				player1.hands.add(hand1);
+				player1.hands.add(new Hand(card2,shoe.takeCard(),bet));
+				player1.hands.remove(player1.getCurrentHand());
+				player1.setCurrentHand(hand1);
+				player1.subtractBalance(bet);
+				System.out.println("player's hand ["+player1.handnumber+"]"+player1.showCurrentHand());
+			}
+		}else {
+			System.out.println("p: illegal command -> player blance is "+player1.getBalance()); 
+			if(debugMode(mode))System.exit(1);
+		}
+	}
+	
+	public void doubleDownAction(){
+		if(player1.getBalance()>=bet){
+			player1.subtractBalance(bet);
+			player1.getCurrentHand().setBet(2*bet);
+			player1.getCurrentHand().addCard(shoe.takeCard());
+		}else System.out.println("2: illegal command");
+	}
+	
+	public boolean playerDidNotBust(){
+		if((dealer.getCurrentHand()!=null)&&(player1.hands.size()>0))return true;
+		else return false;
+	}
+	
+	public boolean DBlackjack(){
+		if(dealer.getCurrentHand().getPoints()==21)return true;
+		else return false;
+	}
+	
+	public void CheckAndPayIns(){
+		if(player1.getInsurance()){
+			player1.addBalance(2*bet);
+			player1.changeInsurance(false);
+		}
+	}
+	
+	public void DHit(){
+		while(dealer.getCurrentHand().getPoints()<17){
+			System.out.println("dealer hits");
+			Card card=shoe.takeCard();
+			acefive.cardRevealed(card);
+			hilo.cardRevealed(card);
+			dealer.hit(card);
+			System.out.println("dealer's hand "+ dealer.showCurrentHandAll());
+		}
+		System.out.println("dealer stands");
+	}
+	
+	public void SetResults(){
+		for(Hand h:player1.hands){//check if a players hand beats the dealer's hand
+			if(h.getPoints()==21&&h.getCards().size()==2)System.out.println("blackjack!!");
+			if((h.getPoints()>dealer.getCurrentHand().getPoints())||(dealer.getCurrentHand().getPoints()>21)){
+				player1.addBalance(2*bet);
+				player1.win();
+				dealer.lost();
+				player1.SetLast("W");
+			}else if(h.getPoints()==dealer.getCurrentHand().getPoints()){
+				player1.addBalance(bet);
+				player1.draw();
+				dealer.draw();
+				player1.SetLast("D");
+				//System.out.println("draw");
+			}else{
+				//System.out.println("dealer wins");
+				dealer.win();
+				player1.lost();
+				player1.SetLast("L");
+			}
+		}
+		//see what card the dealer had
+		Card hidden=dealer.returnHiddenCard();
+		acefive.cardRevealed(hidden);
+		hilo.cardRevealed(hidden);
+		//collectCards();
+		player1.hands.clear();
+		player1.setCurrentHand(null);
+		dealer.setCurrentHand(null);
+	}
 
 	public static void main(String[] args){
 		if(args.length<6)System.exit(1);
@@ -348,122 +523,31 @@ public class Game {
 			}
 			game.bet_deal=0;
 			//---------------------After Bet and Deal-------------------------------
-			while(game.player1.getCurrentHand()!=null){
-				
-				
+			while(game.playableHand()){
 				//Check if player doubled down
-					
-				if(game.player1.getCurrentHand().getBet()==2*game.bet) command = "s";
+				if(game.doubledDown()) command = "s";
 				else{
-					if(args[0].equals("-i")||args[0].equals("-d")){
-						command = game.player1.getplayerInput(args[0]);
-						if(args[0].equals("-d")&&(!command.equals("q")))System.out.println("\n-cmd "+command);
-					}else{
-						command=game.strategyCommand(game.bet_deal, false, game.table.getMaxBet(), game.table.getMinBet(), game.bet,
-								game.acefive, game.hilo, game.basic, game.player1, game.dealer.getVisibleCard());
-					} 
+					command=game.getPlayCommandFromPlayer(args[0]);
 				}
-					
-				//if(args[0].equals("-d"))command -  ir buscar ao ficheiro
-				//if(args[0].equals("-s"))command -  pedir a estrategia
-				  
+				
 				if(command.equals("$")){//Current balance
 					System.out.println("player current balance is "+ game.player1.getBalance());
-					
 				}else if(command.equals("h")){//Hit
-					//Se fez double down so pode fazer hit uma vez
-					System.out.println("player hits");
-					Card a=game.shoe.takeCard();
-					game.acefive.cardRevealed(a);
-					game.hilo.cardRevealed(a);
-					if(game.player1.hit(a)){
-						if(game.player1.handnumber==1&&game.player1.hands.size()==1)
-							System.out.println("player's hand "+ game.player1.showCurrentHand()+"\nplayer busts");
-						else System.out.println("player's hand ["+game.player1.handnumber+"] "+game.player1.showCurrentHand());
-						game.dealer.win();
-						game.player1.SetLast("L");
-						
-						if(game.player1.getNextHand()==null){
-							System.out.println("dealer's hand "+game.dealer.showCurrentHandAll());
-							game.player1.lost();
-							game.player1.hands.remove(game.player1.getCurrentHand());
-							game.player1.setCurrentHand(null);							
-							break;
-						}else{
-							game.player1.loses();
-							Hand remove=game.player1.getCurrentHand();
-							game.player1.setCurrentHand(game.player1.getNextHand());
-							game.player1.hands.remove(remove);
-							System.out.println("playing hand "+(++game.player1.handnumber)+"...");
-							System.out.println("player's hand ["+game.player1.handnumber+"] "+game.player1.showCurrentHand());
-						}				
-						//player1.hands.remove(hand);
-					}else {
-						if(game.player1.handnumber==1&&game.player1.hands.size()==1)
-							System.out.println("player's hand "+ game.player1.showCurrentHand()); 
-						else System.out.println("player's hand ["+game.player1.handnumber+"] "+game.player1.showCurrentHand());
-					}
+					if(game.hitAction())break;
 				}else if(command.equals("s")){//Stand
-					System.out.println("player stands"); 
-					if(game.player1.getNextHand()!=null){
-						game.player1.setCurrentHand(game.player1.getNextHand());
-						System.out.println("playing hand "+(++game.player1.handnumber)+"..."); 
-						System.out.println("player's hand "+game.player1.showCurrentHand());
-					}else{
-						System.out.println("dealer's hand "+game.dealer.showCurrentHandAll());
-						break;
-					}
+					if(game.standAction())break;
 				}else if(command.equals("u")){
-					if((game.player1.hands.peekFirst()!=null)&&(game.player1.current.getCards().size()==2)){
-						System.out.println("surrender option");
-						game.player1.addBalance((float)game.player1.getCurrentHand().getBet()/2);
-						game.player1.hands.clear();
-						game.player1.setCurrentHand(null);
-						game.dealer.setCurrentHand(null);
-					}else System.out.println("You cannot use side rules at the moment");
+					game.surrenderAction();
 				}else if(command.equals("p")){//allow resplitting until the player has as many as four hands and doubling a hand after splitting
-					if(game.player1.getBalance()>=game.table.getMinBet() && game.player1.getCurrentHand().getSizeofCards()==2 && game.player1.hands.size()<4){
-						//if cards have the same face value
-						if(game.player1.getCurrentHand().getCards().get(0).getRank().getRankValue() == game.player1.getCurrentHand().getCards().get(1).getRank().getRankValue()){
-							System.out.println("player is splitting");
-							Card card1 = game.player1.getCurrentHand().getCards().get(0);
-							Card card2 = game.player1.getCurrentHand().getCards().get(1);
-							Hand hand1=new Hand(card1,game.shoe.takeCard(),game.bet);
-							game.player1.hands.add(hand1);
-							game.player1.hands.add(new Hand(card2,game.shoe.takeCard(),game.bet));
-							game.player1.hands.remove(game.player1.getCurrentHand());
-							game.player1.setCurrentHand(hand1);
-							game.player1.subtractBalance(game.bet);
-							System.out.println("player's hand ["+game.player1.handnumber+"]"+game.player1.showCurrentHand());
-						}
-					}else {
-						System.out.println("p: illegal command -> player blance is "+game.player1.getBalance()); 
-						if(args[0].equals("-d"))System.exit(1);
-					}
+					game.splitAction(args[0]);
 				}else if(command.equals("2")){//only on an opening hand worth 9,10,11 and always doubles the bet;take only one more card from the dealer
-					if(game.player1.getBalance()>=game.bet){
-						game.player1.subtractBalance(game.bet);
-						game.player1.getCurrentHand().setBet(2*game.bet);
-						game.player1.getCurrentHand().addCard(game.shoe.takeCard());
-					}else System.out.println("2: illegal command");
+					game.doubleDownAction();
 				}else if(command.equals("ad")){
 					System.out.println("According to Basic strategy: " + game.basic.advice(game.player1.getCurrentHand(),game.dealer.getVisibleCard()));
 					System.out.println("According to Ace-Five strategy: " + game.acefive.advice(game.player1.getCurrentHand(),game.dealer.getVisibleCard()));
 					System.out.println("According to Hi-Low strategy: " + game.hilo.advice(game.player1.getCurrentHand(),game.dealer.getVisibleCard()));
 				}else if(command.equals("st")){
-					if(game.dealer.getblackjacks()!=0)
-						System.out.println("BJ P/D" + game.player1.getblackjacks()/game.dealer.getblackjacks());
-					else System.out.println("Dealer has no Blackjacks yet");
-					if(game.player1.roundsplayed()!=0){
-						System.out.println("Win " + (float)game.player1.getwins()/game.player1.roundsplayed());
-						System.out.println("Lose " + (float)game.player1.getloses()/game.player1.roundsplayed());
-						System.out.println("Push " + (float)game.player1.getdraws()/game.player1.roundsplayed());
-					}else{
-						System.out.println("Win " + game.player1.getwins());
-						System.out.println("Lose " + game.player1.getloses());
-						System.out.println("Push " + game.player1.getdraws());
-					}
-					System.out.println("Balance" + game.player1.getBalance() + "("+ 100*(float)(game.player1.getBalance()/Integer.parseInt(args[3])) +"%)" );
+					game.statistics(Integer.parseInt(args[3]));
 				}else if(command.equals("q")){
 					System.exit(0);
 				}else if(command.equals("i")){
@@ -471,50 +555,11 @@ public class Game {
 				}else System.out.println("Illegal command");			
 			}
 			//-----------------Dealer-------------------------------
-			if((game.dealer.getCurrentHand()!=null)&&(game.player1.hands.size()>0)){
-				if(game.dealer.getCurrentHand().getPoints()==21){//Sem fazer hit ver se tem blackjack
-					if(game.player1.getInsurance()){
-						game.player1.addBalance(2*game.bet);
-						game.player1.changeInsurance(false);
-					}
-				}
-				while(game.dealer.getCurrentHand().getPoints()<17){
-					System.out.println("dealer hits");
-					Card card=game.shoe.takeCard();
-					game.acefive.cardRevealed(card);
-					game.hilo.cardRevealed(card);
-					game.dealer.hit(card);
-					System.out.println("dealer's hand "+ game.dealer.showCurrentHandAll());
-				}
-				System.out.println("dealer stands");
-				for(Hand h:game.player1.hands){//check if a players hand beats the dealer's hand
-					if(h.getPoints()==21&&h.getCards().size()==2)System.out.println("blackjack!!");
-					if((h.getPoints()>game.dealer.getCurrentHand().getPoints())||(game.dealer.getCurrentHand().getPoints()>21)){
-						game.player1.addBalance(2*game.bet);
-						game.player1.win();
-						game.dealer.lost();
-						game.player1.SetLast("W");
-					}else if(h.getPoints()==game.dealer.getCurrentHand().getPoints()){
-						game.player1.addBalance(game.bet);
-						game.player1.draw();
-						game.dealer.draw();
-						game.player1.SetLast("D");
-						//System.out.println("draw");
-					}else{
-						//System.out.println("dealer wins");
-						game.dealer.win();
-						game.player1.lost();
-						game.player1.SetLast("L");
-					}
-				}
-				//see what card the dealer had
-				Card hidden=game.dealer.returnHiddenCard();
-				game.acefive.cardRevealed(hidden);
-				game.hilo.cardRevealed(hidden);
-				//collectCards();
-				game.player1.hands.clear();
-				game.player1.setCurrentHand(null);
-				game.dealer.setCurrentHand(null);
+			if(game.playerDidNotBust()){
+				if(game.DBlackjack()) game.CheckAndPayIns();
+				
+			game.DHit();
+			game.SetResults();
 			}
 			
 		}
