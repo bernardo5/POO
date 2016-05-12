@@ -117,7 +117,41 @@ public class Game {
 					}
 				}
 			}
+	}
+	
+	boolean interactiveMode(String mode){
+		if(mode.equals("-i"))return true;
+		else return false;
+	} 
+	boolean debugMode(String mode){
+		if(mode.equals("-d"))return true;
+		else return false;
+	}
+	boolean simulationMode(String mode){
+		if(mode.equals("-s"))return true;
+		else return false;
+	}
+	
+	boolean checkEndSimulationMode(int nShuffles){
+		if(s_number==nShuffles)return true;
+		else return false;
+	}
+	
+	public void statistics(int initialbalance){
+		if(dealer.getblackjacks()!=0)
+			System.out.println("BJ P/D" + player1.getblackjacks()+"/"+dealer.getblackjacks());
+		else System.out.println("Dealer has no Blackjacks yet");
+		if(player1.roundsplayed()!=0){
+			System.out.println("Win " + (float)player1.getwins()/player1.roundsplayed());
+			System.out.println("Lose " + (float)player1.getloses()/player1.roundsplayed());
+			System.out.println("Push " + (float)player1.getdraws()/player1.roundsplayed());
+		}else{
+			System.out.println("Win " + player1.getwins());
+			System.out.println("Lose " + player1.getloses());
+			System.out.println("Push " + player1.getdraws());
+		}
 		
+		System.out.println("Balance " + player1.getBalance() + " ("+ ((100*(float)(player1.getBalance()/initialbalance))-100) +"%)" );
 	}
 
 	public static void main(String[] args){
@@ -138,7 +172,6 @@ public class Game {
 			//construct game for interactive mode
 			game=new Game(Integer.parseInt(args[4]), shuffle, Integer.parseInt(args[4]), Integer.parseInt(args[3]),Integer.parseInt(args[1]),Integer.parseInt(args[2]));
 		}
-		
 		//debug mode
 		else if(args[0].equals("-d")){
 			if(args.length != 6){
@@ -148,7 +181,6 @@ public class Game {
 			//construct game for debug mode
 			game=new Game(args[4], Integer.parseInt(args[3]), args[5], Integer.parseInt(args[1]),Integer.parseInt(args[2]));
 		}
-		
 		//simulation mode
 		else if(args[0].equals("-s")){
 			if(args.length != 8){
@@ -158,25 +190,19 @@ public class Game {
 			//construct game for simulation mode
 			game=new Game(Integer.parseInt(args[3]), args[7], Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[1]),Integer.parseInt(args[2]));	
 		}else{
-			/*shoe= new Shoe();
-			player1 = new Player(Integer.parseInt(args[3]));*/
 			game=null;
 			System.out.println("Bad input parameters");
 			System.exit(2);
 		}
-		
-		
-		//-----------------------Begining of the game------------------------------//
+//-----------------------Begining of the game------------------------------//
 		int bet = game.table.getMinBet();
 		String command = " ";
 		int bet_deal = 0;
-		//Game game=new Game();
-		//int handnumber=0;
 		while(true){
-			if((args[0].equals("-s"))){//end simulation mode
-				if((game.s_number==Integer.parseInt(args[6]))){
-				System.out.println("Your final balance is: "+ game.player1.getBalance());
-				System.exit(0);
+			if(game.simulationMode(args[0])){//end simulation mode
+				if(game.checkEndSimulationMode(Integer.parseInt(args[6]))){
+					game.statistics(Integer.parseInt(args[3]));
+					System.exit(0);
 				}
 			}
 			if(game.shoe.getShufflePercentage()!=101)
@@ -297,20 +323,7 @@ public class Game {
 				}else if(command.equals("ad")){
 						System.out.println("According to Ace-Five strategy: " + game.acefive.advice());
 				}else if(command.equals("st")){
-					if(game.dealer.getblackjacks()!=0)
-						System.out.println("BJ P/D" + game.player1.getblackjacks()/game.dealer.getblackjacks());
-					else System.out.println("Dealer has no Blackjacks yet");
-					if(game.player1.roundsplayed()!=0){
-						System.out.println("Win " + (float)game.player1.getwins()/game.player1.roundsplayed());
-						System.out.println("Lose " + (float)game.player1.getloses()/game.player1.roundsplayed());
-						System.out.println("Push " + (float)game.player1.getdraws()/game.player1.roundsplayed());
-					}else{
-						System.out.println("Win " + game.player1.getwins());
-						System.out.println("Lose " + game.player1.getloses());
-						System.out.println("Push " + game.player1.getdraws());
-					}
-					
-					System.out.println("Balance" + game.player1.getBalance() + "("+ 100*(float)(game.player1.getBalance()/Integer.parseInt(args[3])) +"%)" );
+					game.statistics(Integer.parseInt(args[3]));
 				}else System.out.println("Illegal command");
 			}
 			bet_deal=0;
