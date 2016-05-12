@@ -241,12 +241,7 @@ public class Game {
 				}else{
 					command=game.strategyCommand(bet_deal, true, game.table.getMaxBet(), game.table.getMinBet(), bet,
 							game.acefive, game.hilo, game.basic, game.player1, null);
-				} 
-				
-				
-				//System.out.println(command);
-				//if(command.equals("2"))System.exit(1);
-				//if(args[0].equals("-s"))command -  pedir a estrategia
+				}
 				
 				if(command.startsWith("b")){//Bet
 					//System.out.println("starts b: "+bet_deal);
