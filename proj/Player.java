@@ -11,6 +11,7 @@ public class Player extends Person{
 	private boolean insurance;
 	//private int prevBet;
 	private String Last;
+	int handnumber;
 	
 	private String followedStretegy;
 	
@@ -20,6 +21,7 @@ public class Player extends Person{
 		this.setBalance(balance);
 		this.insurance=false;
 		this.commands=null;
+		handnumber=0;
 	}
 	
 	public Player(int balance, int ncards, String strategy) {
@@ -29,6 +31,7 @@ public class Player extends Person{
 		this.commands=null;
 		followedStretegy=strategy;
 		Last="first";
+		handnumber=0;
 	}
 	
 	public Player(int balance,String file, int ncards) {
@@ -37,6 +40,8 @@ public class Player extends Person{
 		this.insurance=false;
 		this.commands=new LinkedList<String>();
 		ReadFile(file);
+		System.out.println(commands);
+		handnumber=0;
 	}
 	
 	public void SetLast(String l){

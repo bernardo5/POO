@@ -140,7 +140,7 @@ public class Game {
 		Basic basic=new Basic();
 		HiLo hilo=new HiLo(shoe.nCards()/52);
 		Game game=new Game();
-		
+		//int handnumber=0;
 		while(true){
 			if((args[0].equals("-s"))){//end simulation mode
 				if((s_number==Integer.parseInt(args[6]))){
@@ -208,6 +208,7 @@ public class Game {
 					}
 				}else if(command.equals("d")){//Deal
 					if(bet_deal==1){
+						player1.handnumber=1;
 						//distributeCards();
 						Card a=shoe.takeCard();
 						acefive.cardRevealed(a);
@@ -248,6 +249,7 @@ public class Game {
 								}
 								//System.out.println("end of turn");
 								//collect the cards
+								player1.handnumber=0;
 								player1.hands.clear();
 								player1.setCurrentHand(null);
 								dealer.setCurrentHand(null);
@@ -326,14 +328,21 @@ public class Game {
 							Hand remove=player1.getCurrentHand();
 							player1.setCurrentHand(player1.getNextHand());
 							player1.hands.remove(remove);
+							System.out.println("playing "+(++player1.handnumber)+" hand...");
+							System.out.println("player's hand ["+player1.handnumber+"] "+player1.showCurrentHand());
 						}				
 						//player1.hands.remove(hand);
 					}else System.out.println("player's hand "+ player1.showCurrentHand());
 				}else if(command.equals("s")){//Stand
-					System.out.println("player stands");
-					System.out.println("dealer's hand "+dealer.showCurrentHandAll());
-					if(player1.getNextHand()==null)break;
-					else player1.setCurrentHand(player1.getNextHand());
+					System.out.println("player stands"); 
+					if(player1.getNextHand()!=null){
+						player1.setCurrentHand(player1.getNextHand());
+						System.out.println("playing "+(++player1.handnumber)+"rd hand..."); 
+						System.out.println("player's hand "+player1.showCurrentHand());
+					}else{
+						System.out.println("dealer's hand "+dealer.showCurrentHandAll());
+						break;
+					}
 				}else if(command.equals("u")){
 					if((player1.hands.peekFirst()!=null)&&(player1.current.getCards().size()==2)){
 						System.out.println("surrender option");
@@ -346,7 +355,7 @@ public class Game {
 					if(player1.getBalance()>=table.getMinBet() && player1.getCurrentHand().getSizeofCards()==2 && player1.hands.size()<4){
 						//if cards have the same face value
 						if(player1.getCurrentHand().getCards().get(0).getRank().getRankValue() == player1.getCurrentHand().getCards().get(1).getRank().getRankValue()){
-							System.out.println("player splits");
+							System.out.println("player is splitting");
 							Card card1 = player1.getCurrentHand().getCards().get(0);
 							Card card2 = player1.getCurrentHand().getCards().get(1);
 							Hand hand1=new Hand(card1,shoe.takeCard(),bet);
@@ -355,9 +364,12 @@ public class Game {
 							player1.hands.remove(player1.getCurrentHand());
 							player1.setCurrentHand(hand1);
 							player1.subtractBalance(bet);
-							System.out.println(player1.showCurrentHand());
+							System.out.println("player's hand ["+player1.handnumber+"]"+player1.showCurrentHand());
 						}
-					}else System.out.println("p: illegal command -> player blance is "+player1.getBalance()); if(args[0].equals("-d"))System.exit(1);
+					}else {
+						System.out.println("p: illegal command -> player blance is "+player1.getBalance()); 
+						if(args[0].equals("-d"))System.exit(1);
+					}
 				}else if(command.equals("2")){//only on an opening hand worth 9,10,11 and always doubles the bet;take only one more card from the dealer
 					if(player1.getBalance()>=bet){
 						player1.subtractBalance(bet);
