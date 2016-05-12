@@ -313,7 +313,9 @@ public class Game {
 					acefive.cardRevealed(a);
 					hilo.cardRevealed(a);
 					if(player1.hit(a)){
-						System.out.println("player's hand "+ player1.showCurrentHand()+"\nplayer busts");
+						if(player1.handnumber==1&&player1.hands.size()==1)
+							System.out.println("player's hand "+ player1.showCurrentHand()+"\nplayer busts");
+						else System.out.println("player's hand ["+player1.handnumber+"] "+player1.showCurrentHand());
 						dealer.win();
 						player1.SetLast("L");
 						
@@ -328,16 +330,20 @@ public class Game {
 							Hand remove=player1.getCurrentHand();
 							player1.setCurrentHand(player1.getNextHand());
 							player1.hands.remove(remove);
-							System.out.println("playing "+(++player1.handnumber)+" hand...");
+							System.out.println("playing hand "+(++player1.handnumber)+"...");
 							System.out.println("player's hand ["+player1.handnumber+"] "+player1.showCurrentHand());
 						}				
 						//player1.hands.remove(hand);
-					}else System.out.println("player's hand "+ player1.showCurrentHand());
+					}else {
+						if(player1.handnumber==1&&player1.hands.size()==1)
+							System.out.println("player's hand "+ player1.showCurrentHand());
+						else System.out.println("player's hand ["+player1.handnumber+"] "+player1.showCurrentHand());
+					}
 				}else if(command.equals("s")){//Stand
 					System.out.println("player stands"); 
 					if(player1.getNextHand()!=null){
 						player1.setCurrentHand(player1.getNextHand());
-						System.out.println("playing "+(++player1.handnumber)+"rd hand..."); 
+						System.out.println("playing hand "+(++player1.handnumber)+"..."); 
 						System.out.println("player's hand "+player1.showCurrentHand());
 					}else{
 						System.out.println("dealer's hand "+dealer.showCurrentHandAll());

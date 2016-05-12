@@ -40,7 +40,7 @@ public class Player extends Person{
 		this.insurance=false;
 		this.commands=new LinkedList<String>();
 		ReadFile(file);
-		System.out.println(commands);
+		//System.out.println(commands);
 		handnumber=0;
 	}
 	

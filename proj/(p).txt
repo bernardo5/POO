@@ -1,0 +1,23 @@
+-d 5 50 500 src/shoe-filee(p).txt src/commands(p).txt
+
+b ---> $=495
+
+d ---> dealer hand 2S X (6H)
+       player hand 3D 3S
+
+p ---> player hand(1) 3D 9S
+       player hand(2) 3S 4H
+
+$=490
+
+h ---> player hand(1) 3D 9S 7D (19P)
+
+s
+
+h, h ---> player hand(2) 3S 4H 4D QS (21P)
+
+s    ---> dealer hand 2S 6H AH (19P)
+
+push --->$=495
+win  --->$=505
+
