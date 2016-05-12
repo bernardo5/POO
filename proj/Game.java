@@ -153,6 +153,20 @@ public class Game {
 		
 		System.out.println("Balance " + player1.getBalance() + " ("+ ((100*(float)(player1.getBalance()/initialbalance))-100) +"%)" );
 	}
+	
+	boolean allowedShuffling(){
+		if(shoe.getShufflePercentage()!=101)return true;
+		else return false;
+	}
+	
+	public void checkShuffle(){
+		if(shoe.calculateUsagePercentage()>=shoe.getShufflePercentage()){
+			acefive.resetCount();
+			hilo.restartRunningCount();
+			shoe.shuffleShoe();//Shuffle
+			s_number++;
+		}
+	}
 
 	public static void main(String[] args){
 		if(args.length<6)System.exit(1);
@@ -205,14 +219,7 @@ public class Game {
 					System.exit(0);
 				}
 			}
-			if(game.shoe.getShufflePercentage()!=101)
-				//System.out.println("PERCENTAGE: "+shoe.calculateUsagePercentage());
-				if(game.shoe.calculateUsagePercentage()>=game.shoe.getShufflePercentage()){
-					game.acefive.resetCount();
-					game.hilo.restartRunningCount();
-					game.shoe.shuffleShoe();//Shuffle
-					game.s_number++;
-				}
+			if(game.allowedShuffling()) game.checkShuffle();
 					//System.out.println(player1.getCurrentStrategy());
 			
 			//----------------------Before Bet and Deal----------------------------
