@@ -228,7 +228,7 @@ public class Game {
 						System.out.println("player's hand "+ player1.showCurrentHand());
 
 						if(player1.hands.getFirst().getPoints()==21){//blackjack
-							if(dealer.getVisibleCard().getValue()!=10&&dealer.getVisibleCard().getValue()!=11){
+							if(dealer.getVisibleCard().getRank()!=Rank.ACE){
 								System.out.println("blackjack!!");
 								System.out.println("dealer's hand "+dealer.showCurrentHandAll());
 								player1.blackjack();
@@ -357,7 +357,7 @@ public class Game {
 							player1.subtractBalance(bet);
 							System.out.println(player1.showCurrentHand());
 						}
-					}else System.out.println("p: illegal command->player hands:"+player1.hands.size()+" current is "+player1.getCurrentHand().toString());
+					}else System.out.println("p: illegal command -> player blance is "+player1.getBalance()); if(args[0].equals("-d"))System.exit(1);
 				}else if(command.equals("2")){//only on an opening hand worth 9,10,11 and always doubles the bet;take only one more card from the dealer
 					if(player1.getBalance()>=bet){
 						player1.subtractBalance(bet);
