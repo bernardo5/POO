@@ -44,76 +44,6 @@ public class Game {
 		hilo=new HiLo(shoe.nCards()/52);
 	}
 	
-	public String strategyCommand(int bet_deal, 
-			boolean bet_flag, int maxBet, int minBet, int lastBet, 
-			Acefive acefive, HiLo hilo, Basic basic, Player player, Card card){
-		//strategy mode
-			if(bet_flag){//want to know the amount of money to bet
-				System.out.println("bet/deal part: "+bet_deal);
-				if(bet_deal==0){
-					System.out.println("bet part");
-					if(player.getCurrentStrategy().equals("BS")||player.getCurrentStrategy().equals("HL")){//follow normal bet strategy
-						int minus,plus;
-						System.out.println("ok");
-						if(lastBet+minBet<=maxBet)plus=lastBet+minBet; else plus=maxBet;
-						if((lastBet-minBet)>=minBet)minus=lastBet-minBet; else minus=minBet;
-						if(player.getLast().equals("first"))return "b "+(int)minBet;
-						else if(player.getLast().equals("W"))return "b "+(int)(plus);
-						else if(player.getLast().equals("L"))return "b "+(int)(minus);
-						else /*draw*/return "b "+(int)lastBet;
-					}else{//follow ace-five bet strategy
-						if(acefive.advice().equals("min_bet"))return "b "+(int)minBet;
-						else {
-							/*if(acefive.advice().equals("double last bet"))*/
-							if(2*lastBet<maxBet){
-								if(player.getBalance()<(2*lastBet))return "b "+(int)player.getBalance();
-								else return "b "+(int)(2*lastBet);
-							}else 
-								if(player.getBalance()<maxBet)return "b "+(int)player.getBalance();
-										else return "b "+(int)maxBet;
-						}
-						
-						//else return acefive.advice();
-					}
-				}else return "d";
-			}else{//want to know what action to perform
-				if(player.getCurrentStrategy().equals("BS")||player.getCurrentStrategy().equals("BS-AF")){
-					if(basic.advice(player.current, card).length()==2){
-						String first=Character.toString(basic.advice(player.current, card).charAt(0));
-						String second=Character.toString(basic.advice(player.current, card).charAt(1));
-						if(player.current.getCards().size()==2){
-							if(first.equals("2")&&player.getBalance()<lastBet) return second;
-							return first;
-						}
-						else return second;
-					}else return basic.advice(player.current, card);
-				}else /*if(player.getCurrentStrategy().equals("HL")ou HL-AF)*/{
-					if((hilo.advice(player.current, card).contains("Using basic:"))||((hilo.advice(player.current, card).equals("u"))&&(player.getCurrentHand().getCards().size()!=2))){
-						if(basic.advice(player.current, card).length()==2){
-							String first=Character.toString(basic.advice(player.current, card).charAt(0));
-							String second=Character.toString(basic.advice(player.current, card).charAt(1));
-							if(player.current.getCards().size()==2){
-								if(first.equals("2")&&player.getBalance()<lastBet) return second;
-								return first;
-							}
-							else return second;
-						}else return basic.advice(player.current, card);
-					}
-					else{
-						if(hilo.advice(player.current, card).length()==2){//two options
-							String first=Character.toString(hilo.advice(player.current, card).charAt(0));
-							String second=Character.toString(hilo.advice(player.current, card).charAt(1));
-							if(player.current.getCards().size()==2){
-								if(first.equals("2")&&player.getBalance()<lastBet) return second;
-								return first;
-							}
-							else return second;
-						}else return hilo.advice(player.current, card);
-					}
-				}
-			}
-	}
-	
 	boolean interactiveMode(String mode){
 		if(mode.equals("-i"))return true;
 		else return false;
@@ -159,6 +89,7 @@ public class Game {
 			acefive.resetCount();
 			hilo.restartRunningCount();
 			shoe.shuffleShoe();//Shuffle
+			System.out.println("shuffling the shoe...\n");
 			s_number++;
 		}
 	}
@@ -198,7 +129,7 @@ public class Game {
 		return command;
 	}
 	
-	public void betAction(String command, String mode, int initialBalance){
+	public void betAction(String command, int initialBalance){
 		if(player1.getBalance()>=table.getMinBet() && bet_deal == 0){//Se forem dadas as cartas ja nao pode apostar e so pode apostar se tiver maior balance que a aposta minima
 			String[] bets = command.split(" ");
 			if(bets.length==1){
@@ -214,10 +145,6 @@ public class Game {
 			}else System.out.println("b: Illegal command-mais 2 args");//more than 2 arguments
 		}else{
 			System.out.println("b: Illegal command");/*Can´t use bet*/
-			if(simulationMode(mode)/*args[0].equals("-s")*/){
-				this.statistics(initialBalance);
-				System.exit(1);
-			}
 		}
 	}
 	
@@ -259,7 +186,7 @@ public class Game {
 						dealer.blackjack();
 						player1.SetLast("Draw");
 						//draw
-						player1.draw();
+						player1.draw();System.out.println("player pushes and his current balance is "+player1.getBalance());
 						dealer.draw();
 					}else{
 						//player won-blackjack pays 3 to 2
@@ -311,7 +238,7 @@ public class Game {
 			
 			if(player1.getNextHand()==null){
 				System.out.println("dealer's hand "+dealer.showCurrentHandAll());
-				player1.lost();
+				player1.lost();System.out.println("player loses and his current balance is "+player1.getBalance());
 				player1.hands.remove(player1.getCurrentHand());
 				player1.setCurrentHand(null);							
 				return true;
@@ -423,19 +350,19 @@ public class Game {
 			if(h.getPoints()==21&&h.getCards().size()==2)System.out.println("blackjack!!");
 			if((h.getPoints()>dealer.getCurrentHand().getPoints())||(dealer.getCurrentHand().getPoints()>21)){
 				player1.addBalance(2*bet);
-				player1.win();
+				player1.win();System.out.println("player wins and his current balance is "+player1.getBalance());
 				dealer.lost();
 				player1.SetLast("W");
 			}else if(h.getPoints()==dealer.getCurrentHand().getPoints()){
 				player1.addBalance(bet);
-				player1.draw();
+				player1.draw();System.out.println("player pushes and his current balance is "+player1.getBalance());
 				dealer.draw();
 				player1.SetLast("D");
 				//System.out.println("draw");
 			}else{
 				//System.out.println("dealer wins");
 				dealer.win();
-				player1.lost();
+				player1.lost();System.out.println("player loses and his current balance is "+player1.getBalance());
 				player1.SetLast("L");
 			}
 		}
@@ -461,7 +388,7 @@ public class Game {
 				command=getCommandFromPlayer();
 				
 				if(command.startsWith("b")){//Bet
-					betAction(command, mode, Integer.parseInt(initialBalance));
+					betAction(command, Integer.parseInt(initialBalance));
 				}else if(command.equals("d")){//Deal
 					dealAction();
 				}else if(command.equals("$")){//Current balance

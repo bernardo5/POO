@@ -16,7 +16,12 @@ public abstract class Person {
 	public void setCurrentHand(Hand hand){
 		current=hand;
 	}
-	public abstract void win();
+	public void win() {
+		// TODO Auto-generated method stub
+		this.wins++;
+	}
+	
+	
 	public void draw(){
 		this.draws++;
 		//System.out.println("draw");

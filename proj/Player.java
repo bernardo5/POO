@@ -116,24 +116,6 @@ public class Player extends Person{
            e.printStackTrace();
 	    } 
 	}
-	
-	@Override
-	public void win() {
-		// TODO Auto-generated method stub
-		this.wins++;
-		System.out.println("player wins and his current balance is "+this.getBalance());
-	}
-	
-	@Override
-	public void draw(){
-		this.draws++;
-		System.out.println("player pushes and his current balance is "+this.getBalance());
-	}
-	@Override
-	public void lost(){
-		this.loses++;
-		System.out.println("player loses and his current balance is "+this.getBalance());
-	}
 
 	public Hand getNextHand(){
 		int indexCurrentHand=hands.indexOf(this.getCurrentHand());

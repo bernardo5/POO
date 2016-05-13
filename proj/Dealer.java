@@ -58,10 +58,4 @@ public class Dealer extends Person{
 		return current.getCards().get(1);
 	}
 
-	@Override
-	public void win() {
-		this.wins++;
-		//System.out.println("dealer wins");
-	}
-
 }

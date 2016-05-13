@@ -46,7 +46,6 @@ public class Shoe {
 	
 	public void shuffleShoe(){
 		Collections.shuffle(sequence);
-		System.out.println("shuffling the shoe...\n");
 	}
 	
 	@Override
