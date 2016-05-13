@@ -251,8 +251,8 @@ public class Simulation extends Game{
 						String first=Character.toString(basic.advice(player.current, card).charAt(0));
 						String second=Character.toString(basic.advice(player.current, card).charAt(1));
 						if(player.current.getCards().size()==2){
-							if(first.equals("2")&&player.getBalance()<lastBet) return second;
-							return first;
+							if(first.equals("2")&&player.getBalance()>lastBet&&DoubleAllowed()) return first;
+							return second;
 						}
 						else return second;
 					}else return basic.advice(player.current, card);
@@ -262,8 +262,8 @@ public class Simulation extends Game{
 							String first=Character.toString(basic.advice(player.current, card).charAt(0));
 							String second=Character.toString(basic.advice(player.current, card).charAt(1));
 							if(player.current.getCards().size()==2){
-								if(first.equals("2")&&player.getBalance()<lastBet) return second;
-								return first;
+								if(first.equals("2")&&player.getBalance()>lastBet&&DoubleAllowed()) return first;
+								return second;
 							}
 							else return second;
 						}else return basic.advice(player.current, card);
@@ -273,8 +273,8 @@ public class Simulation extends Game{
 							String first=Character.toString(hilo.advice(player.current, card).charAt(0));
 							String second=Character.toString(hilo.advice(player.current, card).charAt(1));
 							if(player.current.getCards().size()==2){
-								if(first.equals("2")&&player.getBalance()<lastBet) return second;
-								return first;
+								if(first.equals("2")&&player.getBalance()>lastBet&&DoubleAllowed()) return first;
+								return second;
 							}
 							else return second;
 						}else return hilo.advice(player.current, card);
