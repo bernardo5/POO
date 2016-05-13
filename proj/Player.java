@@ -117,46 +117,6 @@ public class Player extends Person{
 	    } 
 	}
 	
-	//Input from Stdin
-	public String getplayerInput(String mode) /*throws IOException*/{
-		if(mode.equals("-i")){
-			BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
-			String s;
-			try {
-				s = bufferRead.readLine();
-			
-				Scanner scanner = new Scanner (s);
-				String command = scanner.next ();
-				if(scanner.hasNextInt()){
-		        int bet=scanner.nextInt();
-		        scanner.close();
-		        return command+" "+Integer.toString(bet);
-		    	}else{
-					scanner.close();
-					return command;
-		    	}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return null;
-			}
-		}else /*if(mode.equals("-d"))*/{
-			if(commands.isEmpty()) return "q"; //no more commands to read
-			else{
-				String s=this.commands.removeFirst();
-				if(s.equals("b")){
-					try{
-						Integer.parseInt(commands.getFirst());
-						return s+=" "+commands.removeFirst();
-					}catch(NumberFormatException e){
-						return s;
-					}
-				}else return s;					
-			}
-		}
-		//return null;
-	}
-	
 	@Override
 	public void win() {
 		// TODO Auto-generated method stub

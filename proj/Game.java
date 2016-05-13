@@ -1,5 +1,10 @@
 package blackjack;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Scanner;
+
 public class Game {
 	
 	Player player1;
@@ -33,23 +38,6 @@ public class Game {
 		shoe.populateShoe();
 		shoe.shuffleShoe();
 		player1 = new Player(balance, shoe.nCards()/52);
-		hilo=new HiLo(shoe.nCards()/52);
-	}
-	
-	Game(String fileShoe, int balance, String commandFile, int minBet, int maxBet){
-		this(minBet, maxBet);
-		shoe = new Shoe();
-		shoe.populateShoeFromFile(fileShoe);
-		player1 = new Player(balance,commandFile, shoe.nCards()/52);
-		hilo=new HiLo(shoe.nCards()/52);
-	}
-	
-	Game(int balance, String strategy, int nShoe, int shufflePercentage, int minBet, int maxBet){
-		this(minBet, maxBet);
-		shoe = new Shoe(nShoe,shufflePercentage);
-		shoe.populateShoe();
-		shoe.shuffleShoe();
-		player1 = new Player(balance, shoe.nCards()/52, strategy);
 		hilo=new HiLo(shoe.nCards()/52);
 	}
 	
@@ -172,25 +160,38 @@ public class Game {
 		}
 	}
 	
-	public String getCommandFromPlayer(String mode){
-		String command=new String();
-		if(interactiveMode(mode)||debugMode(mode)){
-			command = player1.getplayerInput(mode);
-			if(debugMode(mode)&&(!command.equals("q"))){
-				System.out.println("\n-cmd "+command);
-				if((command.indexOf("b")!=-1)){
-					String[]aux=command.split(" ");
-					try{
-						System.out.println("player is betting "+aux[1]);
-					}catch(ArrayIndexOutOfBoundsException e){
-						System.out.println("player is betting "+bet);
-					}
-				}
+	//Input from Stdin
+		public String getplayerInput() /*throws IOException*/{
+			
+			try {
+				BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
+				String s;
+				
+				s = bufferRead.readLine();
+				
+				Scanner scanner = new Scanner (s);
+				String command = scanner.next ();
+				if(scanner.hasNextInt()){
+			       int bet=scanner.nextInt();
+			       scanner.close();
+			       return command+" "+Integer.toString(bet);
+			    }else{
+					scanner.close();
+					return command;
+			    }
+			}catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
 			}
-		}else{
-			command=strategyCommand(bet_deal, true,table.getMaxBet(), table.getMinBet(), bet,
-					acefive, hilo, basic, player1, null);
+			
+			//return null;
 		}
+	
+	public String getCommandFromPlayer(){
+		String command=new String();
+		command = getplayerInput();
+			
 		return command;
 	}
 	
@@ -285,15 +286,9 @@ public class Game {
 		else return false;
 	}
 
-	public String getPlayCommandFromPlayer(String mode){
+	public String getPlayCommandFromPlayer(){
 		String command=new String();
-		if(interactiveMode(mode)||debugMode(mode)){
-			command = player1.getplayerInput(mode);
-			if(debugMode(mode)&&(!command.equals("q")))System.out.println("\n-cmd "+command);
-		}else{
-			command=strategyCommand(bet_deal, false, table.getMaxBet(), table.getMinBet(), bet,
-					acefive, hilo, basic, player1, dealer.getVisibleCard());
-		} 
+		command = getplayerInput();
 		return command;
 	}
 	
@@ -449,13 +444,81 @@ public class Game {
 		player1.setCurrentHand(null);
 		dealer.setCurrentHand(null);
 	}
+	
+	public void play(String mode, String initialBalance/*, String nshuffles*/){
+		String command = " ";
+		while(true){
+			if(allowedShuffling()) checkShuffle();
+					//System.out.println(player1.getCurrentStrategy());
+			
+			//----------------------Before Bet and Deal----------------------------
+			while(!CardsDealt()){
+				
+				command=getCommandFromPlayer();
+				
+				if(command.startsWith("b")){//Bet
+					betAction(command, mode, Integer.parseInt(initialBalance));
+				}else if(command.equals("d")){//Deal
+					dealAction();
+				}else if(command.equals("$")){//Current balance
+					System.out.println("player current balance is "+ player1.getBalance());
+				}else if(command.equals("q")){
+					System.exit(0);
+				}else if(command.equals("ad")){
+						System.out.println("According to Ace-Five strategy: " + acefive.advice());
+				}else if(command.equals("st")){
+					statistics(Integer.parseInt(initialBalance));
+				}else System.out.println("Illegal command");
+			}
+			bet_deal=0;
+			//---------------------After Bet and Deal-------------------------------
+			while(playableHand()){
+				//Check if player doubled down
+				if(doubledDown()) command = "s";
+				else{
+					command=getPlayCommandFromPlayer();
+				}
+				
+				if(command.equals("$")){//Current balance
+					System.out.println("player current balance is "+ player1.getBalance());
+				}else if(command.equals("h")){//Hit
+					if(hitAction())break;
+				}else if(command.equals("s")){//Stand
+					if(standAction())break;
+				}else if(command.equals("u")){
+					surrenderAction();
+				}else if(command.equals("p")){//allow resplitting until the player has as many as four hands and doubling a hand after splitting
+					splitAction(mode);
+				}else if(command.equals("2")){//only on an opening hand worth 9,10,11 and always doubles the bet;take only one more card from the dealer
+					doubleDownAction();
+				}else if(command.equals("ad")){
+					System.out.println("According to Basic strategy: " + basic.advice(player1.getCurrentHand(),dealer.getVisibleCard()));
+					System.out.println("According to Ace-Five strategy: " + acefive.advice(player1.getCurrentHand(),dealer.getVisibleCard()));
+					System.out.println("According to Hi-Low strategy: " + hilo.advice(player1.getCurrentHand(),dealer.getVisibleCard()));
+				}else if(command.equals("st")){
+					statistics(Integer.parseInt(initialBalance));
+				}else if(command.equals("q")){
+					System.exit(0);
+				}else if(command.equals("i")){
+					player1.changeInsurance(true);
+				}else System.out.println("Illegal command");			
+			}
+			//-----------------Dealer-------------------------------
+			if(playerDidNotBust()){
+				if(DBlackjack()) CheckAndPayIns();
+				
+			DHit();
+			SetResults();
+			}
+			
+		}
+	}
 
 	public static void main(String[] args){
 		if(args.length<6)System.exit(1);
 		if(Integer.parseInt(args[1])<1)System.exit(3);//minbet>1
 		if(Integer.parseInt(args[2])<10*Integer.parseInt(args[1]) ||Integer.parseInt(args[2])>20*Integer.parseInt(args[1])) System.exit(4);//10*minbet<=maxbet<=20*minbet
 		if(Integer.parseInt(args[3])<50*Integer.parseInt(args[1]))System.exit(5);//balance>=50*minbet
-		Game game;
 		//interactive mode
 		if(args[0].equals("-i")){
 			if(args.length != 6){
@@ -466,7 +529,8 @@ public class Game {
 			int shuffle=Integer.parseInt(args[5]);
 			if(shuffle<10||shuffle>100)System.exit(7);
 			//construct game for interactive mode
-			game=new Game(Integer.parseInt(args[4]), shuffle, Integer.parseInt(args[4]), Integer.parseInt(args[3]),Integer.parseInt(args[1]),Integer.parseInt(args[2]));
+			Game game=new Game(Integer.parseInt(args[4]), shuffle, Integer.parseInt(args[4]), Integer.parseInt(args[3]),Integer.parseInt(args[1]),Integer.parseInt(args[2]));
+			game.play(args[0], args[3]);
 		}
 		//debug mode
 		else if(args[0].equals("-d")){
@@ -475,7 +539,8 @@ public class Game {
 				System.exit(0);
 			}
 			//construct game for debug mode
-			game=new Game(args[4], Integer.parseInt(args[3]), args[5], Integer.parseInt(args[1]),Integer.parseInt(args[2]));
+			Debug debug=new Debug(args[4], Integer.parseInt(args[3]), args[5], Integer.parseInt(args[1]),Integer.parseInt(args[2]));
+			debug.play(args[0], args[3]);
 		}
 		//simulation mode
 		else if(args[0].equals("-s")){
@@ -484,84 +549,11 @@ public class Game {
 				System.exit(0);
 			}
 			//construct game for simulation mode
-			game=new Game(Integer.parseInt(args[3]), args[7], Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[1]),Integer.parseInt(args[2]));	
+			StrategyMode strategymode=new StrategyMode(Integer.parseInt(args[3]), args[7], Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[1]),Integer.parseInt(args[2]));	
+			strategymode.play(args[0], args[3], args[6]);
 		}else{
-			game=null;
 			System.out.println("Bad input parameters");
 			System.exit(2);
-		}
-//-----------------------Begining of the game------------------------------//
-		String command = " ";
-		while(true){
-			if(game.simulationMode(args[0])){//end simulation mode
-				if(game.checkEndSimulationMode(Integer.parseInt(args[6]))){
-					game.statistics(Integer.parseInt(args[3]));
-					System.exit(0);
-				}
-			}
-			if(game.allowedShuffling()) game.checkShuffle();
-					//System.out.println(player1.getCurrentStrategy());
-			
-			//----------------------Before Bet and Deal----------------------------
-			while(!game.CardsDealt()){
-				
-				command=game.getCommandFromPlayer(args[0]);
-				
-				if(command.startsWith("b")){//Bet
-					game.betAction(command, args[0], Integer.parseInt(args[3]));
-				}else if(command.equals("d")){//Deal
-					game.dealAction();
-				}else if(command.equals("$")){//Current balance
-					System.out.println("player current balance is "+ game.player1.getBalance());
-				}else if(command.equals("q")){
-					System.exit(0);
-				}else if(command.equals("ad")){
-						System.out.println("According to Ace-Five strategy: " + game.acefive.advice());
-				}else if(command.equals("st")){
-					game.statistics(Integer.parseInt(args[3]));
-				}else System.out.println("Illegal command");
-			}
-			game.bet_deal=0;
-			//---------------------After Bet and Deal-------------------------------
-			while(game.playableHand()){
-				//Check if player doubled down
-				if(game.doubledDown()) command = "s";
-				else{
-					command=game.getPlayCommandFromPlayer(args[0]);
-				}
-				
-				if(command.equals("$")){//Current balance
-					System.out.println("player current balance is "+ game.player1.getBalance());
-				}else if(command.equals("h")){//Hit
-					if(game.hitAction())break;
-				}else if(command.equals("s")){//Stand
-					if(game.standAction())break;
-				}else if(command.equals("u")){
-					game.surrenderAction();
-				}else if(command.equals("p")){//allow resplitting until the player has as many as four hands and doubling a hand after splitting
-					game.splitAction(args[0]);
-				}else if(command.equals("2")){//only on an opening hand worth 9,10,11 and always doubles the bet;take only one more card from the dealer
-					game.doubleDownAction();
-				}else if(command.equals("ad")){
-					System.out.println("According to Basic strategy: " + game.basic.advice(game.player1.getCurrentHand(),game.dealer.getVisibleCard()));
-					System.out.println("According to Ace-Five strategy: " + game.acefive.advice(game.player1.getCurrentHand(),game.dealer.getVisibleCard()));
-					System.out.println("According to Hi-Low strategy: " + game.hilo.advice(game.player1.getCurrentHand(),game.dealer.getVisibleCard()));
-				}else if(command.equals("st")){
-					game.statistics(Integer.parseInt(args[3]));
-				}else if(command.equals("q")){
-					System.exit(0);
-				}else if(command.equals("i")){
-					game.player1.changeInsurance(true);
-				}else System.out.println("Illegal command");			
-			}
-			//-----------------Dealer-------------------------------
-			if(game.playerDidNotBust()){
-				if(game.DBlackjack()) game.CheckAndPayIns();
-				
-			game.DHit();
-			game.SetResults();
-			}
-			
 		}
 	}
 }
