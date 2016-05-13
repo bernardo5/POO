@@ -40,6 +40,7 @@ public class Game {
 		shoe = new Shoe(numberDecks, shuffle);
 		shoe.populateShoe();
 		shoe.shuffleShoe();
+		System.out.println("shuffling the shoe...\n");
 		player1 = new Player(balance, shoe.nCards()/52);
 		hilo=new HiLo(shoe.nCards()/52);
 	}
@@ -272,13 +273,13 @@ public class Game {
 		return false;
 	}
 	
-	public boolean possibleToSurrender(){
+	public boolean canUseSideRules(){
 		if((player1.hands.peekFirst()!=null)&&(player1.current.getCards().size()==2))return true;
 		else return false;
 	}
 	
 	public void surrenderAction(){
-		if(possibleToSurrender()){
+		if(canUseSideRules()){
 			System.out.println("player surrends...");
 			player1.addBalance((float)player1.getCurrentHand().getBet()/2);
 			player1.hands.clear();
@@ -304,12 +305,19 @@ public class Game {
 				System.out.println("player's hand ["+player1.handnumber+"]"+player1.showCurrentHand());
 			}else System.out.println("p: illegal command -> You need to have two similar cards to split");
 		}else {
-			System.out.println("p: illegal command -> player blance is "+player1.getBalance()); 
+			System.out.println("p: illegal command"); 
 		}
 	}
 	
+	public boolean DoubleAllowed(){
+		if((player1.getCurrentHand().getPoints()==9)
+				||(player1.getCurrentHand().getPoints()==10)
+					||(player1.getCurrentHand().getPoints()==11))return true;
+		else return false;
+	}
+	
 	public void doubleDownAction(){
-		if(player1.getBalance()>=bet){
+		if((canUseSideRules())&&(player1.getBalance()>=bet)&&DoubleAllowed()){
 			player1.subtractBalance(bet);
 			player1.getCurrentHand().setBet(2*bet);
 			player1.getCurrentHand().addCard(shoe.takeCard());
@@ -430,7 +438,8 @@ public class Game {
 					statistics(Integer.parseInt(initialBalance));
 				}else if(command.equals("q")){
 					System.exit(0);
-				}else if(command.equals("i")){
+				}else if(command.equals("i")&&canUseSideRules()){
+					System.out.println("insurance");
 					player1.changeInsurance(true);
 				}else System.out.println("Illegal command");			
 			}

@@ -150,7 +150,7 @@ public class Simulation extends Game{
 	
 	@Override
 	public void surrenderAction(){
-		if(possibleToSurrender()){
+		if(canUseSideRules()){
 			//System.out.println("player surrends...");
 			player1.addBalance((float)player1.getCurrentHand().getBet()/2);
 			player1.hands.clear();
@@ -183,14 +183,14 @@ public class Simulation extends Game{
 				System.exit(1);
 			}
 		}else {
-			System.out.println("p: illegal command -> player balance is "+player1.getBalance()); 
+			System.out.println("p: illegal command"); 
 			System.exit(1);
 		}
 	}
 	
 	@Override
 	public void doubleDownAction(){
-		if(player1.getBalance()>=bet){
+		if((player1.getBalance()>=bet)&&(canUseSideRules()&&DoubleAllowed())){//AINDA TEM DE SE ACRESCENTAR
 			player1.subtractBalance(bet);
 			player1.getCurrentHand().setBet(2*bet);
 			player1.getCurrentHand().addCard(shoe.takeCard());
@@ -396,7 +396,7 @@ public class Simulation extends Game{
 					statistics(Integer.parseInt(initialBalance));
 				}else if(command.equals("q")){
 					System.exit(0);
-				}else if(command.equals("i")){
+				}else if(command.equals("i")&&canUseSideRules()){
 					player1.changeInsurance(true);
 				}else System.out.println("Illegal command");			
 			}
