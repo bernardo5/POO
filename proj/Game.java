@@ -549,8 +549,8 @@ public class Game {
 				System.exit(0);
 			}
 			//construct game for simulation mode
-			StrategyMode strategymode=new StrategyMode(Integer.parseInt(args[3]), args[7], Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[1]),Integer.parseInt(args[2]));	
-			strategymode.play(args[0], args[3], args[6]);
+			Simulation simulation=new Simulation(Integer.parseInt(args[3]), args[7], Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[1]),Integer.parseInt(args[2]));	
+			simulation.play(args[0], args[3], args[6]);
 		}else{
 			System.out.println("Bad input parameters");
 			System.exit(2);
