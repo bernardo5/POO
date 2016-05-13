@@ -79,7 +79,7 @@ public class Simulation extends Game{
 				}else if(command.equals("u")){
 					surrenderAction();
 				}else if(command.equals("p")){//allow resplitting until the player has as many as four hands and doubling a hand after splitting
-					splitAction(mode);
+					splitAction();
 				}else if(command.equals("2")){//only on an opening hand worth 9,10,11 and always doubles the bet;take only one more card from the dealer
 					doubleDownAction();
 				}else if(command.equals("ad")){

@@ -19,6 +19,8 @@ public class Game {
 	int nshoe;
 	int bet;
 	int bet_deal;
+	int total_hands;
+	
 	
 	Game(int minBet, int maxBet){
 		s_number=0;
@@ -29,6 +31,7 @@ public class Game {
 		dealer = new Dealer();
 		bet=minBet;
 		bet_deal=0;
+		total_hands=0;
 	}
 	
 	Game(int nshoe, int shuffle, int numberDecks, int balance, int minBet, int maxBet){
@@ -130,9 +133,9 @@ public class Game {
 	}
 	
 	public void statistics(int initialbalance){
-		if(dealer.getblackjacks()!=0)
-			System.out.println("BJ P/D" + player1.getblackjacks()+"/"+dealer.getblackjacks());
-		else System.out.println("Dealer has no Blackjacks yet");
+		if(total_hands!=0)
+			System.out.println("BJ P/D " + ((float)player1.getblackjacks()/total_hands)+"/"+((float)dealer.getblackjacks()/total_hands));
+		else System.out.println("Game has just started!");
 		if(player1.roundsplayed()!=0){
 			System.out.println("Win " + (float)player1.getwins()/player1.roundsplayed());
 			System.out.println("Lose " + (float)player1.getloses()/player1.roundsplayed());
@@ -225,6 +228,7 @@ public class Game {
 	
 	public void dealAction(){
 		if(bet_deal==1){
+			total_hands++;
 			player1.handnumber=1;
 			//distributeCards();
 			Card a=shoe.takeCard();
@@ -356,10 +360,11 @@ public class Game {
 		}else System.out.println("You cannot surrender :(");
 	}
 	
-	public void splitAction(String mode){
+	public void splitAction(){
 		if(player1.getBalance()>=table.getMinBet() && player1.getCurrentHand().getSizeofCards()==2 && player1.hands.size()<4){
 			//if cards have the same face value
 			if(player1.getCurrentHand().getCards().get(0).getRank().getRankValue() == player1.getCurrentHand().getCards().get(1).getRank().getRankValue()){
+				total_hands++;
 				System.out.println("player is splitting");
 				Card card1 = player1.getCurrentHand().getCards().get(0);
 				Card card2 = player1.getCurrentHand().getCards().get(1);
@@ -370,10 +375,9 @@ public class Game {
 				player1.setCurrentHand(hand1);
 				player1.subtractBalance(bet);
 				System.out.println("player's hand ["+player1.handnumber+"]"+player1.showCurrentHand());
-			}
+			}else System.out.println("p: illegal command -> You need to have two similar cards to split");
 		}else {
 			System.out.println("p: illegal command -> player blance is "+player1.getBalance()); 
-			if(debugMode(mode))System.exit(1);
 		}
 	}
 	
@@ -488,7 +492,7 @@ public class Game {
 				}else if(command.equals("u")){
 					surrenderAction();
 				}else if(command.equals("p")){//allow resplitting until the player has as many as four hands and doubling a hand after splitting
-					splitAction(mode);
+					splitAction();
 				}else if(command.equals("2")){//only on an opening hand worth 9,10,11 and always doubles the bet;take only one more card from the dealer
 					doubleDownAction();
 				}else if(command.equals("ad")){

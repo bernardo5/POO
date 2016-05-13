@@ -9,6 +9,29 @@ public class Debug extends Game{
 		hilo=new HiLo(shoe.nCards()/52);
 	}
 	
+	@Override
+	public void splitAction(){
+		if(player1.getBalance()>=table.getMinBet() && player1.getCurrentHand().getSizeofCards()==2 && player1.hands.size()<4){
+			//if cards have the same face value
+			if(player1.getCurrentHand().getCards().get(0).getRank().getRankValue() == player1.getCurrentHand().getCards().get(1).getRank().getRankValue()){
+				total_hands++;
+				System.out.println("player is splitting");
+				Card card1 = player1.getCurrentHand().getCards().get(0);
+				Card card2 = player1.getCurrentHand().getCards().get(1);
+				Hand hand1=new Hand(card1,shoe.takeCard(),bet);
+				player1.hands.add(hand1);
+				player1.hands.add(new Hand(card2,shoe.takeCard(),bet));
+				player1.hands.remove(player1.getCurrentHand());
+				player1.setCurrentHand(hand1);
+				player1.subtractBalance(bet);
+				System.out.println("player's hand ["+player1.handnumber+"]"+player1.showCurrentHand());
+			}else System.out.println("p: illegal command -> You need to have two similar cards to split");
+		}else {
+			System.out.println("p: illegal command -> player blance is "+player1.getBalance()); 
+			System.exit(1);
+		}
+	}
+	
 	
 	@Override
 	public String getplayerInput() /*throws IOException*/{
