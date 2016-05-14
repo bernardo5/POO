@@ -1,0 +1,8 @@
+-i 10 150 600 4 80
+
+-d 10 150 600 src/shoe-file.txt src/commands.txt
+
+-s 10 150 600 4 20 1 BS
+
+
+-d 5 50 500 src/shoe-filee.txt src/cmd-file.txt  --> debug da prof
