@@ -1,6 +1,19 @@
 package blackjack;
 
+/**
+ * Methods Override to get the commands from the file
+ */
+
 public class Debug extends Game{
+	
+	/**
+	 * 
+	 * @param fileShoe - file to get the card order to populate the shoe
+	 * @param balance - initial player balance
+	 * @param commandFile - file to get the order of the player commands
+	 * @param minBet
+	 * @param maxBet
+	 */
 	public Debug(String fileShoe, int balance, String commandFile, int minBet, int maxBet){
 		super(minBet, maxBet);
 		shoe = new Shoe();
@@ -9,6 +22,9 @@ public class Debug extends Game{
 		hilo=new HiLo(shoe.nCards()/52);
 	}
 	
+	/**
+	 * Method override in order to quit debug if player has no more money to bet
+	 */
 	@Override
 	public void splitAction(){
 		if(player1.getBalance()>=table.getMinBet() && player1.getCurrentHand().getSizeofCards()==2 && player1.hands.size()<4){
@@ -32,9 +48,11 @@ public class Debug extends Game{
 		}
 	}
 	
-	
+	/**
+	 * get command from player commands linked list 
+	 */
 	@Override
-	public String getplayerInput() /*throws IOException*/{
+	public String getplayerInput(){
 		if(player1.commands.isEmpty()) return "q"; //no more commands to read
 		else{
 			String s=player1.commands.removeFirst();
@@ -47,9 +65,12 @@ public class Debug extends Game{
 				}
 			}else return s;					
 		}
-		
-		//return null;
 	}
+	
+	/**
+	 * gets command from previous method and depending on the 
+	 * command prints info in the command prompt
+	 */
 	@Override
 	public String getCommandFromPlayer(){
 		String command=new String();

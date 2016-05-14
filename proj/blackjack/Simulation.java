@@ -1,7 +1,21 @@
 package blackjack;
 
-public class Simulation extends Game{
+/**
+ * 
+ * Methods Override to get commands from strategies advice and to take out prints
+ *
+ */
 
+public class Simulation extends Game{
+/**
+ * 
+ * @param balance - initial player balance 
+ * @param strategy - strategy the player will follow during he game
+ * @param nShoe - number of decks
+ * @param shufflePercentage
+ * @param minBet
+ * @param maxBet
+ */
 	public Simulation(int balance, String strategy, int nShoe, int shufflePercentage, int minBet, int maxBet){
 		super(minBet, maxBet);
 		shoe = new Shoe(nShoe,shufflePercentage);
@@ -11,8 +25,11 @@ public class Simulation extends Game{
 		hilo=new HiLo(shoe.nCards()/52);
 	}
 	
-	
-	@Override
+	/**
+	 * Override in order to dont print information and to exit in case of error
+	 * @param command
+	 * @param initialBalance
+	 */
 	public void betAction(String command, int initialBalance){
 		if(player1.getBalance()>=table.getMinBet() && bet_deal == 0){//Se forem dadas as cartas ja nao pode apostar e so pode apostar se tiver maior balance que a aposta minima
 			String[] bets = command.split(" ");
@@ -39,10 +56,13 @@ public class Simulation extends Game{
 			System.exit(1);
 		}
 	}
-	
+	/**
+	 *  Override in order to dont print information and to exit in case of error
+	 */
 	@Override
 	public void dealAction(){
 		if(bet_deal==1){
+			insure_surrender=true;
 			total_hands++;
 			player1.handnumber=1;
 			//distributeCards();
@@ -96,11 +116,14 @@ public class Simulation extends Game{
 			System.exit(1);
 		}
 	}
-	
+	/**
+	 *  Override in order to dont print information and to exit in case of error
+	 */
 	@Override
 	public boolean hitAction(){
 		//Se fez double down so pode fazer hit uma vez
 		//System.out.println("player hits");
+		insure_surrender=false;
 		Card a=shoe.takeCard();
 		acefive.cardRevealed(a);
 		hilo.cardRevealed(a);
@@ -133,7 +156,9 @@ public class Simulation extends Game{
 		}*/
 		return false;
 	}
-	
+	/**
+	 *  Override in order to dont print information and to exit in case of error
+	 */
 	@Override
 	public boolean standAction(){
 		//System.out.println("player stands"); 
@@ -147,7 +172,9 @@ public class Simulation extends Game{
 		}
 		return false;
 	}
-	
+	/**
+	 *  Override in order to dont print information and to exit in case of error
+	 */
 	@Override
 	public void surrenderAction(){
 		if(canUseSideRules()){
@@ -162,12 +189,20 @@ public class Simulation extends Game{
 		}
 	}
 	
+	boolean checkEndSimulationMode(int nShuffles){
+		if(s_number==nShuffles)return true;
+		else return false;
+	}
+	/**
+	 *  Override in order to dont print information and to exit in case of error
+	 */
 	@Override
 	public void splitAction(){
 		if(player1.getBalance()>=table.getMinBet() && player1.getCurrentHand().getSizeofCards()==2 && player1.hands.size()<4){
 			//if cards have the same face value
 			if(player1.getCurrentHand().getCards().get(0).getRank().getRankValue() == player1.getCurrentHand().getCards().get(1).getRank().getRankValue()){
 				total_hands++;
+				insure_surrender=false;
 				//System.out.println("player is splitting");
 				Card card1 = player1.getCurrentHand().getCards().get(0);
 				Card card2 = player1.getCurrentHand().getCards().get(1);
@@ -187,19 +222,24 @@ public class Simulation extends Game{
 			System.exit(1);
 		}
 	}
-	
+	/**
+	 * Override in order to dont print information and to exit in case of error
+	 */
 	@Override
 	public void doubleDownAction(){
 		if((player1.getBalance()>=bet)&&(canUseSideRules()&&DoubleAllowed())){//AINDA TEM DE SE ACRESCENTAR
 			player1.subtractBalance(bet);
 			player1.getCurrentHand().setBet(2*bet);
+			player1.hands.get(player1.hands.indexOf(player1.current)).setBet(2*bet);
 			player1.getCurrentHand().addCard(shoe.takeCard());
 		}else {
 			System.out.println("2: illegal command");
 			System.exit(1);
 		}
 	}
-	
+	/**
+	 * Override in order to dont print information and to exit in case of error
+	 */
 	@Override
 	public void DHit(){
 		while(dealer.getCurrentHand().getPoints()<17){
@@ -212,7 +252,20 @@ public class Simulation extends Game{
 		}
 		//System.out.println("dealer stands");
 	}
-	
+	/**
+	 * gets command from followed strategy
+	 * @param bet_deal
+	 * @param bet_flag
+	 * @param maxBet
+	 * @param minBet
+	 * @param lastBet
+	 * @param acefive
+	 * @param hilo
+	 * @param basic
+	 * @param player
+	 * @param card - dealer visible card
+	 * @return
+	 */
 	public String strategyCommand(int bet_deal, 
 			boolean bet_flag, int maxBet, int minBet, int lastBet, 
 			Acefive acefive, HiLo hilo, Basic basic, Player player, Card card){
@@ -283,7 +336,6 @@ public class Simulation extends Game{
 			}
 	}
 	
-	
 	@Override
 	public String getCommandFromPlayer(){
 		String command=new String();
@@ -302,7 +354,9 @@ public class Simulation extends Game{
 		 
 		return command;
 	}
-	
+	/**
+	 * Override in order to dont print information and to exit in case of error
+	 */
 	@Override
 	public void SetResults(){
 		for(Hand h:player1.hands){//check if a players hand beats the dealer's hand
@@ -334,7 +388,9 @@ public class Simulation extends Game{
 		player1.setCurrentHand(null);
 		dealer.setCurrentHand(null);
 	}
-	
+	/**
+	 * Override in order to dont print information and to exit in case of error
+	 */
 	@Override
 	public void checkShuffle(){
 		if(shoe.calculateUsagePercentage()>=shoe.getShufflePercentage()){
@@ -345,8 +401,12 @@ public class Simulation extends Game{
 			s_number++;
 		}
 	}
-	
-	public void play(String mode, String initialBalance, String nshuffles){
+	/**
+	 * Similar but doesnt print information and to exit in case of error
+	 * @param initialBalance
+	 * @param nshuffles
+	 */
+	public void play(String initialBalance, String nshuffles){
 		String command = " ";
 		while(true){
 			if(checkEndSimulationMode(Integer.parseInt(nshuffles))){

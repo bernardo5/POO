@@ -21,7 +21,7 @@ public class Main {
 			if(shuffle<10||shuffle>100)System.exit(7);
 			//construct game for interactive mode
 			Game game=new Game(Integer.parseInt(args[4]), shuffle, Integer.parseInt(args[4]), Integer.parseInt(args[3]),Integer.parseInt(args[1]),Integer.parseInt(args[2]));
-			game.play(args[0], args[3]);
+			game.play(args[3]);
 		}
 		//debug mode
 		else if(args[0].equals("-d")){
@@ -31,7 +31,7 @@ public class Main {
 			}
 			//construct game for debug mode
 			Debug debug=new Debug(args[4], Integer.parseInt(args[3]), args[5], Integer.parseInt(args[1]),Integer.parseInt(args[2]));
-			debug.play(args[0], args[3]);
+			debug.play(args[3]);
 		}
 		//simulation mode
 		else if(args[0].equals("-s")){
@@ -41,7 +41,7 @@ public class Main {
 			}
 			//construct game for simulation mode
 			Simulation simulation=new Simulation(Integer.parseInt(args[3]), args[7], Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[1]),Integer.parseInt(args[2]));	
-			simulation.play(args[0], args[3], args[6]);
+			simulation.play(args[3], args[6]);
 		}else{
 			System.out.println("Bad input parameters");
 			System.exit(2);

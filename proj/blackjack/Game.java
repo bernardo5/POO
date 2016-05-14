@@ -20,8 +20,13 @@ public class Game {
 	int bet;
 	int bet_deal;
 	int total_hands;
+	boolean insure_surrender;
 	
-	
+	/**
+	 * Initializes all independent variables
+	 * @param minBet
+	 * @param maxBet
+	 */
 	public Game(int minBet, int maxBet){
 		s_number=0;
 		nshoe=0;
@@ -32,8 +37,17 @@ public class Game {
 		bet=minBet;
 		bet_deal=0;
 		total_hands=0;
+		insure_surrender=true;
 	}
-	
+	/**
+	 * Initializes game for interactive mode, which is the common game of Blackjack
+	 * @param nshoe - number of shoes
+	 * @param shuffle - shuffle percentage
+	 * @param numberDecks - number of decks in the shoe
+	 * @param balance - initial player balance 
+	 * @param minBet
+	 * @param maxBet
+	 */
 	public Game(int nshoe, int shuffle, int numberDecks, int balance, int minBet, int maxBet){
 		this(minBet, maxBet);
 		this.nshoe=nshoe;
@@ -44,28 +58,13 @@ public class Game {
 		player1 = new Player(balance, shoe.nCards()/52);
 		hilo=new HiLo(shoe.nCards()/52);
 	}
-	
-	boolean interactiveMode(String mode){
-		if(mode.equals("-i"))return true;
-		else return false;
-	} 
-	boolean debugMode(String mode){
-		if(mode.equals("-d"))return true;
-		else return false;
-	}
-	boolean simulationMode(String mode){
-		if(mode.equals("-s"))return true;
-		else return false;
-	}
-	
-	boolean checkEndSimulationMode(int nShuffles){
-		if(s_number==nShuffles)return true;
-		else return false;
-	}
-	
+	/**
+	 * Calculates the game statistics
+	 * @param initialbalance
+	 */
 	public void statistics(int initialbalance){
 		if(total_hands!=0)
-			System.out.println("BJ P/D " + ((float)player1.getblackjacks()/total_hands)+"/"+((float)dealer.getblackjacks()/total_hands));
+			System.out.println("BJ P/D " + ((float)player1.getblackjacks()/total_hands)+"/"+((float)dealer.getblackjacks()/dealer.roundsplayed()));
 		else System.out.println("Game has just started!");
 		if(player1.roundsplayed()!=0){
 			System.out.println("Win " + (float)player1.getwins()/player1.roundsplayed());
@@ -79,12 +78,17 @@ public class Game {
 		
 		System.out.println("Balance " + player1.getBalance() + " ("+ ((100*(float)(player1.getBalance()/initialbalance))-100) +"%)" );
 	}
-	
+	/**
+	 * checks if the mode allows shuffling
+	 * @return
+	 */
 	boolean allowedShuffling(){
 		if(shoe.getShufflePercentage()!=101)return true;
 		else return false;
 	}
-	
+	/**
+	 * Checks if the shoe usage percentage is enough to shuffle again
+	 */
 	public void checkShuffle(){
 		if(shoe.calculateUsagePercentage()>=shoe.getShufflePercentage()){
 			acefive.resetCount();
@@ -95,7 +99,10 @@ public class Game {
 		}
 	}
 	
-	//Input from Stdin
+	/**
+	 * 
+	 * @return - user typed command
+	 */
 		public String getplayerInput() /*throws IOException*/{
 			
 			try {
@@ -125,12 +132,14 @@ public class Game {
 	
 	public String getCommandFromPlayer(){
 		String command=new String();
-		command = getplayerInput();
-			
+		command = getplayerInput();	
 		return command;
 	}
-	
-	public void betAction(String command, int initialBalance){
+	/**
+	 * Places a bet corresponding to the typed command
+	 * @param command
+	 */
+	public void betAction(String command){
 		if(player1.getBalance()>=table.getMinBet() && bet_deal == 0){//Se forem dadas as cartas ja nao pode apostar e so pode apostar se tiver maior balance que a aposta minima
 			String[] bets = command.split(" ");
 			if(bets.length==1){
@@ -148,14 +157,20 @@ public class Game {
 			System.out.println("b: Illegal command");/*Can´t use bet*/
 		}
 	}
-	
+	/**
+	 * 
+	 * @return boolean saying if cards were dealt (true) or not (false)
+	 */
 	public boolean CardsDealt(){
 		if(bet_deal<2)return false;
 		else return true;
 	}
-	
+	/**
+	 * deals cards to dealer and player and if player has blackjack it assigns the result directly
+	 */
 	public void dealAction(){
 		if(bet_deal==1){
+			insure_surrender=true;
 			total_hands++;
 			player1.handnumber=1;
 			//distributeCards();
@@ -212,7 +227,10 @@ public class Game {
 		if(player1.getCurrentHand()!=null)return true;
 		else return false;
 	}
-	
+	/**
+	 * 
+	 * @return true if player doubled down in the last play
+	 */
 	public boolean doubledDown(){
 		if(player1.getCurrentHand().getBet()==2*bet)return true;
 		else return false;
@@ -223,17 +241,25 @@ public class Game {
 		command = getplayerInput();
 		return command;
 	}
-	
+	/**
+	 * deals another card to the player
+	 * @return true if there are no more hands to play, false if there are more hands to play
+	 */
 	public boolean hitAction(){
 		//Se fez double down so pode fazer hit uma vez
 		System.out.println("player hits");
+		insure_surrender=false;
 		Card a=shoe.takeCard();
 		acefive.cardRevealed(a);
 		hilo.cardRevealed(a);
 		if(player1.hit(a)){
 			if(player1.handnumber==1&&player1.hands.size()==1)
 				System.out.println("player's hand "+ player1.showCurrentHand()+"\nplayer busts");
-			else System.out.println("player's hand ["+player1.handnumber+"] "+player1.showCurrentHand());
+			else {
+				System.out.println("player's hand ["+player1.handnumber+"] "+player1.showCurrentHand());
+				System.out.println("player busts ["+player1.handnumber+"]");
+				System.out.println("player loses and is current balance is "+player1.getBalance());
+			}
 			dealer.win();
 			player1.SetLast("L");
 			
@@ -260,6 +286,10 @@ public class Game {
 		return false;
 	}
 	
+	/**
+	 * 
+	 * @return true if there are no more hands to play, false otherwise
+	 */
 	public boolean standAction(){
 		System.out.println("player stands"); 
 		if(player1.getNextHand()!=null){
@@ -293,6 +323,7 @@ public class Game {
 			//if cards have the same face value
 			if(player1.getCurrentHand().getCards().get(0).getRank().getRankValue() == player1.getCurrentHand().getCards().get(1).getRank().getRankValue()){
 				total_hands++;
+				insure_surrender=false;
 				System.out.println("player is splitting");
 				Card card1 = player1.getCurrentHand().getCards().get(0);
 				Card card2 = player1.getCurrentHand().getCards().get(1);
@@ -320,15 +351,23 @@ public class Game {
 		if((canUseSideRules())&&(player1.getBalance()>=bet)&&DoubleAllowed()){
 			player1.subtractBalance(bet);
 			player1.getCurrentHand().setBet(2*bet);
+			player1.hands.get(player1.hands.indexOf(player1.current)).setBet(2*bet);
 			player1.getCurrentHand().addCard(shoe.takeCard());
+			System.out.println("player current hand: "+player1.current.toString());
 		}else System.out.println("2: illegal command");
 	}
-	
+	/**
+	 * 
+	 * @return true if player still has hands that did not bust
+	 */
 	public boolean playerDidNotBust(){
 		if((dealer.getCurrentHand()!=null)&&(player1.hands.size()>0))return true;
 		else return false;
 	}
-	
+	/**
+	 * 
+	 * @return true if dealer has Blackjack
+	 */
 	public boolean DBlackjack(){
 		if(dealer.getCurrentHand().getPoints()==21)return true;
 		else return false;
@@ -352,17 +391,19 @@ public class Game {
 		}
 		System.out.println("dealer stands");
 	}
-	
+	/**
+	 * Pays the money accordingly to the result
+	 */
 	public void SetResults(){
 		for(Hand h:player1.hands){//check if a players hand beats the dealer's hand
 			if(h.getPoints()==21&&h.getCards().size()==2)System.out.println("blackjack!!");
 			if((h.getPoints()>dealer.getCurrentHand().getPoints())||(dealer.getCurrentHand().getPoints()>21)){
-				player1.addBalance(2*bet);
+				player1.addBalance(2*h.getBet());
 				player1.win();System.out.println("player wins and his current balance is "+player1.getBalance());
 				dealer.lost();
 				player1.SetLast("W");
 			}else if(h.getPoints()==dealer.getCurrentHand().getPoints()){
-				player1.addBalance(bet);
+				player1.addBalance(h.getBet());
 				player1.draw();System.out.println("player pushes and his current balance is "+player1.getBalance());
 				dealer.draw();
 				player1.SetLast("D");
@@ -384,7 +425,11 @@ public class Game {
 		dealer.setCurrentHand(null);
 	}
 	
-	public void play(String mode, String initialBalance/*, String nshuffles*/){
+	/**
+	 * Interactive mode part
+	 * @param initialBalance
+	 */
+	public void play(String initialBalance){
 		String command = " ";
 		while(true){
 			if(allowedShuffling()) checkShuffle();
@@ -396,7 +441,7 @@ public class Game {
 				command=getCommandFromPlayer();
 				
 				if(command.startsWith("b")){//Bet
-					betAction(command, Integer.parseInt(initialBalance));
+					betAction(command);
 				}else if(command.equals("d")){//Deal
 					dealAction();
 				}else if(command.equals("$")){//Current balance
@@ -438,8 +483,9 @@ public class Game {
 					statistics(Integer.parseInt(initialBalance));
 				}else if(command.equals("q")){
 					System.exit(0);
-				}else if(command.equals("i")&&canUseSideRules()){
-					//System.out.println("insurance");
+				}else if(command.equals("i")&&canUseSideRules()&&player1.getBalance()>=bet){
+					System.out.println("player is insuring");
+					player1.subtractBalance(bet);
 					player1.changeInsurance(true);
 				}else System.out.println("Illegal command");			
 			}
