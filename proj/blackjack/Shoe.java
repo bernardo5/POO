@@ -119,9 +119,11 @@ public class Shoe {
 		    br.close();
 		    
 	     }catch(FileNotFoundException e){
-	    	 e.printStackTrace();
+	    	 System.out.println("File not found");
+	    	 System.exit(1);
 	     }catch(IOException e){
-            e.printStackTrace();
+	    	 System.out.println("Cannot open file");
+	    	 System.exit(1);
 	     } 
 	}
 	
