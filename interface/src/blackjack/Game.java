@@ -7,37 +7,40 @@ import java.util.Scanner;
 
 public class Game {
 	
-	Player player1;
-	Shoe shoe;
-	Table table;
-	Dealer dealer;
-	Acefive acefive;
-	Basic basic;
-	HiLo hilo;
+	protected Player player1;
+	protected Shoe shoe;
+	protected Table table;
+	protected Dealer dealer;
+	protected Acefive acefive;
+	protected Basic basic;
+	protected HiLo hilo;
 	
-	int s_number;
-	int nshoe;
-	int bet;
-	int bet_deal;
-	int total_hands;
-	boolean insure_surrender;
+	protected int s_number;
+	protected int bet;
+	protected int bet_deal;
+	protected int total_hands;
+	protected boolean insure_surrender;
 	
 	/**
 	 * Initializes all independent variables
 	 * @param minBet
 	 * @param maxBet
 	 */
-	public Game(int minBet, int maxBet){
+	
+	public Game(){
 		s_number=0;
-		nshoe=0;
-		table = new Table(minBet, maxBet);
 		acefive=new Acefive();
 		basic=new Basic();
 		dealer = new Dealer();
-		bet=minBet;
 		bet_deal=0;
 		total_hands=0;
 		insure_surrender=true;
+	}
+	
+	public Game(int minBet, int maxBet){
+		this();
+		table = new Table(minBet, maxBet);
+		bet=minBet;
 	}
 	/**
 	 * Initializes game for interactive mode, which is the common game of Blackjack
@@ -48,9 +51,8 @@ public class Game {
 	 * @param minBet
 	 * @param maxBet
 	 */
-	public Game(int nshoe, int shuffle, int numberDecks, int balance, int minBet, int maxBet){
+	public Game(int shuffle, int numberDecks, int balance, int minBet, int maxBet){
 		this(minBet, maxBet);
-		this.nshoe=nshoe;
 		shoe = new Shoe(numberDecks, shuffle);
 		shoe.populateShoe();
 		shoe.shuffleShoe();
@@ -82,7 +84,7 @@ public class Game {
 	 * checks if the mode allows shuffling
 	 * @return
 	 */
-	boolean allowedShuffling(){
+	protected boolean allowedShuffling(){
 		if(shoe.getShufflePercentage()!=101)return true;
 		else return false;
 	}
@@ -425,6 +427,27 @@ public class Game {
 		dealer.setCurrentHand(null);
 	}
 	
+	public Player getPlayer(){
+		return player1;
+	}
+	
+	public Dealer getDealer(){
+		return dealer;
+	}
+	
+	public String actionAdvices(boolean action){
+		if(action)return("According to Basic strategy: " + basic.advice(player1.getCurrentHand(),dealer.getVisibleCard())+"\n"+
+		"According to Ace-Five strategy: " + acefive.advice(player1.getCurrentHand(),dealer.getVisibleCard())+"\n"+
+		"According to Hi-Low strategy: " + hilo.advice(player1.getCurrentHand(),dealer.getVisibleCard()));
+		else return ("According to Ace-Five strategy: " + acefive.advice());
+	}
+	
+	public void insureAction(){
+		System.out.println("player is insuring");
+		player1.subtractBalance(bet);
+		player1.changeInsurance(true);
+	}
+	
 	/**
 	 * Interactive mode part
 	 * @param initialBalance
@@ -449,7 +472,7 @@ public class Game {
 				}else if(command.equals("q")){
 					System.exit(0);
 				}else if(command.equals("ad")){
-						System.out.println("According to Ace-Five strategy: " + acefive.advice());
+					actionAdvices(false);
 				}else if(command.equals("st")){
 					statistics(Integer.parseInt(initialBalance));
 				}else System.out.println("Illegal command");
@@ -476,17 +499,13 @@ public class Game {
 				}else if(command.equals("2")){//only on an opening hand worth 9,10,11 and always doubles the bet;take only one more card from the dealer
 					doubleDownAction();
 				}else if(command.equals("ad")){
-					System.out.println("According to Basic strategy: " + basic.advice(player1.getCurrentHand(),dealer.getVisibleCard()));
-					System.out.println("According to Ace-Five strategy: " + acefive.advice(player1.getCurrentHand(),dealer.getVisibleCard()));
-					System.out.println("According to Hi-Low strategy: " + hilo.advice(player1.getCurrentHand(),dealer.getVisibleCard()));
+					System.out.println(actionAdvices(true));
 				}else if(command.equals("st")){
 					statistics(Integer.parseInt(initialBalance));
 				}else if(command.equals("q")){
 					System.exit(0);
 				}else if(command.equals("i")&&canUseSideRules()&&player1.getBalance()>=bet){
-					System.out.println("player is insuring");
-					player1.subtractBalance(bet);
-					player1.changeInsurance(true);
+					insureAction();
 				}else System.out.println("Illegal command");			
 			}
 			//-----------------Dealer-------------------------------

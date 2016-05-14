@@ -20,7 +20,7 @@ public class Main {
 			int shuffle=Integer.parseInt(args[5]);
 			if(shuffle<10||shuffle>100)System.exit(7);
 			//construct game for interactive mode
-			Game game=new Game(Integer.parseInt(args[4]), shuffle, Integer.parseInt(args[4]), Integer.parseInt(args[3]),Integer.parseInt(args[1]),Integer.parseInt(args[2]));
+			Game game=new Game(shuffle, Integer.parseInt(args[4]), Integer.parseInt(args[3]),Integer.parseInt(args[1]),Integer.parseInt(args[2]));
 			game.play(args[3]);
 		}
 		//debug mode
