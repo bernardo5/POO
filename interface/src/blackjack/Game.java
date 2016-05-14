@@ -17,7 +17,7 @@ public class Game {
 	
 	protected int s_number;
 	protected int bet;
-	protected int bet_deal;
+	private int bet_deal;
 	protected int total_hands;
 	protected boolean insure_surrender;
 	
@@ -32,7 +32,7 @@ public class Game {
 		acefive=new Acefive();
 		basic=new Basic();
 		dealer = new Dealer();
-		bet_deal=0;
+		setBet_deal(0);
 		total_hands=0;
 		insure_surrender=true;
 	}
@@ -142,17 +142,17 @@ public class Game {
 	 * @param command
 	 */
 	public void betAction(String command){
-		if(player1.getBalance()>=table.getMinBet() && bet_deal == 0){//Se forem dadas as cartas ja nao pode apostar e so pode apostar se tiver maior balance que a aposta minima
+		if(player1.getBalance()>=table.getMinBet() && getBet_deal() == 0){//Se forem dadas as cartas ja nao pode apostar e so pode apostar se tiver maior balance que a aposta minima
 			String[] bets = command.split(" ");
 			if(bets.length==1){
 				player1.subtractBalance(bet);
-				bet_deal++;
+				setBet_deal(getBet_deal() + 1);
 			}else if(bets.length==2){
 				//System.out.println(bets[1]+" bets[1]");
 				if(Integer.parseInt(bets[1])<=player1.getBalance()){
 					bet=Integer.parseInt(bets[1]);
 					player1.subtractBalance(bet);
-					bet_deal++;
+					setBet_deal(getBet_deal() + 1);
 				}else System.out.println("b: Illegal command-menor balance");//< balance
 			}else System.out.println("b: Illegal command-mais 2 args");//more than 2 arguments
 		}else{
@@ -164,14 +164,43 @@ public class Game {
 	 * @return boolean saying if cards were dealt (true) or not (false)
 	 */
 	public boolean CardsDealt(){
-		if(bet_deal<2)return false;
+		if(getBet_deal()<2)return false;
 		else return true;
 	}
+	
+	public void dealWithBlackJack(){
+		if(dealer.getVisibleCard().getRank()!=Rank.ACE){
+			System.out.println("blackjack!!");
+			System.out.println("dealer's hand "+dealer.showCurrentHandAll());
+			player1.blackjack();
+			if(dealer.getCurrentHand().getPoints()==21){//dealer also has blackjack
+				player1.setBalance(player1.getBalance()+bet);
+				dealer.blackjack();
+				player1.SetLast("Draw");
+				//draw
+				player1.draw();System.out.println("player pushes and his current balance is "+player1.getBalance());
+				dealer.draw();
+			}else{
+				//player won-blackjack pays 3 to 2
+				dealer.lost();
+				player1.addBalance((float)(1.5*bet+bet));
+				player1.SetLast("W");
+				System.out.println("player wins and his current balance is "+player1.getBalance());
+			}
+			//System.out.println("end of turn");
+			//collect the cards
+			player1.handnumber=0;
+			player1.hands.clear();
+			player1.setCurrentHand(null);
+			dealer.setCurrentHand(null);
+		}//else it is possible to insure and do other possibilities
+	}
+	
 	/**
 	 * deals cards to dealer and player and if player has blackjack it assigns the result directly
 	 */
-	public void dealAction(){
-		if(bet_deal==1){
+	public boolean dealAction(){
+		if(getBet_deal()==1){
 			insure_surrender=true;
 			total_hands++;
 			player1.handnumber=1;
@@ -195,34 +224,11 @@ public class Game {
 			System.out.println("player's hand "+ player1.showCurrentHand());
 
 			if(player1.hands.getFirst().getPoints()==21){//blackjack
-				if(dealer.getVisibleCard().getRank()!=Rank.ACE){
-					System.out.println("blackjack!!");
-					System.out.println("dealer's hand "+dealer.showCurrentHandAll());
-					player1.blackjack();
-					if(dealer.getCurrentHand().getPoints()==21){//dealer also has blackjack
-						player1.setBalance(player1.getBalance()+bet);
-						dealer.blackjack();
-						player1.SetLast("Draw");
-						//draw
-						player1.draw();System.out.println("player pushes and his current balance is "+player1.getBalance());
-						dealer.draw();
-					}else{
-						//player won-blackjack pays 3 to 2
-						dealer.lost();
-						player1.addBalance((float)(1.5*bet+bet));
-						player1.SetLast("W");
-						System.out.println("player wins and his current balance is "+player1.getBalance());
-					}
-					//System.out.println("end of turn");
-					//collect the cards
-					player1.handnumber=0;
-					player1.hands.clear();
-					player1.setCurrentHand(null);
-					dealer.setCurrentHand(null);
-				}//else it is possible to insure and do other possibilities
+				return true;
 			}
-			bet_deal++;
+			setBet_deal(getBet_deal() + 1);
 		}else System.out.println("d: illegal command");
+		return false;
 	}
 	
 	public boolean playableHand(){
@@ -391,7 +397,8 @@ public class Game {
 			dealer.hit(card);
 			System.out.println("dealer's hand "+ dealer.showCurrentHandAll());
 		}
-		System.out.println("dealer stands");
+		if(dealer.current.getPoints()<=21)System.out.println("dealer stands");
+		else System.out.println("dealer busts");
 	}
 	/**
 	 * Pays the money accordingly to the result
@@ -466,7 +473,7 @@ public class Game {
 				if(command.startsWith("b")){//Bet
 					betAction(command);
 				}else if(command.equals("d")){//Deal
-					dealAction();
+					if(dealAction())dealWithBlackJack();
 				}else if(command.equals("$")){//Current balance
 					System.out.println("player current balance is "+ player1.getBalance());
 				}else if(command.equals("q")){
@@ -477,7 +484,7 @@ public class Game {
 					statistics(Integer.parseInt(initialBalance));
 				}else System.out.println("Illegal command");
 			}
-			bet_deal=0;
+			setBet_deal(0);
 			//---------------------After Bet and Deal-------------------------------
 			while(playableHand()){
 				//Check if player doubled down
@@ -517,5 +524,13 @@ public class Game {
 			}
 			
 		}
+	}
+
+	public int getBet_deal() {
+		return bet_deal;
+	}
+
+	public void setBet_deal(int bet_deal) {
+		this.bet_deal = bet_deal;
 	}
 }

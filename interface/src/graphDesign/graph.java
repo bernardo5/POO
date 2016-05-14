@@ -29,7 +29,7 @@ public class graph{
 	private JFrame frame;
 	private JTextField textField;
 	private HashMap<String, Image> cards;
-	boolean action=false;
+	boolean action;
 	Game game;
 	JPanel panel, panel_1;
 	
@@ -54,6 +54,7 @@ public class graph{
 	 * Create the application.
 	 */
 	public graph() {
+		action=false;
 		initialize();
 		try {
 			cards=new HashMap<String, Image>(53);
@@ -188,85 +189,169 @@ public class graph{
 		panel_1.setBounds(10, 118, 514, 114);
 		panel_1.setBackground(new Color(0,100,0));
 		
-		
+		JButton btnStand = new JButton("Stand");
+		JButton btnSplit = new JButton("Split");
+		JButton btnDouble = new JButton("Double");
+		JButton btnInsurance = new JButton("Insurance");
+		JButton btnSurrender = new JButton("Surrender");
+		JButton btnDeal = new JButton("Deal");
+		JButton btnBet = new JButton("Bet");
 		
 		JButton btnHit = new JButton("Hit");
 		btnHit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				game.hitAction();
-				ShowGameCards();
+				if(game.hitAction()){
+					JOptionPane.showMessageDialog(frame,
+							"Your hand busted");
+					if(game.playerDidNotBust()){
+						if(game.DBlackjack()) game.CheckAndPayIns();
+						
+						game.DHit();
+						game.SetResults();
+						
+					}
+					btnHit.setEnabled(false);
+					btnStand.setEnabled(false);
+					btnSplit.setEnabled(false);
+					btnDouble.setEnabled(false);
+					btnInsurance.setEnabled(false);
+					btnSurrender.setEnabled(false);
+					btnDeal.setEnabled(false);
+					btnBet.setEnabled(true);
+					ShowDealerCards(true);
+					action=false;
+				}else{
+					ShowGameCards();
+					btnDouble.setEnabled(false);
+					btnInsurance.setEnabled(false);
+					btnSurrender.setEnabled(false);
+				}
+				
+				
 			}
 		});
 		btnHit.setBounds(535, 175, 89, 23);
+		btnHit.setEnabled(false);
 		frame.getContentPane().add(btnHit);
 		
-		JButton btnNewButton = new JButton("Deal");
-		btnNewButton.addActionListener(new ActionListener() {
+		
+		btnDeal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				game.dealAction();
-				ShowGameCards();
+				if(game.dealAction()){
+					ShowGameCards();
+					game.dealWithBlackJack();
+					btnHit.setEnabled(false);
+					btnStand.setEnabled(false);
+					btnSplit.setEnabled(false);
+					btnDouble.setEnabled(false);
+					btnInsurance.setEnabled(false);
+					btnSurrender.setEnabled(false);
+					btnDeal.setEnabled(false);
+					btnBet.setEnabled(true);
+					ShowDealerCards(true);
+				}else{
+					ShowGameCards();
+					btnHit.setEnabled(true);
+					btnStand.setEnabled(true);
+					btnSplit.setEnabled(true);
+					btnDouble.setEnabled(true);
+					btnInsurance.setEnabled(true);
+					btnSurrender.setEnabled(true);
+					btnDeal.setEnabled(false);
+				}
+				
+				game.setBet_deal(0);
 			}
 		});
-		btnNewButton.setBounds(535, 499, 89, 23);
-		frame.getContentPane().add(btnNewButton);
+		btnDeal.setBounds(535, 499, 89, 23);
+		btnDeal.setEnabled(false);
+		frame.getContentPane().add(btnDeal);
 		
-		JButton btnNewButton_1 = new JButton("Bet");
-		btnNewButton_1.addActionListener(new ActionListener() {
+		
+		btnBet.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				game.betAction(textField.getText());
+				btnDeal.setEnabled(true);
+				btnBet.setEnabled(false);
+				DeleteHands();
+				action=true;
 			}
 		});
-		btnNewButton_1.setBounds(535, 446, 89, 23);
-		frame.getContentPane().add(btnNewButton_1);
+		btnBet.setBounds(535, 446, 89, 23);
+		frame.getContentPane().add(btnBet);
 		
 		textField = new JTextField();
 		textField.setBounds(535, 468, 89, 20);
 		frame.getContentPane().add(textField);
 		textField.setColumns(10);
 		
-		JButton btnStand = new JButton("Stand");
+		
 		btnStand.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				game.standAction();
+				if(game.standAction()){
+					if(game.playerDidNotBust()){
+						if(game.DBlackjack()) game.CheckAndPayIns();
+						
+						game.DHit();
+						ShowDealerCards(true);
+						action=false;
+						game.SetResults();
+					}
+					btnHit.setEnabled(false);
+					btnStand.setEnabled(false);
+					btnSplit.setEnabled(false);
+					btnDouble.setEnabled(false);
+					btnInsurance.setEnabled(false);
+					btnSurrender.setEnabled(false);
+					btnDeal.setEnabled(false);
+					btnBet.setEnabled(true);
+					
+				}
+				
 			}
 		});
 		btnStand.setBounds(535, 209, 89, 23);
+		btnStand.setEnabled(false);
 		frame.getContentPane().add(btnStand);
 		
-		JButton btnSplit = new JButton("Split");
+		
 		btnSplit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				game.splitAction();
 			}
 		});
+		btnSplit.setEnabled(false);
 		btnSplit.setBounds(535, 243, 89, 23);
 		frame.getContentPane().add(btnSplit);
 		
-		JButton btnDouble = new JButton("Double");
+		
 		btnDouble.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				game.doubleDownAction();
 			}
 		});
 		btnDouble.setBounds(535, 277, 89, 23);
+		btnDouble.setEnabled(false);
 		frame.getContentPane().add(btnDouble);
 		
-		JButton btnInsurance = new JButton("Insurance");
+		
 		btnInsurance.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				game.insureAction();
 			}
 		});
 		btnInsurance.setBounds(535, 311, 89, 23);
+		btnInsurance.setEnabled(false);
 		frame.getContentPane().add(btnInsurance);
 		
-		JButton btnSurrender = new JButton("Surrender");
+		
 		btnSurrender.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				game.surrenderAction();
 			}
 		});
 		btnSurrender.setBounds(535, 345, 89, 23);
+		btnSurrender.setEnabled(false);
 		frame.getContentPane().add(btnSurrender);
 		
 		JButton btnNewButton_2 = new JButton("Advice");
@@ -346,7 +431,7 @@ public class graph{
 			JLabel lblCard = new JLabel("");
 			lblCard.setIcon(new ImageIcon(cards.get(c.toString())));
 			panel.add(lblCard);
-			System.out.println("Entrou no for do jogador");
+			//System.out.println("Entrou no for do jogador");
 		}
 		panel.revalidate();
 		panel.repaint();
@@ -365,6 +450,10 @@ public class graph{
 	public void DeleteHands(){
 		panel.removeAll();
 		panel_1.removeAll();
+		panel_1.revalidate();
+		panel_1.repaint();
+		panel.revalidate();
+		panel.repaint();
 	}
 	
 	public void ShowDealerCards(boolean end){
@@ -372,7 +461,9 @@ public class graph{
 		for(Card c:game.getDealer().getCurrentHand().getCards()){
 			JLabel lblCard = new JLabel("");
 			lblCard.setIcon(new ImageIcon(cards.get(c.toString())));
-			panel.add(lblCard);
+			panel_1.add(lblCard);
+			panel_1.revalidate();
+			panel_1.repaint();
 		}
 	}
 }

@@ -31,17 +31,17 @@ public class Simulation extends Game{
 	 * @param initialBalance
 	 */
 	public void betAction(String command, int initialBalance){
-		if(player1.getBalance()>=table.getMinBet() && bet_deal == 0){//Se forem dadas as cartas ja nao pode apostar e so pode apostar se tiver maior balance que a aposta minima
+		if(player1.getBalance()>=table.getMinBet() && getBet_deal() == 0){//Se forem dadas as cartas ja nao pode apostar e so pode apostar se tiver maior balance que a aposta minima
 			String[] bets = command.split(" ");
 			if(bets.length==1){
 				player1.subtractBalance(bet);
-				bet_deal++;
+				setBet_deal(getBet_deal() + 1);
 			}else if(bets.length==2){
 				//System.out.println(bets[1]+" bets[1]");
 				if(Integer.parseInt(bets[1])<=player1.getBalance()){
 					bet=Integer.parseInt(bets[1]);
 					player1.subtractBalance(bet);
-					bet_deal++;
+					setBet_deal(getBet_deal() + 1);
 				}else{
 					System.out.println("b: Illegal command");//< balance
 					System.exit(1);
@@ -56,12 +56,43 @@ public class Simulation extends Game{
 			System.exit(1);
 		}
 	}
+	@Override
+	public void dealWithBlackJack(){
+		if(dealer.getVisibleCard().getRank()!=Rank.ACE){
+			//System.out.println("blackjack!!");
+			//System.out.println("dealer's hand "+dealer.showCurrentHandAll());
+			player1.blackjack();
+			if(dealer.getCurrentHand().getPoints()==21){//dealer also has blackjack
+				player1.setBalance(player1.getBalance()+bet);
+				dealer.blackjack();
+				//player1.SetLast("Draw");
+				//draw
+				player1.draw();
+				dealer.draw();
+			}else{
+				//player won-blackjack pays 3 to 2
+				dealer.lost();
+				player1.addBalance((float)(1.5*bet+bet));
+				player1.SetLast("W");
+				//System.out.println("player wins and his current balance is "+player1.getBalance());
+			}
+			//System.out.println("end of turn");
+			//collect the cards
+			player1.handnumber=0;
+			player1.hands.clear();
+			player1.setCurrentHand(null);
+			dealer.setCurrentHand(null);
+		}//else it is possible to insure and do other possibilities
+	}
+	
+	
+	
 	/**
 	 *  Override in order to dont print information and to exit in case of error
 	 */
 	@Override
-	public void dealAction(){
-		if(bet_deal==1){
+	public boolean dealAction(){
+		if(getBet_deal()==1){
 			insure_surrender=true;
 			total_hands++;
 			player1.handnumber=1;
@@ -84,37 +115,14 @@ public class Simulation extends Game{
 			//System.out.println("player's hand "+ player1.showCurrentHand());
 
 			if(player1.hands.getFirst().getPoints()==21){//blackjack
-				if(dealer.getVisibleCard().getRank()!=Rank.ACE){
-					//System.out.println("blackjack!!");
-					//System.out.println("dealer's hand "+dealer.showCurrentHandAll());
-					player1.blackjack();
-					if(dealer.getCurrentHand().getPoints()==21){//dealer also has blackjack
-						player1.setBalance(player1.getBalance()+bet);
-						dealer.blackjack();
-						//player1.SetLast("Draw");
-						//draw
-						player1.draw();
-						dealer.draw();
-					}else{
-						//player won-blackjack pays 3 to 2
-						dealer.lost();
-						player1.addBalance((float)(1.5*bet+bet));
-						player1.SetLast("W");
-						//System.out.println("player wins and his current balance is "+player1.getBalance());
-					}
-					//System.out.println("end of turn");
-					//collect the cards
-					player1.handnumber=0;
-					player1.hands.clear();
-					player1.setCurrentHand(null);
-					dealer.setCurrentHand(null);
-				}//else it is possible to insure and do other possibilities
+				return true;
 			}
-			bet_deal++;
+			setBet_deal(getBet_deal() + 1);
 		}else {
 			System.out.println("d: illegal command");
 			System.exit(1);
 		}
+		return false;
 	}
 	/**
 	 *  Override in order to dont print information and to exit in case of error
@@ -339,7 +347,7 @@ public class Simulation extends Game{
 	@Override
 	public String getCommandFromPlayer(){
 		String command=new String();
-			command=strategyCommand(bet_deal, true,table.getMaxBet(), table.getMinBet(), bet,
+			command=strategyCommand(getBet_deal(), true,table.getMaxBet(), table.getMinBet(), bet,
 					acefive, hilo, basic, player1, null);
 		return command;
 	}
@@ -349,7 +357,7 @@ public class Simulation extends Game{
 	public String getPlayCommandFromPlayer(){
 		String command=new String();
 		
-		command=strategyCommand(bet_deal, false, table.getMaxBet(), table.getMinBet(), bet,
+		command=strategyCommand(getBet_deal(), false, table.getMaxBet(), table.getMinBet(), bet,
 				acefive, hilo, basic, player1, dealer.getVisibleCard());
 		 
 		return command;
@@ -433,7 +441,7 @@ public class Simulation extends Game{
 					System.exit(-1);
 				}
 			}
-			bet_deal=0;
+			setBet_deal(0);
 			//---------------------After Bet and Deal-------------------------------
 			while(playableHand()){
 				//Check if player doubled down
