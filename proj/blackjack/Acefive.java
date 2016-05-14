@@ -3,15 +3,21 @@ package blackjack;
 public class Acefive implements ActionStrategy,BetStrategy{
 
 	private int count = 0;
-	
+	/**
+	 * Depending on the card shown refreshes the count variable
+	 * @param card - new visible card on game
+	 */
 	public void cardRevealed(Card card){
 		if(card.getValue()==5) count++;
 		if(card.getValue()==11) count--;
 	}
-	
+	/**
+	 * At the end of each shuffle the counting is reset
+	 */
 	public void resetCount(){
 		count=0;
 	}
+	
 	
 	@Override
 	public String advice(Hand player_hand, Card dealer_card) {
@@ -25,7 +31,7 @@ public class Acefive implements ActionStrategy,BetStrategy{
 	@Override
 	public String advice() {
 		if(count>=2)return "double last bet";
-			else /*if(count<=1)*/ return "min_bet";
+			else return "min_bet";
 	}
 
 }

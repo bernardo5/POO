@@ -7,11 +7,17 @@ public class Hand {
 	private int points;
 	private int bet;
 	
-	//Constructors
 	public Hand(){
 		this.cards= new LinkedList<Card>();
 		this.points=0;
 	}
+	
+	/**
+	 * 
+	 * @param card1
+	 * @param card2
+	 */
+	
 	public Hand(Card card1, Card card2){
 		this();
 		this.cards.add(card1);
@@ -19,6 +25,13 @@ public class Hand {
 		updatePoints();
 		this.bet=0;
 	}
+	
+	/**
+	 * 
+	 * @param card1
+	 * @param card2
+	 * @param bet
+	 */
 	public Hand(Card card1, Card card2,int bet){
 		this();
 		this.cards.add(card1);
@@ -27,7 +40,7 @@ public class Hand {
 		this.bet=bet;
 	}
 	
-	//Getters
+	
 	public LinkedList<Card> getCards(){
 		return cards;
 	}
@@ -41,12 +54,15 @@ public class Hand {
 		return cards.size();
 	}
 	
-	//Setters
+	
 	public void setBet(int bet) {
 		this.bet = bet;
 	}
 
-	//Methods
+	/**
+	 * Updates hand points - counts the hand points and if it exceeds 21 and the hand has aces,
+	 * makes them count only one point
+	 */
 	public void updatePoints(){
 		int sum=0;
 		int value=0;
@@ -63,7 +79,10 @@ public class Hand {
         }
 		this.points=sum;
 	}
-	
+	/**
+	 * 
+	 * @param card - card to add
+	 */
 	public void addCard(Card card){
 		this.cards.add(card);
 		this.updatePoints();

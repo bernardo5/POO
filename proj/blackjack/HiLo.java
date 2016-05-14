@@ -13,12 +13,19 @@ public class HiLo implements ActionStrategy{
 		this.nbcardsrevealed=0;
 	}
 	//Methods
+	
+	/**
+	 * Depending on the card revealed, refreshes the count
+	 * @param card
+	 */
 	public void cardRevealed(Card card){
 		if(card.getValue()<7 &&card.getValue()>2) runningcount += 1;
 		else if(card.getValue()<=11 &&card.getValue()>9) runningcount -= 1;
 		nbcardsrevealed++;
 	}
-	
+	/**
+	 * At the end of each shuffle the counting is reset
+	 */
 	public void restartRunningCount(){
 		runningcount=0;
 	}

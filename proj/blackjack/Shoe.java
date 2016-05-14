@@ -14,14 +14,21 @@ public class Shoe {
 		return sequence.size();
 	}
 	
-	//Constructor for interactive mode
+	/**
+	 * Constructor for interactive and simulation modes 
+	 * @param numberDecks
+	 * @param percentage - for shuffling
+	 */
 	public Shoe(int numberDecks, int percentage){
 		this.sequence=new ArrayList<Card>(numberDecks*52);
 		this.nDecks=numberDecks;
 		this.shufflePercentage=percentage;
 		this.nbNextCard=0;
 	}
-	//Constructor for debug mode
+	/**
+	 * Constructor for debug mode
+	 * shuffle percentage is higher than 100% because we dont want to shuffle the shoe
+	 */
 	public Shoe(){
 		this.sequence=new ArrayList<Card>();//size depends on file with the cards
 		this.shufflePercentage=101;//dont want to shuffle
@@ -37,7 +44,7 @@ public class Shoe {
 	public float calculateUsagePercentage(){//percentage of shoe played before shuffle
 		if(this.shufflePercentage==101)return 0   ; 
 		else
-		return 100*((/*(nDecks*52)-*/(float)(nbNextCard+1))/(nDecks*52));
+		return 100*(((float)(nbNextCard+1))/(nDecks*52));
 	}
 	
 	public Card takeCard(){

@@ -9,21 +9,30 @@ public class Player extends Person{
 	protected LinkedList<Hand> hands = new LinkedList<Hand>();
 	private float balance;
 	private boolean insurance;
-	//private int prevBet;
 	private String Last;
 	int handnumber;
-	
 	private String followedStretegy;
 	
-	//Constructors
+	/**
+	 * Constructor for interactive mode
+	 * @param balance
+	 * @param ncards
+	 */
 	public Player(int balance, int ncards) {
 		super();
 		this.setBalance(balance);
 		this.insurance=false;
 		this.commands=null;
 		handnumber=0;
+		Last="first";
 	}
 	
+	/**
+	 * Constructor for simulation mode
+	 * @param balance
+	 * @param ncards
+	 * @param strategy
+	 */
 	public Player(int balance, int ncards, String strategy) {
 		super();
 		this.setBalance(balance);
@@ -33,7 +42,12 @@ public class Player extends Person{
 		Last="first";
 		handnumber=0;
 	}
-	
+	/**
+	 * Constructor for debug mode
+	 * @param balance
+	 * @param file
+	 * @param ncards
+	 */
 	public Player(int balance,String file, int ncards) {
 		super();
 		this.setBalance(balance);
@@ -42,12 +56,21 @@ public class Player extends Person{
 		ReadFile(file);
 		//System.out.println(commands);
 		handnumber=0;
+		Last="first";
 	}
 	
+	/**
+	 * 
+	 * @param l - last game result
+	 */
 	public void SetLast(String l){
 		this.Last=l;
 	}
 	
+	/**
+	 * 
+	 * @return - last game result
+	 */
 	public String getLast(){
 		return this.Last;
 	}
@@ -60,6 +83,11 @@ public class Player extends Person{
 	public float getBalance() {
 		return balance;
 	}
+	
+	/**
+	 * 
+	 * @return if the player has insured
+	 */
 	public boolean getInsurance(){
 		return insurance;
 	}
@@ -78,27 +106,15 @@ public class Player extends Person{
 		this.insurance=insurance;
 	}
 	
-	//Methods
-	/*public String showHands(){
-		//player may have more than one hand and shows all cards
-		String game=new String();
-		int i=1;
-		if(hands.size()==1){
-			game = "Hand : "+hands.toString()+"\n";
-		}else{
-			for(Hand aux:hands){
-				game+="Hand "+ i+": "+aux.toString()+"\n";
-				i++;
-			}
-		}
-		return game;
-	}*/
 	
 	public void loses(){
 		super.lost();
 	}
 	
-
+/**
+ * gets user commands for debug mode and places them in a linked list (commands)
+ * @param file
+ */
 	public void ReadFile(String file){
 		String line;
 		try{
@@ -116,7 +132,10 @@ public class Player extends Person{
            e.printStackTrace();
 	    } 
 	}
-
+/**
+ * 
+ * @return player next hand, in case of previous split, or null if he has no more hands to play
+ */
 	public Hand getNextHand(){
 		int indexCurrentHand=hands.indexOf(this.getCurrentHand());
 		if((indexCurrentHand!=-1)&&((indexCurrentHand+1)<hands.size()))

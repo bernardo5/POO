@@ -1,6 +1,10 @@
 package blackjack;
 
 public class Basic implements ActionStrategy{
+	/**
+	 * Depending on the players hand and the dealers visible card gives the better 
+	 * command according to the basic strategy
+	 */
 	@Override
 	public String advice(Hand player_hand,Card dealer_card) {
 		if (player_hand.getSizeofCards() == 2 && 

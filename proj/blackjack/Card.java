@@ -62,17 +62,22 @@ public class Card {
 		this.suit = suit;
 	}
 	
-	//Getters
+	
 	public Rank getRank(){
 		return this.rank;
 	}
+	
 	public Suit getSuit(){
 		return this.suit;
 	}
+	
 	public int getValue(){
 		return this.getRank().getRankValue();
 	}
-
+	
+	/**
+	 * Redefines the toString method to print the card according to assignment paper
+	 */
 	@Override
 	public String toString() {
 		String Card=Integer.toString(this.getValue());

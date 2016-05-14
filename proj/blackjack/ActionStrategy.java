@@ -43,5 +43,11 @@ public interface ActionStrategy extends Strategy{
 								   {"s","s","s","s","s","s","s","s","s","s"},//10,10
 								   {"p","p","p","p","p","p","p","p","p","p"} //A,A
 								};
+		/**
+		 * 
+		 * @param hand - player hand
+		 * @param card - visible card of the dealer
+		 * @return advice
+		 */
 	public String advice(Hand hand, Card card);
 }

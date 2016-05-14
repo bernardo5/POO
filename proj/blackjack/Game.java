@@ -439,7 +439,7 @@ public class Game {
 				}else if(command.equals("q")){
 					System.exit(0);
 				}else if(command.equals("i")&&canUseSideRules()){
-					System.out.println("insurance");
+					//System.out.println("insurance");
 					player1.changeInsurance(true);
 				}else System.out.println("Illegal command");			
 			}

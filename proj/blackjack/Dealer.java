@@ -7,34 +7,25 @@ public class Dealer extends Person{
 		super();
 	}
 	
-	
-	
+	/**
+	 * Used to see if player can insure
+	 * @return rank of visible card
+	 */
 	public Rank returnShownCard(){
 		return current.getCards().getFirst().getRank();
 	}
-	
+	/**
+	 * Used to pass visible card to strategy methods
+	 * @return visible card
+	 */
 	public Card getVisibleCard(){
 		return current.getCards().getFirst();
 	}
 	
-	/*public String showHands(){
-		//Dealer only has one hand and shows all cards except the first
-		String game=new String();
-		LinkedList<Card> cards=current.getCards();
-		int i=0;
-		for(Card c:cards){
-			if(i!=1){
-				if(i!=0)game+=", ";
-				game+=c.toString();
-				}
-			i++;
-		}
-		
-		game+=" ("+current.getPoints()+")";
-		
-		return game;
-	}*/
-	
+	/**
+	 * Overrides the same name method in Person in order to hide on card
+	 * i - index of card in hand
+	 */
 	@Override
 	public String showCurrentHand(){
 		String hand=new String();
@@ -50,10 +41,17 @@ public class Dealer extends Person{
 		return hand;
 	}
 	
+	/**
+	 * 
+	 * @return string with all cards from dealers hand
+	 */
 	public String showCurrentHandAll(){
 		return super.showCurrentHand();
 	}
-	
+	/**
+	 * 
+	 * @return previously hidden card for counting techniques
+	 */
 	public Card returnHiddenCard(){
 		return current.getCards().get(1);
 	}
