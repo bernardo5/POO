@@ -560,7 +560,7 @@ public class Game {
 				}else if(command.equals("q")){
 					System.exit(0);
 				}else if(command.equals("ad")){
-					actionAdvices(false);
+					System.out.println(actionAdvices(false));
 				}else if(command.equals("st")){
 					System.out.println(statistics(Integer.parseInt(initialBalance)));
 				}else System.out.println("Illegal command");

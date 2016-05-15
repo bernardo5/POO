@@ -35,6 +35,9 @@ public class graph{
 	JLabel handnumber;
 	JLabel balance;
 	int initialBalance;
+	int win;
+	int draw;
+	int lost;
 	
 	
 	/**
@@ -57,6 +60,9 @@ public class graph{
 	 * Create the application.
 	 */
 	public graph() {
+		win=0;
+		draw=0;
+		lost=0;
 		action=false;
 		initialize();
 		try {
@@ -229,7 +235,7 @@ public class graph{
 					btnSurrender.setEnabled(false);
 					btnDeal.setEnabled(false);
 					btnBet.setEnabled(true);
-					
+					displayResult();
 					action=false;
 				}else{
 					ShowGameCards();
@@ -260,7 +266,7 @@ public class graph{
 					btnSurrender.setEnabled(false);
 					btnDeal.setEnabled(false);
 					btnBet.setEnabled(true);
-					
+					displayResult();
 				}else{
 					ShowGameCards();
 					btnHit.setEnabled(true);
@@ -338,7 +344,7 @@ public class graph{
 					btnSurrender.setEnabled(false);
 					btnDeal.setEnabled(false);
 					btnBet.setEnabled(true);
-					
+					displayResult();
 				}else{
 					handnumber.setText("");
 					handnumber.setText(Integer.toString(game.getPlayerPlayingHand()));
@@ -386,7 +392,7 @@ public class graph{
 					btnSurrender.setEnabled(false);
 					btnDeal.setEnabled(false);
 					btnBet.setEnabled(true);
-					
+					displayResult();
 				}
 				balance.setText("Balance: "+game.getPlayer().getBalance());
 			}
@@ -420,6 +426,7 @@ public class graph{
 				btnSurrender.setEnabled(false);
 				btnDeal.setEnabled(false);
 				btnBet.setEnabled(true);
+				displayResult();
 				balance.setText("Balance: "+game.getPlayer().getBalance());
 			}
 		});
@@ -528,6 +535,23 @@ public class graph{
 			panel_1.add(lblCard);
 			panel_1.revalidate();
 			panel_1.repaint();
+		}
+	}
+	
+	public void displayResult(){
+		while(game.getPlayer().getwins()!=win||game.getPlayer().getdraws()!=draw||game.getPlayer().getloses()!=lost){
+			if(game.getPlayer().getwins()>win){
+				JOptionPane.showMessageDialog(frame,
+						"You won!! :)");
+				win++;
+			}else if(game.getPlayer().getdraws()>draw){
+				JOptionPane.showMessageDialog(frame,"It's a Push!!");
+				draw++;
+			}else if(game.getPlayer().getloses()>lost){
+				JOptionPane.showMessageDialog(frame,
+						"You Lost :((");
+				lost++;
+			}
 		}
 	}
 }

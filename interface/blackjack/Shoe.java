@@ -53,6 +53,7 @@ public class Shoe {
 	
 	public void shuffleShoe(){
 		Collections.shuffle(sequence);
+		nbNextCard=0;
 	}
 	
 	@Override
